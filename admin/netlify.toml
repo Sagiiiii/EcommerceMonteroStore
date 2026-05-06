@@ -1,0 +1,3 @@
+[build]
+  command = "npx ng build --configuration production"
+  publish = "dist/admin"

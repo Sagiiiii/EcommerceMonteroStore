@@ -1,0 +1,196 @@
+<app-sidebar></app-sidebar>
+
+<!-- ════════════════════════════════════════════════════════════
+      MÓDULO: Dashboard Principal — MONTERO'S
+      Panel Administrativo · JAIME PONCE MONTERO
+      ════════════════════════════════════════════════════════════ -->
+
+<div class="border-bottom pt-5 mt-2 mb-5">
+  <h1 class="mt-2 mt-md-4 mb-3 pt-5">Panel de Control</h1>
+  <div class="d-flex flex-wrap flex-md-nowrap justify-content-between">
+    <p class="text-muted">
+      Resumen ejecutivo de ventas, ganancias y estadísticas clave de <strong>MONTERO'S</strong>.
+    </p>
+  </div>
+</div>
+
+<!-- ══ TARJETAS KPI ══════════════════════════════════════════════ -->
+<div class="row mb-4">
+
+  <!-- KPI 1: Ganancia total -->
+  <div class="col-12 col-sm-6 col-xl-3 mb-3">
+    <div class="card kpi-card h-100">
+      <div class="card-body">
+        <div class="row align-items-center">
+          <div class="col">
+            <h6 class="kpi-label">Ganancia total</h6>
+            <span class="kpi-value" *ngIf="load_data">
+              S/ {{ total_ganancia | number:'1.2-2' }}
+            </span>
+            <span class="kpi-value kpi-value--placeholder" *ngIf="!load_data">
+              S/ —
+            </span>
+          </div>
+          <div class="col-auto">
+            <div class="kpi-icon kpi-icon--success">
+              <i class="cxi-cart"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- KPI 2: Ganancia del mes -->
+  <div class="col-12 col-sm-6 col-xl-3 mb-3">
+    <div class="card kpi-card h-100">
+      <div class="card-body">
+        <div class="row align-items-center">
+          <div class="col">
+            <h6 class="kpi-label">
+              Ganancia — {{ load_data ? meses : 'Mes actual' }}
+            </h6>
+            <span class="kpi-value" *ngIf="load_data">
+              S/ {{ total_ganancia_mes | number:'1.2-2' }}
+            </span>
+            <span class="kpi-value kpi-value--placeholder" *ngIf="!load_data">
+              S/ —
+            </span>
+          </div>
+          <div class="col-auto">
+            <div class="kpi-icon kpi-icon--primary">
+              <i class="cxi-calendar"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- KPI 3: N° de ventas del mes -->
+  <div class="col-12 col-sm-6 col-xl-3 mb-3">
+    <div class="card kpi-card h-100">
+      <div class="card-body">
+        <div class="row align-items-center">
+          <div class="col">
+            <h6 class="kpi-label">
+              Ventas — {{ load_data ? meses : 'Mes actual' }}
+            </h6>
+            <span class="kpi-value" *ngIf="load_data">
+              {{ count_ventas_porcent }}
+            </span>
+            <span class="kpi-value kpi-value--placeholder" *ngIf="!load_data">
+              —
+            </span>
+          </div>
+          <div class="col-auto">
+            <div class="kpi-icon kpi-icon--warning">
+              <i class="cxi-files"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- KPI 4: Mes anterior -->
+  <div class="col-12 col-sm-6 col-xl-3 mb-3">
+    <div class="card kpi-card h-100">
+      <div class="card-body">
+        <div class="row align-items-center">
+          <div class="col">
+            <h6 class="kpi-label">
+              Mes anterior — {{ load_data ? mes_anterior : '...' }}
+            </h6>
+            <span class="kpi-value" *ngIf="load_data">
+              S/ {{ total_mes_anterior | number:'1.2-2' }}
+            </span>
+            <span class="kpi-value kpi-value--placeholder" *ngIf="!load_data">
+              S/ —
+            </span>
+          </div>
+          <div class="col-auto">
+            <div class="kpi-icon kpi-icon--secondary">
+              <i class="cxi-files"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+<!-- /KPIs -->
+
+
+<!-- ══ GRÁFICO: Ventas mensuales ═════════════════════════════════ -->
+<div class="card box-shadow-sm mt-3">
+  <div class="card-header d-flex align-items-center">
+    <h5 class="mb-0">
+      <i class="cxi-calendar mr-2"></i> Ventas mensuales
+    </h5>
+  </div>
+  <div class="card-body">
+    <div *ngIf="load_data">
+      <canvas id="chart-ventas-mensuales"></canvas>
+    </div>
+    <div class="chart-empty" *ngIf="!load_data">
+      <i class="cxi-info d-block mb-2"></i>
+      No hay datos disponibles para este gráfico.
+    </div>
+  </div>
+</div>
+
+<!-- ══ GRÁFICO: Mejores clientes ════════════════════════════════ -->
+<div class="card box-shadow-sm mt-4">
+  <div class="card-header d-flex align-items-center">
+    <h5 class="mb-0">
+      <i class="cxi-profile mr-2"></i> Mejores clientes
+    </h5>
+  </div>
+  <div class="card-body">
+    <div *ngIf="load_data">
+      <canvas id="chart-mejores-clientes"></canvas>
+    </div>
+    <div class="chart-empty" *ngIf="!load_data">
+      <i class="cxi-info d-block mb-2"></i>
+      No hay datos disponibles para este gráfico.
+    </div>
+  </div>
+</div>
+
+<!-- ══ GRÁFICO: Ventas diarias ═══════════════════════════════════ -->
+<div class="card box-shadow-sm mt-4">
+  <div class="card-header d-flex align-items-center">
+    <h5 class="mb-0">
+      <i class="cxi-time mr-2"></i> Ventas diarias
+    </h5>
+  </div>
+  <div class="card-body">
+    <div *ngIf="load_data">
+      <canvas id="chart-ventas-diarias"></canvas>
+    </div>
+    <div class="chart-empty" *ngIf="!load_data">
+      <i class="cxi-info d-block mb-2"></i>
+      No hay datos disponibles para este gráfico.
+    </div>
+  </div>
+</div>
+
+<!-- ══ GRÁFICO: Mejores ítems ════════════════════════════════════ -->
+<div class="card box-shadow-sm mt-4 mb-5">
+  <div class="card-header d-flex align-items-center">
+    <h5 class="mb-0">
+      <i class="cxi-attach mr-2"></i> Mejores ítems
+    </h5>
+  </div>
+  <div class="card-body">
+    <div *ngIf="load_data">
+      <canvas id="chart-mejores-items"></canvas>
+    </div>
+    <div class="chart-empty" *ngIf="!load_data">
+      <i class="cxi-info d-block mb-2"></i>
+      No hay datos disponibles para este gráfico.
+    </div>
+  </div>
+</div>

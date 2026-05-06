@@ -1,0 +1,156 @@
+<app-sidebar></app-sidebar>
+
+<!-- ════════════════════════════════════════════════════════════
+      MÓDULO: Editar Producto — MONTERO'S
+      Panel Administrativo · JAIME PONCE MONTERO
+      ════════════════════════════════════════════════════════════ -->
+
+<div class="border-bottom pt-5 mt-2 mb-5">
+  <h1 class="mt-2 mt-md-4 mb-3 pt-5">Productos</h1>
+  <div class="d-flex flex-wrap flex-md-nowrap justify-content-between">
+    <p class="text-muted">
+      Modifique los datos del producto en el catálogo de <strong>MONTERO'S</strong>.
+    </p>
+  </div>
+</div>
+
+<!-- Estado: no encontrado -->
+<ng-container *ngIf="producto === undefined">
+  <div class="card box-shadow-sm">
+    <div class="card-body text-center py-5">
+      <img src="assets/img/advertencia.png" alt="No encontrado" class="img-fluid mb-3" style="max-width:120px;">
+      <h4 class="font-size-lg font-weight-semibold mb-2">Producto no encontrado</h4>
+      <p class="text-muted font-size-sm mb-3">No se encontró el registro en MONTERO'S.</p>
+      <a class="btn btn-dark btn-sm" [routerLink]="['/panel/productos']">
+        <i class="cxi-angle-left mr-1"></i> Volver al listado
+      </a>
+    </div>
+  </div>
+</ng-container>
+
+<!-- Formulario de edición -->
+<ng-container *ngIf="producto !== undefined">
+  <form #actualizarForm="ngForm" (ngSubmit)="actualizar(actualizarForm)">
+    <div class="card box-shadow-sm">
+
+      <div class="card-header d-flex align-items-center">
+        <h5 class="mb-0">
+          <i class="cxi-edit mr-2"></i> Editar producto
+        </h5>
+      </div>
+
+      <div class="card-body">
+        <div class="row">
+
+          <!-- ── Columna izquierda ── -->
+          <div class="col-lg-8">
+            <div class="row">
+
+              <div class="col-lg-12 form-group">
+                <label class="form-label" for="input-titulo">
+                  <i class="cxi-bag mr-1"></i> Título del producto
+                </label>
+                <input type="text" class="form-control" id="input-titulo"
+                  placeholder="Título del producto" required
+                  name="titulo" [(ngModel)]="producto.titulo">
+              </div>
+
+              <div class="col-lg-4 form-group">
+                <label class="form-label" for="input-stock">
+                  <i class="cxi-plus mr-1"></i> Stock
+                </label>
+                <input type="number" class="form-control" id="input-stock"
+                  placeholder="Cantidad" required min="0"
+                  name="stock" [(ngModel)]="producto.stock">
+              </div>
+
+              <div class="col-lg-4 form-group">
+                <label class="form-label" for="input-precio">
+                  <i class="cxi-cart mr-1"></i> Precio (S/.)
+                </label>
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">S/.</span>
+                  </div>
+                  <input type="number" class="form-control" id="input-precio"
+                    placeholder="0.00" required min="0" step="0.01"
+                    name="precio" [(ngModel)]="producto.precio">
+                </div>
+              </div>
+
+              <div class="col-lg-4 form-group">
+                <label class="form-label" for="select-categoria">
+                  <i class="cxi-layouts mr-1"></i> Categoría
+                </label>
+                <select class="form-control custom-select" id="select-categoria"
+                  required name="categoria" [(ngModel)]="producto.categoria">
+                  <option value="" disabled>Seleccione una categoría</option>
+                  <option [value]="item.titulo" *ngFor="let item of config_global.categorias">
+                    {{ item.titulo }}
+                  </option>
+                </select>
+              </div>
+
+              <div class="col-lg-12 form-group">
+                <label class="form-label" for="input-descripcion">
+                  <i class="cxi-comment mr-1"></i> Descripción corta
+                </label>
+                <textarea class="form-control" id="input-descripcion"
+                  placeholder="Descripción breve del producto" required rows="4"
+                  name="descripcion" [(ngModel)]="producto.descripcion">
+                </textarea>
+              </div>
+
+              <div class="col-lg-12 form-group">
+                <label class="form-label">
+                  <i class="cxi-attach mr-1"></i> Descripción detallada
+                </label>
+                <tinymce [config]="{ height: 400 }" name="contenido" [(ngModel)]="producto.contenido"></tinymce>
+              </div>
+
+            </div>
+          </div>
+          <!-- /col izquierda -->
+
+          <!-- ── Columna derecha: portada ── -->
+          <div class="col-lg-4">
+            <div class="form-group">
+              <label class="form-label" for="input-portada">
+                <i class="cxi-photo mr-1"></i> Imagen de portada
+              </label>
+              <div class="custom-file">
+                <input class="custom-file-input" type="file" id="input-portada"
+                  accept="image/png, image/jpeg, image/jpg, image/webp, image/gif"
+                  (change)="fileChangeEvent($event)">
+                <label class="custom-file-label" for="input-portada"
+                  style="white-space: nowrap; overflow: hidden;">
+                  Cambiar imagen
+                </label>
+              </div>
+              <small class="form-text text-muted">Formatos: JPG, PNG, WEBP, GIF · Máx. 4 MB</small>
+            </div>
+            <div class="mt-2">
+              <img [src]="imgSelect" class="img-thumbnail w-100" alt="Portada actual del producto">
+            </div>
+          </div>
+          <!-- /col derecha -->
+
+        </div>
+      </div>
+
+      <div class="card-footer d-flex align-items-center">
+        <button *ngIf="!load_btn" class="btn btn-primary mr-3" type="submit">
+          <i class="cxi-check mr-1"></i> Guardar cambios
+        </button>
+        <button *ngIf="load_btn" type="button" class="btn btn-secondary mr-3" disabled>
+          <span class="spinner-grow spinner-grow-sm mr-2" role="status" aria-hidden="true"></span>
+          Guardando...
+        </button>
+        <a class="btn btn-dark" [routerLink]="['/panel/productos']">
+          <i class="cxi-angle-left mr-1"></i> Regresar
+        </a>
+      </div>
+
+    </div>
+  </form>
+</ng-container>

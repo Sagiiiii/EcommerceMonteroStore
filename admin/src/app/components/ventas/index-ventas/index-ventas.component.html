@@ -1,0 +1,179 @@
+<app-sidebar></app-sidebar>
+
+<!-- ════════════════════════════════════════════════════════════
+      MÓDULO: Listado de Ventas — MONTERO'S
+      Panel Administrativo · JAIME PONCE MONTERO
+      ════════════════════════════════════════════════════════════ -->
+
+<div class="border-bottom pt-5 mt-2 mb-5">
+  <h1 class="mt-2 mt-md-4 mb-3 pt-5">Ventas</h1>
+  <div class="d-flex flex-wrap flex-md-nowrap justify-content-between">
+    <p class="text-muted">
+      Gestione y haga seguimiento a todas las órdenes de venta de <strong>MONTERO'S</strong>.
+    </p>
+  </div>
+</div>
+
+<div class="card box-shadow-sm">
+
+  <!-- Encabezado + filtro de fechas (un solo card-header) -->
+  <div class="card-header">
+    <div class="d-flex align-items-end flex-wrap gap-3">
+      <h5 class="mb-0 mr-auto">
+        <i class="cxi-cart mr-2"></i> Órdenes de venta — MONTERO'S
+      </h5>
+      <div class="row">
+        <div class="col-sm-5 form-group mb-sm-0">
+          <label class="form-label font-size-sm" for="filtro-desde">
+            <i class="cxi-calendar mr-1"></i> Desde
+          </label>
+          <input class="form-control form-control-sm" type="date"
+            id="filtro-desde" name="desde" [(ngModel)]="desde">
+        </div>
+        <div class="col-sm-5 form-group mb-sm-0">
+          <label class="form-label font-size-sm" for="filtro-hasta">
+            <i class="cxi-calendar mr-1"></i> Hasta
+          </label>
+          <input class="form-control form-control-sm" type="date"
+            id="filtro-hasta" name="hasta" [(ngModel)]="hasta">
+        </div>
+        <div class="col-sm-2 d-flex align-items-end">
+          <button type="button" class="btn btn-primary btn-sm w-100" (click)="filtrar()">
+            <i class="cxi-search mr-1"></i> Filtrar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cuerpo: listado de ventas -->
+  <div class="card-body">
+
+    <!-- Estado: cargando -->
+    <div class="text-center py-5" *ngIf="load_data">
+      <div class="spinner-border text-primary mb-3"
+        style="width:2rem;height:2rem;" role="status">
+        <span class="sr-only">Cargando ventas...</span>
+      </div>
+      <p class="text-muted mb-0 font-size-sm">Cargando ventas de MONTERO'S...</p>
+    </div>
+
+    <!-- Estado: sin ventas -->
+    <div class="text-center py-5" *ngIf="!load_data && ventas.length === 0">
+      <i class="cxi-cart font-size-xl text-muted d-block mb-2"></i>
+      <p class="text-muted mb-0">No se encontraron órdenes para el período seleccionado.</p>
+    </div>
+
+    <!-- Lista de órdenes -->
+    <ng-container *ngIf="!load_data && ventas.length > 0">
+      <ng-container
+        *ngFor="let item of ventas | slice: (page-1)*pageSize : (page-1)*pageSize + pageSize">
+
+        <div class="venta-item pb-3 mb-3">
+
+          <!-- Fila superior: cliente + badge estado + acciones -->
+          <div class="row justify-content-between align-items-start mb-2">
+
+            <!-- Nombre del cliente -->
+            <div class="col">
+              <h6 class="font-weight-semibold mb-1">
+                {{ item.cliente?.nombres }}, {{ item.cliente?.apellidos }}
+              </h6>
+            </div>
+
+            <!-- Badge de estado + dropdown -->
+            <div class="col-auto d-flex align-items-center gap-2">
+
+              <!-- Badge estado -->
+              <span class="badge badge-secondary" *ngIf="item.estado === 'Procesando'">Procesando</span>
+              <span class="badge badge-info"      *ngIf="item.estado === 'Enviado'">Enviado</span>
+              <span class="badge badge-danger"    *ngIf="item.estado === 'Cancelado'">Cancelado</span>
+              <span class="badge badge-success"   *ngIf="item.estado === 'Finalizado' || item.estado === 'Recibido'">
+                {{ item.estado }}
+              </span>
+              <span class="badge badge-warning"   *ngIf="item.estado === 'Pendiente Cobro'">Pendiente cobro</span>
+
+              <!-- Dropdown acciones -->
+              <div class="dropdown ml-2">
+                <button class="btn btn-sm btn-outline-secondary dropdown-toggle"
+                  type="button" data-toggle="dropdown"
+                  aria-haspopup="true" aria-expanded="false">
+                  <i class="cxi-settings"></i>
+                </button>
+                <div class="dropdown-menu dropdown-menu-right">
+                  <a class="dropdown-item"
+                    [routerLink]="['/panel/ventas', item._id]">
+                    <i class="cxi-files mr-2"></i> Ver detalles
+                  </a>
+                </div>
+              </div>
+
+            </div>
+          </div>
+          <!-- /fila superior -->
+
+          <!-- Metadatos de la orden -->
+          <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
+            <span class="badge badge-dark font-size-xs">#{{ item.nventa }}</span>
+            <span class="text-muted font-size-sm">
+              <i class="cxi-calendar mr-1"></i>
+              {{ item.createdAt | date: 'dd/MM/yyyy' }}
+            </span>
+            <span class="text-muted font-size-sm">
+              <i class="cxi-truck mr-1"></i> {{ item.envio_titulo }}
+            </span>
+          </div>
+
+          <!-- Cambio de estado + total -->
+          <div class="row align-items-center">
+            <div class="col-md-7 mb-2 mb-md-0">
+              <div class="d-flex gap-2">
+                <select class="form-control form-control-sm custom-select"
+                  name="nuevoEstado_{{ item._id }}"
+                  [(ngModel)]="item.nuevoEstado">
+                  <option value="Pendiente Cobro">Pendiente Cobro</option>
+                  <option value="Procesando">Procesando</option>
+                  <option value="Enviado">Enviado</option>
+                  <option value="Cancelado">Cancelado</option>
+                  <option value="Finalizado">Finalizado</option>
+                </select>
+                <button type="button"
+                  class="btn btn-sm btn-dark flex-shrink-0"
+                  (click)="cambiarEstado(item._id, item.nuevoEstado)">
+                  Actualizar
+                </button>
+              </div>
+            </div>
+            <div class="col-md-5 text-md-right">
+              <span class="h6 font-weight-bold mb-0">
+                S/ {{ item.subtotal | number:'1.2-2' }}
+              </span>
+            </div>
+          </div>
+
+        </div>
+
+        <hr class="my-0">
+
+      </ng-container>
+    </ng-container>
+
+  </div>
+
+  <!-- Paginación -->
+  <div class="card-footer d-flex justify-content-between align-items-center"
+    *ngIf="!load_data && ventas.length > 0">
+    <span class="font-size-sm text-muted">
+      {{ ventas.length }} orden(es) en total
+    </span>
+    <ngb-pagination
+      [(page)]="page"
+      [pageSize]="pageSize"
+      [collectionSize]="ventas.length"
+      [maxSize]="5"
+      [rotate]="true"
+      [boundaryLinks]="true">
+    </ngb-pagination>
+  </div>
+
+</div>

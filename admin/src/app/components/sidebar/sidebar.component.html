@@ -1,0 +1,153 @@
+<!-- ════════════════════════════════════════════════════════════
+      COMPONENTE: Sidebar — MONTERO'S
+      Panel Administrativo · JAIME PONCE MONTERO
+      ════════════════════════════════════════════════════════════ -->
+
+<!-- ── Navbar superior ── -->
+<header class="navbar navbar-expand navbar-light fixed-top navbar-box-shadow bg-light px-3 px-lg-4"
+  data-scroll-header data-fixed-element>
+
+  <!-- Logo móvil -->
+  <a class="navbar-brand d-lg-none" [routerLink]="['/inicio']">
+    <img src="assets/img/components/logo/logo-dark.svg" alt="MONTERO'S" width="130">
+  </a>
+
+  <!-- Botón hamburguesa móvil -->
+  <button class="navbar-toggler d-block d-lg-none mr-3 ml-auto"
+    type="button" data-toggle="offcanvas" data-target="componentsNav">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <!-- Menú derecho (desktop) -->
+  <ul class="navbar-nav ml-auto d-none d-lg-flex align-items-center">
+    <li class="nav-item dropdown">
+      <a class="nav-tool dropdown-toggle py-0"
+        data-toggle="dropdown"
+        style="cursor: pointer; text-decoration: none;">
+        <img src="assets/img/user.png"
+          class="mr-2"
+          style="width:30px; border-radius:100%;"
+          alt="Avatar {{ user_admin.nombres }}">
+        {{ user_admin.nombres }}
+      </a>
+      <div class="dropdown-menu dropdown-menu-right">
+        <a [routerLink]="['/panel/perfil']" class="dropdown-item">
+          <i class="cxi-profile mr-2"></i> Mi perfil
+        </a>
+        <div class="dropdown-divider"></div>
+        <a class="dropdown-item text-danger" style="cursor: pointer;" (click)="logout()">
+          <i class="cxi-logout mr-2"></i> Cerrar sesión
+        </a>
+      </div>
+    </li>
+  </ul>
+
+</header>
+<!-- /navbar -->
+
+
+<!-- ── Sidebar (Off-canvas) ── -->
+<aside class="cs-offcanvas cs-offcanvas-expand bg-dark" id="componentsNav">
+
+  <!-- Logo desktop -->
+  <div class="cs-offcanvas-cap d-none d-lg-block py-2 bg-dark">
+    <a class="navbar-brand pl-0 py-2" [routerLink]="['/inicio']">
+      <img src="assets/img/monteros-fondo-negro.png" alt="MONTERO'S" width="210">
+    </a>
+    <span class="badge badge-warning">Admin</span>
+  </div>
+
+  <!-- Perfil del administrador -->
+  <div class="cs-offcanvas-cap d-none d-lg-block py-3 bg-dark text-center">
+    <img src="assets/img/user.png"
+      class="rounded-circle mb-2"
+      alt="Avatar {{ user_admin.nombres }}"
+      style="width:80px; height:80px; object-fit:cover; border:2px solid rgba(255,255,255,.2);">
+    <p class="h6 text-light mt-2 mb-0">
+      {{ user_admin.nombres }}, {{ user_admin.apellidos }}
+    </p>
+    <p class="font-size-sm text-muted mt-1 mb-0">{{ user_admin.email }}</p>
+  </div>
+
+  <!-- Botones de acción (desktop) -->
+  <div class="cs-offcanvas-cap d-none d-lg-block py-0 bg-dark">
+    <div class="d-flex py-3 px-3 border-bottom border-secondary">
+      <a class="btn btn-secondary btn-block mr-2"
+        [routerLink]="['/panel/perfil']">
+        <i class="cxi-profile mr-1"></i> Mi perfil
+      </a>
+      <a class="btn btn-danger btn-block mt-0"
+        style="cursor: pointer;" (click)="logout()">
+        <i class="cxi-lock mr-1"></i> Cerrar sesión
+      </a>
+    </div>
+  </div>
+
+  <!-- Control móvil -->
+  <div class="cs-offcanvas-cap d-flex d-lg-none bg-dark px-3 py-2 align-items-center justify-content-between">
+    <div class="d-flex align-items-center">
+      <h5 class="text-light mb-0 mr-2">Menú</h5>
+      <span class="badge badge-warning">Admin</span>
+    </div>
+    <button class="close text-light" type="button"
+      data-dismiss="offcanvas" aria-label="Cerrar menú">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <!-- Navegación principal -->
+  <div class="cs-offcanvas-body px-0 pt-4 pb-grid-gutter"
+    data-simplebar data-simplebar-inverse>
+
+    <h6 class="font-size-xs text-uppercase text-muted px-4 mt-2 mb-3"
+      style="letter-spacing:.08em;">
+      Menú principal
+    </h6>
+    <hr class="hr-gradient hr-light mb-2 opacity-25">
+
+    <nav class="nav nav-light flex-column">
+      <a class="nav-link px-4 py-2"
+        [routerLink]="['/inicio']" routerLinkActive="active">
+        <i class="cxi-grid mr-3"></i> Inicio
+      </a>
+      <a class="nav-link px-4 py-2"
+        [routerLink]="['/panel/clientes']" routerLinkActive="active">
+        <i class="cxi-profile mr-3"></i> Clientes
+      </a>
+      <a class="nav-link px-4 py-2"
+        [routerLink]="['/panel/productos']" routerLinkActive="active">
+        <i class="cxi-bag mr-3"></i> Productos
+      </a>
+      <a class="nav-link px-4 py-2"
+        [routerLink]="['/panel/cupones']" routerLinkActive="active">
+        <i class="cxi-star mr-3"></i> Cupones
+      </a>
+      <a class="nav-link px-4 py-2"
+        [routerLink]="['/panel/descuentos']" routerLinkActive="active">
+        <i class="cxi-minus-round mr-3"></i> Descuentos
+      </a>
+      <a class="nav-link px-4 py-2"
+        [routerLink]="['/panel/contactos']" routerLinkActive="active">
+        <i class="cxi-wechat mr-3"></i> Mensajes
+      </a>
+      <a class="nav-link px-4 py-2"
+        [routerLink]="['/panel/ventas']" routerLinkActive="active">
+        <i class="cxi-cart mr-3"></i> Ventas
+      </a>
+      <a class="nav-link px-4 py-2"
+        [routerLink]="['/panel/configuracion']" routerLinkActive="active">
+        <i class="cxi-settings mr-3"></i> Configuración
+      </a>
+    </nav>
+
+  </div>
+
+  <!-- Pie del sidebar -->
+  <div class="cs-offcanvas-cap d-none d-lg-block py-2 bg-dark">
+    <p class="text-center text-muted font-size-xs mb-0 px-3">
+      &copy; {{ currentYear }} MONTERO'S · Panel Administrativo
+    </p>
+  </div>
+
+</aside>
+<!-- /sidebar -->

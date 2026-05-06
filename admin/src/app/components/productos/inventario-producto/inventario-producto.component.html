@@ -1,0 +1,160 @@
+<app-sidebar></app-sidebar>
+
+<!-- ════════════════════════════════════════════════════════════
+     MÓDULO: Inventario de Producto — MONTERO'S
+     Panel Administrativo · JAIME PONCE MONTERO
+     ════════════════════════════════════════════════════════════ -->
+
+<div class="border-bottom pt-5 mt-2 mb-5">
+  <h1 class="mt-2 mt-md-4 mb-3 pt-5">Inventario de producto</h1>
+  <div class="d-flex flex-wrap flex-md-nowrap justify-content-between align-items-start">
+    <p class="text-muted">
+      Registre entradas de stock y consulte el historial de inventario en <strong>MONTERO'S</strong>.
+    </p>
+    <div class="ml-md-4 mt-2 mt-md-0 flex-shrink-0">
+      <a class="btn btn-dark" [routerLink]="['/panel/productos']">
+        <i class="cxi-angle-left mr-1"></i> Regresar
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- Estado: producto no encontrado -->
+<div class="card box-shadow-sm" *ngIf="producto === undefined">
+  <div class="card-body text-center py-5">
+    <img src="assets/img/advertencia.png" alt="No encontrado" class="img-fluid mb-3" style="max-width:120px;">
+    <h4 class="font-size-lg font-weight-semibold mb-2">Producto no encontrado</h4>
+    <p class="text-muted font-size-sm mb-3">No se encontró el registro solicitado en MONTERO'S.</p>
+    <a class="btn btn-dark btn-sm" [routerLink]="['/panel/productos']">
+      <i class="cxi-angle-left mr-1"></i> Volver al listado
+    </a>
+  </div>
+</div>
+
+<!-- Inventario del producto -->
+<div class="card box-shadow-sm" *ngIf="producto">
+
+  <!-- Encabezado -->
+  <div class="card-header d-flex align-items-center justify-content-between">
+    <div>
+      <h5 class="mb-0">
+        <i class="cxi-plus mr-2"></i> Inventario del producto
+      </h5>
+      <small class="text-muted">{{ producto.titulo }}</small>
+    </div>
+    <button type="button" class="btn btn-sm btn-success" (click)="exportExcel()">
+      <i class="cxi-file-download mr-1"></i> Exportar Excel
+    </button>
+  </div>
+
+  <!-- Formulario de ingreso de stock -->
+  <div class="card-body border-bottom">
+    <form #inventarioForm="ngForm" (ngSubmit)="registroInventario(inventarioForm)">
+      <div class="row align-items-end">
+        <div class="col-md-4 form-group mb-md-0">
+          <label class="form-label" for="input-cantidad">
+            <i class="cxi-plus mr-1"></i> Cantidad
+          </label>
+          <input class="form-control" type="number" id="input-cantidad"
+            placeholder="Ej.: 50" required min="1"
+            name="cantidad" [(ngModel)]="inventario.cantidad">
+        </div>
+        <div class="col-md-5 form-group mb-md-0">
+          <label class="form-label" for="input-proveedor">
+            <i class="cxi-profile mr-1"></i> Proveedor
+          </label>
+          <input class="form-control" type="text" id="input-proveedor"
+            placeholder="Nombre del proveedor" required
+            name="proveedor" [(ngModel)]="inventario.proveedor">
+        </div>
+        <div class="col-md-3 form-group mb-md-0">
+          <button class="btn btn-primary w-100" type="submit">
+            <i class="cxi-check mr-1"></i> Registrar entrada
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <!-- Tabla de inventario -->
+  <div class="card-body p-0">
+    <div class="table-responsive">
+      <table class="table table-hover mb-0">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col">Administrador</th>
+            <th scope="col">Cantidad</th>
+            <th scope="col">Proveedor</th>
+            <th scope="col" class="text-center">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+
+          <!-- Sin registros -->
+          <tr *ngIf="inventarios.length === 0">
+            <td colspan="4" class="text-center py-4">
+              <span class="text-muted">No hay registros de inventario para este producto.</span>
+            </td>
+          </tr>
+
+          <!-- Filas -->
+          <tr *ngFor="let item of inventarios">
+            <td class="align-middle">
+              {{ item.admin?.nombres }} {{ item.admin?.apellidos }}
+            </td>
+            <td class="align-middle">
+              {{ item.cantidad }}
+              <span class="text-muted ml-1 font-size-sm">unidades</span>
+            </td>
+            <td class="align-middle">{{ item.proveedor }}</td>
+            <td class="text-center align-middle">
+              <button type="button" class="btn btn-sm btn-outline-danger"
+                [attr.data-toggle]="'modal'"
+                [attr.data-target]="'#modalInventario-' + item._id">
+                <i class="cxi-trash mr-1"></i> Eliminar
+              </button>
+            </td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<!-- Modales de eliminación -->
+<ng-container *ngFor="let item of inventarios">
+  <div class="modal fade" [id]="'modalInventario-' + item._id"
+    tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">
+            <i class="cxi-trash mr-2 text-danger"></i> Eliminar registro
+          </h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Cancelar">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p class="mb-2">¿Confirma que desea eliminar este registro de inventario?</p>
+          <p class="font-size-sm text-muted mb-0">
+            Proveedor: <strong>{{ item.proveedor }}</strong> —
+            Cantidad: <strong>{{ item.cantidad }} unidades</strong>
+          </p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+          <button *ngIf="!load_btn" type="button" class="btn btn-danger btn-sm" (click)="eliminar(item._id)">
+            <i class="cxi-trash mr-1"></i> Sí, eliminar
+          </button>
+          <button *ngIf="load_btn" type="button" class="btn btn-secondary btn-sm" disabled>
+            <span class="spinner-grow spinner-grow-sm mr-2" role="status" aria-hidden="true"></span>
+            Eliminando...
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>

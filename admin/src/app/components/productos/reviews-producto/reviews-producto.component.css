@@ -1,0 +1,47 @@
+/* ============================================================
+    MONTERO'S — Panel Administrativo
+    Módulo: Reseñas de Producto
+    ============================================================ */
+
+/* Sistema de calificación por estrellas */
+.star-rating {
+  display: flex;
+  gap: 2px;
+}
+
+.star-rating .sr-star {
+  font-size: 1.1rem;
+  color: #d1d5db; /* gris por defecto */
+  transition: color 0.2s ease;
+}
+
+.star-rating .sr-star.active {
+  color: #f59e0b; /* amarillo dorado para activas */
+}
+
+/* Tarjeta horizontal del producto */
+.card-horizontal {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+}
+
+.card-horizontal .card-img-top {
+  width: 180px;
+  min-width: 180px;
+  overflow: hidden;
+  border-right: 1px solid #e9ecef;
+}
+
+@media (max-width: 576px) {
+  .card-horizontal {
+    flex-direction: column;
+  }
+
+  .card-horizontal .card-img-top {
+    width: 100%;
+    min-width: unset;
+    border-right: none;
+    border-bottom: 1px solid #e9ecef;
+  }
+}

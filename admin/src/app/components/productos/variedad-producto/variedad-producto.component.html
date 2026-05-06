@@ -1,0 +1,160 @@
+<app-sidebar></app-sidebar>
+
+<!-- Encabezado de página -->
+<div class="border-bottom pt-5 mt-2 mb-5">
+  <h1 class="mt-2 mt-md-4 mb-3 pt-5">Gestión de Productos — MONTERO'S</h1>
+  <div class="d-flex flex-wrap flex-md-nowrap justify-content-between">
+    <p class="text-muted">
+      Este módulo permite administrar las variedades disponibles para cada producto del catálogo de MONTERO'S.
+    </p>
+    <p class="font-size-sm font-weight-medium pl-md-4">
+      <a class="btn btn-dark btn-block px-4" [routerLink]="['/panel/productos']">
+        ← Regresar a Productos
+      </a>
+    </p>
+  </div>
+</div>
+
+<!-- Tarjeta principal -->
+<div class="card box-shadow-sm">
+
+  <div class="card-header">
+    <h5 class="mb-0">Variedades del Producto</h5>
+  </div>
+
+  <div class="card-body">
+    <div style="max-width: 48rem;">
+
+      <!-- Tarjeta horizontal del producto -->
+      <div class="card card-horizontal mb-4">
+        <div class="card-img-top text-center">
+          <img
+            [src]="url + 'obtener_portada/' + producto.portada"
+            class="img-thumbnail rounded-0 mt-4 mb-4"
+            alt="Imagen del producto {{ producto.titulo }}"
+            style="width: 80%;"
+          >
+        </div>
+        <div class="card-body">
+          <h6 class="card-title">{{ producto.titulo }}</h6>
+          <p class="card-text fs-sm">{{ producto.descripcion }}</p>
+          <span class="text-danger fw-semibold">Precio de Venta: S/ {{ producto.precio }}</span>
+          <br><br>
+          <a [routerLink]="['/panel/productos', producto._id]" class="btn btn-sm btn-dark">
+            Ver detalle del producto
+          </a>
+        </div>
+      </div>
+
+      <!-- Campo: Título de variedad -->
+      <div class="form-group row align-items-center mt-4">
+        <label class="col-md-3 col-form-label font-weight-medium" for="input-titulo-variedad">
+          Título de la variedad
+        </label>
+        <div class="col-md-9">
+          <input
+            class="form-control"
+            type="text"
+            id="input-titulo-variedad"
+            placeholder="Ej: Talla, Color, Modelo..."
+            name="titulo_variedad"
+            [(ngModel)]="producto.titulo_variedad"
+          >
+        </div>
+      </div>
+
+      <!-- Campo: Agregar opción de variedad -->
+      <div class="form-group row align-items-center">
+        <label class="col-md-3 col-form-label font-weight-medium" for="input-nueva-variedad">
+          Opciones de variedad
+        </label>
+        <div class="col-md-9">
+          <div class="input-group">
+            <input
+              class="form-control"
+              type="text"
+              id="input-nueva-variedad"
+              placeholder="Ej: S, M, L, XL / Rojo, Azul..."
+              name="nuevaVariedad"
+              [(ngModel)]="nuevaVariedad"
+            >
+            <button class="btn btn-dark" type="button" (click)="agregarVariedad()">
+              + Agregar
+            </button>
+          </div>
+        </div>
+
+        <!-- Tabla de variedades registradas -->
+        <div class="col-md-3"></div>
+        <div class="col-md-9 mt-3">
+          <div class="table-responsive" *ngIf="producto.variedades">
+            <table class="table table-sm">
+              <thead class="thead-dark">
+                <tr>
+                  <th>Opción</th>
+                  <th class="text-center">Eliminar</th>
+                </tr>
+              </thead>
+              <tbody>
+
+                <!-- Estado vacío -->
+                <tr *ngIf="producto.variedades.length === 0">
+                  <td colspan="2" class="text-center text-muted py-3">
+                    No se han agregado variedades aún. Use el campo superior para comenzar.
+                  </td>
+                </tr>
+
+                <!-- Lista de variedades -->
+                <tr *ngFor="let item of producto.variedades; let indice = index">
+                  <td>{{ item.titulo }}</td>
+                  <td class="text-center">
+                    <a
+                      style="cursor: pointer;"
+                      class="text-danger"
+                      title="Eliminar variedad"
+                      (click)="eliminarVariedad(indice)"
+                    >
+                      <i class="cxi-delete"></i>
+                    </a>
+                  </td>
+                </tr>
+
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Pie de tarjeta: acciones -->
+  <div class="card-footer d-flex align-items-center gap-2">
+
+    <button
+      *ngIf="!loadBtn"
+      class="btn btn-success"
+      type="button"
+      (click)="actualizar()"
+    >
+      Guardar cambios
+    </button>
+
+    <button
+      *ngIf="loadBtn"
+      type="button"
+      class="btn btn-secondary"
+      disabled
+    >
+      <span class="spinner-grow spinner-grow-sm me-2" role="status" aria-hidden="true"></span>
+      Guardando cambios...
+    </button>
+
+    <a class="btn btn-dark" [routerLink]="['/panel/productos']">
+      Regresar
+    </a>
+
+  </div>
+
+</div>

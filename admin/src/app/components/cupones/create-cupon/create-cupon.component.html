@@ -1,0 +1,133 @@
+<app-sidebar></app-sidebar>
+
+<!-- ════════════════════════════════════════════════════════════
+      MÓDULO: Registro de Cupón — MONTERO'S
+      Panel Administrativo · JAIME PONCE MONTERO
+      ════════════════════════════════════════════════════════════ -->
+
+<div class="border-bottom pt-5 mt-2 mb-5">
+  <h1 class="mt-2 mt-md-4 mb-3 pt-5">Cupones de Descuento</h1>
+  <div class="d-flex flex-wrap flex-md-nowrap justify-content-between">
+    <p class="text-muted">
+      Cree y gestione los cupones de descuento disponibles en <strong>MONTERO'S</strong>.
+    </p>
+  </div>
+</div>
+
+<form #registroForm="ngForm" (ngSubmit)="registro(registroForm)">
+  <div class="card box-shadow-sm">
+
+    <!-- Encabezado -->
+    <div class="card-header d-flex align-items-center">
+      <h5 class="mb-0">
+        <i class="cxi-files mr-2"></i>
+        Registrar nuevo cupón
+      </h5>
+    </div>
+
+    <div class="card-body">
+      <div class="row">
+
+        <!-- Código del cupón -->
+        <div class="col-lg-3 col-md-6 form-group">
+          <label class="form-label" for="input-codigo">
+            <i class="cxi-files mr-1"></i> Código de cupón
+          </label>
+          <input
+            class="form-control"
+            type="text"
+            id="input-codigo"
+            placeholder="Ej.: MONTEROS10"
+            required
+            name="codigo"
+            [(ngModel)]="cupon.codigo">
+          <small class="form-text text-muted">Código único e irrepetible.</small>
+        </div>
+
+        <!-- Tipo de descuento -->
+        <div class="col-lg-3 col-md-6 form-group">
+          <label class="form-label" for="select-tipo">
+            <i class="cxi-arrow-vertical mr-1"></i> Tipo de descuento
+          </label>
+          <select
+            class="form-control custom-select"
+            id="select-tipo"
+            name="tipo"
+            required
+            [(ngModel)]="cupon.tipo">
+            <option value="" disabled selected>Seleccione una opción</option>
+            <option value="Porcentaje">Porcentaje (%)</option>
+            <option value="Valor Fijo">Valor fijo (S/.)</option>
+          </select>
+        </div>
+
+        <!-- Valor del descuento -->
+        <div class="col-lg-3 col-md-6 form-group">
+          <label class="form-label" for="input-valor">
+            <i class="cxi-cart mr-1"></i> Valor del descuento
+          </label>
+          <input
+            class="form-control"
+            type="number"
+            id="input-valor"
+            placeholder="Ej.: 15"
+            required
+            min="0"
+            name="valor"
+            [(ngModel)]="cupon.valor">
+          <small class="form-text text-muted">Porcentaje o monto según el tipo.</small>
+        </div>
+
+        <!-- Límite de usos -->
+        <div class="col-lg-3 col-md-6 form-group">
+          <label class="form-label" for="input-limite">
+            <i class="cxi-minus-round mr-1"></i> Límite de usos
+          </label>
+          <input
+            class="form-control"
+            type="number"
+            id="input-limite"
+            placeholder="Ej.: 100"
+            required
+            min="1"
+            name="limite"
+            [(ngModel)]="cupon.limite">
+          <small class="form-text text-muted">Máximo de veces que puede usarse.</small>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Pie de tarjeta -->
+    <div class="card-footer d-flex align-items-center">
+
+      <!-- Botón activo -->
+      <button
+        *ngIf="!load_btn"
+        class="btn btn-primary mr-3"
+        type="submit">
+        <i class="cxi-check mr-1"></i> Crear cupón
+      </button>
+
+      <!-- Botón de carga -->
+      <button
+        *ngIf="load_btn"
+        type="button"
+        class="btn btn-secondary mr-3"
+        disabled>
+        <span
+          class="spinner-grow spinner-grow-sm mr-2"
+          role="status"
+          aria-hidden="true">
+        </span>
+        Creando...
+      </button>
+
+      <a [routerLink]="['/panel/cupones']" class="btn btn-dark">
+        <i class="cxi-angle-left mr-1"></i> Regresar
+      </a>
+
+    </div>
+
+  </div>
+</form>

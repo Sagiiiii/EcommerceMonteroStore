@@ -1,0 +1,56 @@
+<!--
+  ════════════════════════════════════════════════════════════════
+  pill.html — Plantilla de referencia de tarjeta KPI
+  MONTERO'S · Panel Administrativo · JAIME PONCE MONTERO
+
+  NOTA: Este archivo es un fragmento de referencia visual.
+  NO forma parte del árbol de componentes Angular.
+  Los valores y etiquetas deben reemplazarse con bindings reales
+  al integrarlo en el componente correspondiente.
+  ════════════════════════════════════════════════════════════════
+-->
+
+<div class="row mb-4">
+
+  <!-- ── Plantilla de tarjeta KPI (repetir por cada métrica) ── -->
+  <div class="col-12 col-sm-6 col-xl-3 mb-3">
+    <div class="card kpi-card h-100">
+      <div class="card-body">
+        <div class="row align-items-center">
+
+          <!-- Datos -->
+          <div class="col">
+            <!-- Etiqueta de la métrica -->
+            <h6 class="kpi-label">Nombre de la métrica</h6>
+            <!-- Valor numérico -->
+            <span class="kpi-value">S/ 0.00</span>
+          </div>
+
+          <!-- Ícono decorativo -->
+          <div class="col-auto">
+            <div class="kpi-icon kpi-icon--primary">
+              <i class="cxi-cart"></i>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!--
+  Variantes de color disponibles para .kpi-icon:
+  · kpi-icon--success   → verde  (ganancias, confirmados)
+  · kpi-icon--primary   → azul   (mensuales, generales)
+  · kpi-icon--warning   → ámbar  (conteos, alertas)
+  · kpi-icon--secondary → gris   (comparativos, anteriores)
+
+  Íconos sugeridos del sistema cxi-*:
+  · cxi-cart      → ventas / compras
+  · cxi-calendar  → fechas / meses
+  · cxi-files     → pedidos / registros
+  · cxi-time      → períodos anteriores
+  · cxi-profile   → clientes
+-->

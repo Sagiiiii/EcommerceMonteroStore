@@ -1,0 +1,156 @@
+<app-sidebar></app-sidebar>
+
+<!-- ════════════════════════════════════════════════════════════
+     MÓDULO: Galería de Producto — MONTERO'S
+     Panel Administrativo · JAIME PONCE MONTERO
+     ════════════════════════════════════════════════════════════ -->
+
+<div class="border-bottom pt-5 mt-2 mb-5">
+  <h1 class="mt-2 mt-md-4 mb-3 pt-5">Galería del producto</h1>
+  <div class="d-flex flex-wrap flex-md-nowrap justify-content-between align-items-start">
+    <p class="text-muted">
+      Administre las imágenes de galería del producto en <strong>MONTERO'S</strong>.
+    </p>
+    <div class="ml-md-4 mt-2 mt-md-0 flex-shrink-0">
+      <a class="btn btn-dark" [routerLink]="['/panel/productos']">
+        <i class="cxi-angle-left mr-1"></i> Regresar a Productos
+      </a>
+    </div>
+  </div>
+</div>
+
+<div class="card box-shadow-sm" *ngIf="producto">
+
+  <div class="card-header d-flex align-items-center">
+    <h5 class="mb-0">
+      <i class="cxi-photo mr-2"></i> Galería — {{ producto.titulo }}
+    </h5>
+  </div>
+
+  <div class="card-body">
+    <div style="max-width: 48rem;">
+
+      <!-- Tarjeta de presentación del producto -->
+      <div class="card card-horizontal mb-4">
+        <div class="card-img-top text-center p-3" style="background-color: #f8f9fa;">
+          <img [src]="url + 'obtener_portada/' + producto.portada"
+            class="img-thumbnail" alt="Portada de {{ producto.titulo }}"
+            style="width: 80%; max-height: 160px; object-fit: contain;">
+        </div>
+        <div class="card-body">
+          <h6 class="card-title font-weight-semibold">{{ producto.titulo }}</h6>
+          <p class="card-text font-size-sm text-muted">{{ producto.descripcion }}</p>
+          <p class="mb-3 font-weight-medium">Precio de venta: <strong>S/ {{ producto.precio | number:'1.2-2' }}</strong></p>
+          <a [routerLink]="['/panel/productos', producto._id]" class="btn btn-sm btn-dark">
+            <i class="cxi-edit mr-1"></i> Editar producto
+          </a>
+        </div>
+      </div>
+
+      <!-- Subir nueva imagen -->
+      <div class="form-group row align-items-center mt-2">
+        <label class="col-md-3 col-form-label font-weight-medium" for="input-img">
+          <i class="cxi-photo mr-1"></i> Nueva imagen
+        </label>
+        <div class="col-md-9">
+          <div class="input-group">
+            <input id="input-img" class="form-control" type="file"
+              accept="image/png, image/jpeg, image/jpg, image/webp, image/gif"
+              (change)="fileChangeEvent($event)">
+            <div class="input-group-append">
+              <ng-container *ngIf="file !== undefined">
+                <button *ngIf="!load_btn" class="btn btn-primary" type="button" (click)="subirImagen()">
+                  <i class="cxi-check mr-1"></i> Subir
+                </button>
+                <button *ngIf="load_btn" type="button" class="btn btn-secondary" disabled>
+                  <span class="spinner-grow spinner-grow-sm mr-2" role="status" aria-hidden="true"></span>
+                  Subiendo...
+                </button>
+              </ng-container>
+              <ng-container *ngIf="file === undefined">
+                <button class="btn btn-secondary" type="button" disabled>Subir</button>
+              </ng-container>
+            </div>
+          </div>
+          <small class="form-text text-muted">Formatos: JPG, PNG, WEBP, GIF · Máx. 4 MB</small>
+        </div>
+      </div>
+
+      <!-- Tabla de imágenes de galería -->
+      <div class="table-responsive mt-3" *ngIf="producto?.galeria">
+        <table class="table table-hover table-sm">
+          <thead class="thead-dark">
+            <tr>
+              <th scope="col">Imagen</th>
+              <th scope="col">Nombre de archivo</th>
+              <th scope="col" class="text-center">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+
+            <!-- Sin imágenes -->
+            <tr *ngIf="producto.galeria.length === 0">
+              <td colspan="3" class="text-center py-3">
+                <span class="text-muted">No hay imágenes en la galería de este producto.</span>
+              </td>
+            </tr>
+
+            <!-- Imágenes -->
+            <tr *ngFor="let item of producto.galeria; let indice = index">
+              <td class="align-middle">
+                <img [src]="url + 'obtener_portada/' + item.imagen"
+                  class="img-thumbnail" style="width:70px;height:52px;object-fit:cover;"
+                  alt="Imagen {{ indice + 1 }} de galería">
+              </td>
+              <td class="align-middle">
+                <code class="font-size-sm">{{ item.imagen }}</code>
+              </td>
+              <td class="text-center align-middle">
+                <button type="button" class="btn btn-sm btn-outline-danger"
+                  [attr.data-toggle]="'modal'"
+                  [attr.data-target]="'#modalGaleria-' + item._id">
+                  <i class="cxi-trash mr-1"></i> Eliminar
+                </button>
+              </td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Modales de eliminación -->
+<ng-container *ngFor="let item of producto?.galeria">
+  <div class="modal fade" [id]="'modalGaleria-' + item._id"
+    tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">
+            <i class="cxi-trash mr-2 text-danger"></i> Eliminar imagen
+          </h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Cancelar">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p class="mb-2">¿Confirma que desea eliminar la imagen <strong><code>{{ item.imagen }}</code></strong>?</p>
+          <p class="font-size-sm text-muted mb-0">Esta acción es irreversible.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+          <button *ngIf="!load_btn_eliminar" type="button" class="btn btn-danger btn-sm" (click)="eliminar(item._id)">
+            <i class="cxi-trash mr-1"></i> Sí, eliminar
+          </button>
+          <button *ngIf="load_btn_eliminar" type="button" class="btn btn-secondary btn-sm" disabled>
+            <span class="spinner-grow spinner-grow-sm mr-2" role="status" aria-hidden="true"></span>
+            Eliminando...
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>

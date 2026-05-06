@@ -1,0 +1,162 @@
+<app-sidebar></app-sidebar>
+
+<!-- ════════════════════════════════════════════════════════════
+      MÓDULO: Registro de Descuento — MONTERO'S
+      Panel Administrativo · JAIME PONCE MONTERO
+      ════════════════════════════════════════════════════════════ -->
+
+<div class="border-bottom pt-5 mt-2 mb-5">
+  <h1 class="mt-2 mt-md-4 mb-3 pt-5">Descuentos y Promociones</h1>
+  <div class="d-flex flex-wrap flex-md-nowrap justify-content-between">
+    <p class="text-muted">
+      Registre una nueva campaña de descuento para <strong>MONTERO'S</strong>.
+      Defina el período de vigencia, el porcentaje aplicado y el banner promocional.
+    </p>
+  </div>
+</div>
+
+<form #registroForm="ngForm" (ngSubmit)="registro(registroForm)">
+  <div class="card box-shadow-sm">
+
+    <!-- Encabezado -->
+    <div class="card-header d-flex align-items-center">
+      <h5 class="mb-0">
+        <i class="cxi-attach mr-2"></i>
+        Registrar nuevo descuento
+      </h5>
+    </div>
+
+    <div class="card-body">
+      <div class="row">
+
+        <!-- ── Columna izquierda: datos del descuento ── -->
+        <div class="col-lg-8">
+          <div class="row">
+
+            <!-- Título -->
+            <div class="col-lg-12 form-group">
+              <label class="form-label" for="input-titulo">
+                <i class="cxi-attach mr-1"></i> Título del descuento
+              </label>
+              <input
+                type="text"
+                class="form-control"
+                id="input-titulo"
+                placeholder="Ej.: Descuento de verano MONTERO'S"
+                required
+                name="titulo"
+                [(ngModel)]="descuento.titulo">
+              <small class="form-text text-muted">Nombre que identificará esta campaña.</small>
+            </div>
+
+            <!-- Fecha de inicio -->
+            <div class="col-lg-6 form-group">
+              <label class="form-label" for="input-fecha-inicio">
+                <i class="cxi-calendar mr-1"></i> Fecha de inicio
+              </label>
+              <input
+                type="date"
+                class="form-control"
+                id="input-fecha-inicio"
+                required
+                name="fecha_inicio"
+                [(ngModel)]="descuento.fecha_inicio">
+            </div>
+
+            <!-- Fecha de fin -->
+            <div class="col-lg-6 form-group">
+              <label class="form-label" for="input-fecha-fin">
+                <i class="cxi-calendar mr-1"></i> Fecha de fin
+              </label>
+              <input
+                type="date"
+                class="form-control"
+                id="input-fecha-fin"
+                required
+                name="fecha_fin"
+                [(ngModel)]="descuento.fecha_fin">
+            </div>
+
+            <!-- Porcentaje de descuento -->
+            <div class="col-lg-6 form-group">
+              <label class="form-label" for="input-descuento">
+                <i class="cxi-cart mr-1"></i> Porcentaje de descuento (%)
+              </label>
+              <div class="input-group">
+                <input
+                  type="number"
+                  class="form-control"
+                  id="input-descuento"
+                  placeholder="Ej.: 20"
+                  required
+                  min="1"
+                  max="100"
+                  name="descuento"
+                  [(ngModel)]="descuento.descuento">
+                <div class="input-group-append">
+                  <span class="input-group-text">%</span>
+                </div>
+              </div>
+              <small class="form-text text-muted">Valor entre 1% y 100%.</small>
+            </div>
+
+          </div>
+        </div>
+        <!-- /col izquierda -->
+
+        <!-- ── Columna derecha: banner ── -->
+        <div class="col-lg-4">
+          <div class="form-group">
+            <label class="form-label" for="input-banner">
+              <i class="cxi-photo mr-1"></i> Banner promocional
+            </label>
+            <div class="custom-file">
+              <input
+                class="custom-file-input"
+                type="file"
+                id="input-banner"
+                accept="image/png, image/jpeg, image/jpg, image/webp, image/gif"
+                (change)="fileChangeEvent($event)">
+              <label
+                class="custom-file-label"
+                for="input-banner"
+                style="white-space: nowrap; overflow: hidden;">
+                Seleccionar imagen
+              </label>
+            </div>
+            <small class="form-text text-muted">
+              Formatos: JPG, PNG, WEBP, GIF · Máx. 4 MB
+            </small>
+          </div>
+          <div class="mt-2">
+            <img
+              [src]="imgSelect"
+              class="img-thumbnail w-100"
+              alt="Vista previa del banner del descuento">
+          </div>
+        </div>
+        <!-- /col derecha -->
+
+      </div>
+    </div>
+
+    <!-- Pie de tarjeta -->
+    <div class="card-footer d-flex align-items-center">
+
+      <button *ngIf="!load_btn" class="btn btn-primary mr-3" type="submit">
+        <i class="cxi-check mr-1"></i> Crear descuento
+      </button>
+
+      <button *ngIf="load_btn" type="button" class="btn btn-secondary mr-3" disabled>
+        <span class="spinner-grow spinner-grow-sm mr-2" role="status" aria-hidden="true"></span>
+        Creando...
+      </button>
+
+      <a class="btn btn-dark" [routerLink]="['/panel/descuentos']">
+        <i class="cxi-angle-left mr-1"></i> Regresar
+      </a>
+
+    </div>
+
+  </div>
+</form>

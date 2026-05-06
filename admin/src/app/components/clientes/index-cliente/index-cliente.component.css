@@ -1,0 +1,74 @@
+/* =============================================
+    INDEX-CLIENTE — MONTERO'S Admin Panel
+   ============================================= */
+
+.border-bottom h1 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #2d2d2d;
+}
+
+.card.box-shadow-sm {
+  border: 1px solid #e8e8e8;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* Cabecera de filtros */
+.card-header.bg-light {
+  background-color: #f8f9fa !important;
+  border-bottom: 1px solid #e9ecef;
+  padding: 1rem 1.25rem;
+}
+
+/* Tabla */
+.table th {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+
+.table td {
+  vertical-align: middle;
+  font-size: 0.9rem;
+}
+
+.table-hover tbody tr:hover {
+  background-color: rgba(220, 53, 69, 0.04);
+}
+
+/* Dropdown */
+.dropdown-item i {
+  width: 16px;
+  text-align: center;
+}
+
+.dropdown-item.text-danger:hover {
+  background-color: #fff5f5;
+}
+
+/* Modal */
+.modal-header .modal-title {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+/* Pie paginación */
+.card-footer {
+  background-color: #f8f9fa;
+  border-top: 1px solid #dee2e6;
+  padding: 0.75rem 1.25rem;
+}
+
+/* Spinner */
+.spinner-border.text-danger {
+  color: #dc3545 !important;
+}
+
+/* Input group focus */
+.input-group .form-control:focus {
+  border-color: #dc3545;
+  box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.15);
+  z-index: 3;
+}

@@ -1,0 +1,80 @@
+<!-- ════════════════════════════════════════════════════════════
+      MÓDULO: Inicio de Sesión — MONTERO'S
+      Panel Administrativo · JAIME PONCE MONTERO
+      ════════════════════════════════════════════════════════════ -->
+
+<div class="login-wrapper">
+  <div class="row justify-content-center w-100">
+    <div class="col-lg-5 col-md-7 col-sm-10">
+      <div class="login-card">
+
+        <!-- Logotipo / marca -->
+        <div class="login-brand text-center mb-4">
+          <h2 class="login-brand-name">MONTERO'S</h2>
+          <p class="login-brand-sub">Panel Administrativo</p>
+        </div>
+
+        <!-- Encabezado -->
+        <h4 class="login-title text-center mb-1">Iniciar sesión</h4>
+        <p class="login-subtitle text-muted text-center mb-4">
+          Ingrese sus credenciales de administrador para acceder al sistema de <strong>MONTERO'S</strong>.
+        </p>
+
+        <!-- Formulario -->
+        <form #loginForm="ngForm" (ngSubmit)="login(loginForm)" novalidate>
+
+          <!-- Correo electrónico -->
+          <div class="form-group">
+            <label class="form-label" for="login-email">
+              <i class="cxi-profile mr-1"></i> Correo electrónico
+            </label>
+            <input
+              type="email"
+              class="form-control"
+              id="login-email"
+              name="email"
+              placeholder="Ingrese su correo electrónico"
+              required
+              [(ngModel)]="user.email">
+          </div>
+
+          <!-- Contraseña -->
+          <div class="form-group">
+            <label class="form-label" for="login-password">
+              <i class="cxi-lock mr-1"></i> Contraseña
+            </label>
+            <div class="cs-password-toggle input-group-overlay">
+              <input
+                type="password"
+                class="form-control appended-form-control"
+                id="login-password"
+                name="password"
+                placeholder="Ingrese su contraseña"
+                required
+                [(ngModel)]="user.password">
+              <div class="input-group-append-overlay">
+                <label class="btn cs-password-toggle-btn input-group-text">
+                  <input type="checkbox" class="custom-control-input">
+                  <i class="cxi-eye cs-password-toggle-indicator"></i>
+                  <span class="sr-only">Mostrar contraseña</span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Botón de acceso -->
+          <button type="submit" class="btn btn-primary btn-block mt-3">
+            <i class="cxi-check mr-1"></i> Ingresar al sistema
+          </button>
+
+        </form>
+
+        <!-- Pie de página -->
+        <p class="login-footer text-center text-muted mt-4 mb-0">
+          &copy; {{ currentYear }} MONTERO'S · Sistema de gestión administrativa
+        </p>
+
+      </div>
+    </div>
+  </div>
+</div>

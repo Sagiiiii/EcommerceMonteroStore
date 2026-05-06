@@ -1,0 +1,34 @@
+/* index-ventas.component.css — MONTERO'S */
+.border-bottom h1 { font-size: 1.6rem; font-weight: 700; color: #2d2d2d; letter-spacing: -0.02em; }
+.card.box-shadow-sm { border: 1px solid #e8e8e8; border-radius: 0.5rem; box-shadow: 0 2px 8px rgba(0,0,0,.06); }
+.card-header { background-color: #f8f9fa; border-bottom: 1px solid #e8e8e8; padding: 1rem 1.25rem; }
+.card-header h5 { font-size: 1rem; font-weight: 600; color: #2d2d2d; }
+.card-footer { background-color: #f8f9fa; border-top: 1px solid #e8e8e8; padding: 0.75rem 1.25rem; }
+
+/* Ítem de venta */
+.venta-item { padding-top: 1rem; }
+.venta-item:first-child { padding-top: 0; }
+
+/* Badges */
+.badge { font-size: 0.72rem; font-weight: 600; padding: 0.3em 0.65em; letter-spacing: 0.02em; }
+.badge-warning  { background-color: #ffc107; color: #212529; }
+.badge-success  { background-color: #28a745; color: #fff; }
+.badge-danger   { background-color: #dc3545; color: #fff; }
+.badge-info     { background-color: #17a2b8; color: #fff; }
+.badge-secondary{ background-color: #6c757d; color: #fff; }
+.badge-dark     { background-color: #343a40; color: #fff; }
+
+/* Tipografía */
+.font-size-sm  { font-size: 0.875rem; }
+.font-size-xs  { font-size: 0.775rem; }
+.font-size-xl  { font-size: 2rem; }
+.font-weight-semibold { font-weight: 600; }
+
+/* Form label */
+.form-label { font-weight: 500; font-size: 0.875rem; color: #444; margin-bottom: 0.3rem; display: block; }
+
+/* Utilidades */
+.gap-2 { gap: 0.5rem; }
+.gap-3 { gap: 0.75rem; }
+
+ngb-pagination { display: flex; justify-content: flex-end; }

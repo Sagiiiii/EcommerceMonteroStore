@@ -1,0 +1,29 @@
+<app-sidebar></app-sidebar>
+
+<!-- ════════════════════════════════════════════════════════════
+      PÁGINA: Error 404 — Recurso no encontrado
+      Panel Administrativo MONTERO'S · JAIME PONCE MONTERO
+      ════════════════════════════════════════════════════════════ -->
+
+<div class="container error404-container">
+  <div class="row justify-content-center">
+    <div class="col-lg-6 col-md-8 col-sm-10 text-center">
+
+      <img
+        src="assets/img/404.jpg"
+        alt="Página no encontrada — MONTERO'S"
+        class="error404-img">
+
+      <h2 class="error404-title">Página no encontrada</h2>
+      <p class="error404-desc text-muted">
+        El recurso que busca no existe o fue movido dentro del
+        sistema administrativo de <strong>MONTERO'S</strong>.
+      </p>
+
+      <a [routerLink]="['/inicio']" class="btn btn-primary btn-lg mt-2">
+        <i class="cxi-home mr-2"></i> Volver al inicio
+      </a>
+
+    </div>
+  </div>
+</div>

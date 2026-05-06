@@ -1,0 +1,38 @@
+<!-- Account menu (sticky sidebar) -->
+<div class="sidebar-sticky" data-sidebar-sticky-options='{
+  "topSpacing": 120,
+  "minWidth": 991
+}'>
+  <div class="sidebar-sticky-inner">
+    <div class="card">
+      <div class="card-body" *ngIf="user_lc">
+        <h5 class="card-title mb-1">{{user_lc.nombres}}</h5>
+        <p class="card-text text-muted mb-lg-0">{{user_lc.email}}</p>
+      </div>
+      <div id="account-menu" class="collapse d-lg-block">
+        <div class="list-group list-group-flush border-top">
+          <a [routerLink]="['/cuenta/perfil']" routerLinkActive="active" class="btn btn-danger list-group-item list-group-item-action d-flex align-items-center">
+            <i class="cxi-profile font-size-lg mr-2 text-dark"></i>
+            <span class="text-dark">Mi perfil</span>
+          </a>
+          <a [routerLink]="['/cuenta/direcciones']" routerLinkActive="active" class="btn btn-danger list-group-item list-group-item-action d-flex align-items-center">
+            <i class="cxi-bag font-size-lg mr-2 text-dark"></i>
+            <span class="text-dark">Mis Direcciones</span>
+          </a>
+          <a [routerLink]="['/cuenta/ordenes']" routerLinkActive="active" class="btn btn-danger list-group-item list-group-item-action d-flex align-items-center">
+            <i class="cxi-heart font-size-lg mr-2 text-dark"></i>
+            <span class="text-dark">Mis Ordenes</span>
+          </a>
+          <a [routerLink]="['/cuenta/reviews']" routerLinkActive="active" class="btn btn-danger list-group-item list-group-item-action d-flex align-items-center">
+            <i class="cxi-star font-size-lg mr-2 text-dark "></i>
+            <span class="text-dark">Mis Reseñas</span>
+          </a>
+          <a style="cursor: pointer;" (click)="logout()" class="btn btn-dark list-group-item list-group-item-action d-flex align-items-center">
+            <i class="cxi-logout font-size-lg mr-2 text-danger"></i>
+            <span class="text-danger">Cerrar Sesión</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

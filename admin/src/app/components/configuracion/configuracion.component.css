@@ -1,0 +1,137 @@
+/* ════════════════════════════════════════════════════════════════
+    configuracion.component.css
+    Estilos del módulo de Configuración General — MONTERO'S
+    Panel Administrativo · JAIME PONCE MONTERO
+   ════════════════════════════════════════════════════════════════ */
+
+/* ── Encabezado del módulo ─────────────────────────────────────── */
+.border-bottom h1 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #2d2d2d;
+  letter-spacing: -0.02em;
+}
+
+/* ── Tarjeta principal ─────────────────────────────────────────── */
+.card.box-shadow-sm {
+  border: 1px solid #e8e8e8;
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.card-header {
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #e8e8e8;
+  padding: 1rem 1.25rem;
+}
+
+.card-header h5 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #2d2d2d;
+}
+
+/* ── Tabla de categorías ───────────────────────────────────────── */
+.table thead.thead-dark th {
+  background-color: #2d2d2d;
+  border-color: #3d3d3d;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.table tbody tr:hover {
+  background-color: #f8f9fa;
+}
+
+.table td code {
+  font-size: 0.78rem;
+  color: #6c757d;
+  background: transparent;
+  padding: 0;
+}
+
+/* ── Zona de carga de logo (drag & drop) ───────────────────────── */
+.cs-file-drop-area {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1.5rem;
+  border: 2px dashed #ced4da;
+  border-radius: 0.5rem;
+  background-color: #fdfdfd;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+  cursor: pointer;
+}
+
+.cs-file-drop-area:hover {
+  border-color: #007bff;
+  background-color: #f0f7ff;
+}
+
+.cs-file-drop-preview {
+  width: 120px;
+  height: 120px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f0f0f0;
+}
+
+.cs-file-drop-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.cs-file-drop-message {
+  font-size: 0.875rem;
+  color: #6c757d;
+  text-align: center;
+}
+
+.cs-file-drop-hint {
+  font-size: 0.775rem;
+  color: #adb5bd;
+  text-align: center;
+}
+
+.cs-file-drop-input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+
+/* ── Pie de tarjeta / acciones ─────────────────────────────────── */
+.card-footer {
+  background-color: #f8f9fa;
+  border-top: 1px solid #e8e8e8;
+  padding: 1rem 1.25rem;
+}
+
+/* ── Mejora visual de botones de acción ────────────────────────── */
+.btn-primary {
+  font-weight: 600;
+}
+
+.btn-outline-danger {
+  font-size: 0.8rem;
+}
+
+.btn-outline-primary {
+  font-size: 0.825rem;
+}
+
+/* ── Textos de ayuda ───────────────────────────────────────────── */
+.form-text.text-muted {
+  font-size: 0.775rem;
+  margin-top: 0.3rem;
+}

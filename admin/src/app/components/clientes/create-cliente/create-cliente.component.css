@@ -1,0 +1,76 @@
+/* =============================================
+    CREATE-CLIENTE — MONTERO'S Admin Panel
+   ============================================= */
+
+.border-bottom h1 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #2d2d2d;
+}
+
+.card.box-shadow-sm {
+  border: 1px solid #e8e8e8;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.card-header {
+  background-color: #f8f9fa;
+  border-bottom: 2px solid #dee2e6;
+  padding: 1rem 1.25rem;
+}
+
+.card-header h5 {
+  font-weight: 600;
+  color: #343a40;
+}
+
+.form-label {
+  font-weight: 500;
+  font-size: 0.875rem;
+  color: #495057;
+  margin-bottom: 0.35rem;
+}
+
+.form-control,
+.custom-select {
+  border-radius: 6px;
+  border: 1px solid #ced4da;
+  font-size: 0.9rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-control:focus,
+.custom-select:focus {
+  border-color: #dc3545;
+  box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.15);
+}
+
+.form-group small.text-danger {
+  font-size: 0.78rem;
+  margin-top: 0.25rem;
+  display: block;
+}
+
+.card-footer {
+  background-color: #f8f9fa;
+  border-top: 1px solid #dee2e6;
+  padding: 1rem 1.25rem;
+}
+
+.btn-danger {
+  background-color: #dc3545;
+  border-color: #dc3545;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+}
+
+.btn-danger:hover:not(:disabled) {
+  background-color: #c82333;
+  border-color: #bd2130;
+}
+
+.btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+}

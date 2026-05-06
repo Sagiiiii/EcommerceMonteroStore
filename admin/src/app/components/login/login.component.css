@@ -1,0 +1,99 @@
+/* ════════════════════════════════════════════════════════════════
+    login.component.css
+    Estilos del módulo de Inicio de Sesión — MONTERO'S
+    Panel Administrativo · JAIME PONCE MONTERO
+   ════════════════════════════════════════════════════════════════ */
+
+/* ── Contenedor principal ──────────────────────────────────────── */
+.login-wrapper {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f4f5f7;
+  padding: 2rem 1rem;
+}
+
+/* ── Tarjeta de login ──────────────────────────────────────────── */
+.login-card {
+  background-color: #ffffff;
+  border: 1px solid #e8e8e8;
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+  padding: 2.5rem 2rem;
+  width: 100%;
+}
+
+/* ── Marca / logotipo ──────────────────────────────────────────── */
+.login-brand-name {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: #1a1a1a;
+  letter-spacing: -0.03em;
+  margin-bottom: 0.15rem;
+}
+
+.login-brand-sub {
+  font-size: 0.8rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #8a8a8a;
+  margin-bottom: 0;
+}
+
+/* ── Títulos ───────────────────────────────────────────────────── */
+.login-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #2d2d2d;
+}
+
+.login-subtitle {
+  font-size: 0.875rem;
+  line-height: 1.55;
+}
+
+/* ── Labels ────────────────────────────────────────────────────── */
+.form-label {
+  font-weight: 500;
+  font-size: 0.875rem;
+  color: #444;
+  margin-bottom: 0.35rem;
+}
+
+/* ── Inputs ────────────────────────────────────────────────────── */
+.form-control {
+  border-radius: 0.375rem;
+  font-size: 0.9rem;
+}
+
+.form-control:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.18);
+}
+
+/* ── Botón principal ───────────────────────────────────────────── */
+.btn-primary {
+  font-weight: 600;
+  font-size: 0.9rem;
+  padding: 0.6rem 1.25rem;
+  border-radius: 0.375rem;
+}
+
+/* ── Pie de página ─────────────────────────────────────────────── */
+.login-footer {
+  font-size: 0.775rem;
+  color: #adb5bd;
+}
+
+/* ── Responsivo ────────────────────────────────────────────────── */
+@media (max-width: 480px) {
+  .login-card {
+    padding: 1.75rem 1.25rem;
+  }
+
+  .login-brand-name {
+    font-size: 1.5rem;
+  }
+}

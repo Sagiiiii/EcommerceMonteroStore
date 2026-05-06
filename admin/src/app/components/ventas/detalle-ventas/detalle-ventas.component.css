@@ -1,0 +1,13 @@
+/* detalle-ventas.component.css — MONTERO'S */
+.border-bottom h1 { font-size: 1.6rem; font-weight: 700; color: #2d2d2d; letter-spacing: -0.02em; }
+.card.box-shadow-sm { border: 1px solid #e8e8e8; border-radius: 0.5rem; box-shadow: 0 2px 8px rgba(0,0,0,.06); }
+.card-header { background-color: #f8f9fa; border-bottom: 1px solid #e8e8e8; padding: 1rem 1.25rem; }
+.card-header h5 { font-size: 1rem; font-weight: 600; color: #2d2d2d; }
+.font-weight-medium { font-weight: 500; }
+.font-weight-semibold { font-weight: 600; }
+.font-size-sm { font-size: 0.875rem; }
+.font-size-xs { font-size: 0.775rem; }
+.font-size-lg { font-size: 1.1rem; }
+.img-thumbnail { border-radius: 0.375rem; object-fit: cover; }
+code { font-size: 0.78rem; background: #f0f0f0; padding: 0.15em 0.4em; border-radius: 0.25rem; }
+.table-light td, .table-light th { background-color: #f8f9fa; }

@@ -1,0 +1,30 @@
+/* ════════════════════════════════════════════════════════════════
+    error404.component.css
+    Estilos de la página Error 404 — MONTERO'S
+    Panel Administrativo · JAIME PONCE MONTERO
+    ════════════════════════════════════════════════════════════════ */
+
+.error404-container {
+  padding-top: 6rem;
+  padding-bottom: 4rem;
+}
+
+.error404-img {
+  width: 70%;
+  max-width: 380px;
+  margin-bottom: 2rem;
+  opacity: 0.92;
+}
+
+.error404-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #2d2d2d;
+  margin-bottom: 0.75rem;
+}
+
+.error404-desc {
+  font-size: 0.95rem;
+  line-height: 1.65;
+  margin-bottom: 1.5rem;
+}

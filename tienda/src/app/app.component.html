@@ -1,0 +1,13 @@
+<!-- ── BANNER DEMO ── -->
+<div *ngIf="isDemo" style="background:#ffc107;padding:8px 16px;
+      text-align:center;font-size:.85rem;font-weight:600;
+      color:#1a1a1a;position:sticky;top:0;z-index:9999">
+    ⚡ Modo Demo activo — Navegando como cliente de prueba |
+    <span style="opacity:.7">cliente@demo.com</span>
+    &nbsp;·&nbsp;
+    <span style="cursor:pointer;text-decoration:underline" (click)="cerrarDemo()">
+        Salir del modo demo
+    </span>
+</div>
+
+<router-outlet></router-outlet>

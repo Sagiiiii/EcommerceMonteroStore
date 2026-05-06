@@ -1,0 +1,215 @@
+<app-sidebar></app-sidebar>
+
+<!-- Encabezado del módulo -->
+<div class="border-bottom pt-5 mt-2 mb-5">
+  <h1 class="mt-2 mt-md-4 mb-3 pt-5">
+    <i class="cxi-profile mr-2"></i> Gestión de Clientes
+  </h1>
+  <div class="d-flex flex-wrap flex-md-nowrap justify-content-between align-items-center">
+    <p class="text-muted mb-0">
+      Registro de nuevos clientes en el sistema administrativo de <strong>MONTERO'S</strong>.
+    </p>
+    <a [routerLink]="['/panel/clientes']" class="btn btn-sm btn-outline-secondary mt-2 mt-md-0">
+      <i class="cxi-arrow-left mr-1"></i> Volver al listado
+    </a>
+  </div>
+</div>
+
+<!-- Formulario de registro -->
+<form #registroForm="ngForm" (ngSubmit)="registrarCliente(registroForm)" novalidate autocomplete="off">
+  <div class="card box-shadow-sm">
+
+    <!-- Cabecera -->
+    <div class="card-header d-flex align-items-center">
+      <i class="cxi-profile mr-2 text-danger"></i>
+      <h5 class="mb-0">Nuevo Registro de Cliente</h5>
+    </div>
+
+    <!-- Cuerpo -->
+    <div class="card-body">
+      <div class="row">
+
+        <!-- Nombres -->
+        <div class="col-md-4 form-group">
+          <label for="nombres" class="form-label">
+            <i class="cxi-profile mr-1"></i> Nombres <span class="text-danger">*</span>
+          </label>
+          <input
+            id="nombres"
+            class="form-control"
+            type="text"
+            placeholder="Nombres completos"
+            required
+            name="nombres"
+            autocomplete="given-name"
+            [(ngModel)]="cliente.nombres"
+            #nombresRef="ngModel"
+          >
+          <small class="text-danger" *ngIf="nombresRef.invalid && nombresRef.touched">
+            El nombre es obligatorio.
+          </small>
+        </div>
+
+        <!-- Apellidos -->
+        <div class="col-md-4 form-group">
+          <label for="apellidos" class="form-label">
+            <i class="cxi-profile mr-1"></i> Apellidos <span class="text-danger">*</span>
+          </label>
+          <input
+            id="apellidos"
+            class="form-control"
+            type="text"
+            placeholder="Apellidos completos"
+            required
+            name="apellidos"
+            autocomplete="family-name"
+            [(ngModel)]="cliente.apellidos"
+            #apellidosRef="ngModel"
+          >
+          <small class="text-danger" *ngIf="apellidosRef.invalid && apellidosRef.touched">
+            El apellido es obligatorio.
+          </small>
+        </div>
+
+        <!-- Correo electrónico -->
+        <div class="col-md-4 form-group">
+          <label for="email" class="form-label">
+            <i class="cxi-mail mr-1"></i> Correo electrónico <span class="text-danger">*</span>
+          </label>
+          <input
+            id="email"
+            class="form-control"
+            type="email"
+            placeholder="ejemplo@correo.com"
+            required
+            name="email"
+            autocomplete="email"
+            [(ngModel)]="cliente.email"
+            #emailRef="ngModel"
+          >
+          <small class="text-danger" *ngIf="emailRef.invalid && emailRef.touched">
+            Ingrese un correo electrónico válido.
+          </small>
+        </div>
+
+        <!-- Teléfono -->
+        <div class="col-md-4 form-group">
+          <label for="telefono" class="form-label">
+            <i class="cxi-iphone mr-1"></i> Teléfono <span class="text-danger">*</span>
+          </label>
+          <input
+            id="telefono"
+            class="form-control"
+            type="tel"
+            placeholder="Ej: 987 654 321"
+            required
+            name="telefono"
+            autocomplete="tel"
+            [(ngModel)]="cliente.telefono"
+            #telefonoRef="ngModel"
+          >
+          <small class="text-danger" *ngIf="telefonoRef.invalid && telefonoRef.touched">
+            El teléfono es obligatorio.
+          </small>
+        </div>
+
+        <!-- Fecha de nacimiento -->
+        <div class="col-md-4 form-group">
+          <label for="f_nacimiento" class="form-label">
+            <i class="cxi-calendar mr-1"></i> Fecha de nacimiento <span class="text-danger">*</span>
+          </label>
+          <input
+            id="f_nacimiento"
+            class="form-control"
+            type="date"
+            required
+            name="f_nacimiento"
+            [(ngModel)]="cliente.f_nacimiento"
+            #fechaRef="ngModel"
+          >
+          <small class="text-danger" *ngIf="fechaRef.invalid && fechaRef.touched">
+            La fecha de nacimiento es obligatoria.
+          </small>
+        </div>
+
+        <!-- DNI -->
+        <div class="col-md-4 form-group">
+          <label for="dni" class="form-label">
+            <i class="cxi-files mr-1"></i> DNI <span class="text-danger">*</span>
+          </label>
+          <input
+            id="dni"
+            class="form-control"
+            type="number"
+            placeholder="Ej: 12345678"
+            required
+            name="dni"
+            [(ngModel)]="cliente.dni"
+            #dniRef="ngModel"
+            min="10000000"
+            max="99999999"
+          >
+          <small class="text-danger" *ngIf="dniRef.invalid && dniRef.touched">
+            Ingrese un DNI válido (8 dígitos).
+          </small>
+        </div>
+
+        <!-- Género -->
+        <div class="col-md-4 form-group">
+          <label for="genero" class="form-label">
+            <i class="cxi-user mr-1"></i> Género <span class="text-danger">*</span>
+          </label>
+          <select
+            id="genero"
+            class="form-control custom-select"
+            name="genero"
+            required
+            [(ngModel)]="cliente.genero"
+            #generoRef="ngModel"
+          >
+            <option value="" disabled selected>— Seleccione una opción —</option>
+            <option value="Masculino">Masculino</option>
+            <option value="Femenino">Femenino</option>
+            <option value="Prefiero no decir">Prefiero no decir</option>
+          </select>
+          <small class="text-danger" *ngIf="generoRef.invalid && generoRef.touched">
+            Seleccione una opción de género.
+          </small>
+        </div>
+
+      </div>
+
+      <p class="text-muted small mt-2 mb-0">
+        <span class="text-danger">*</span> Todos los campos son obligatorios.
+      </p>
+    </div>
+
+    <!-- Pie -->
+    <div class="card-footer d-flex align-items-center justify-content-between">
+      <div>
+        <button
+          *ngIf="!load_btn"
+          class="btn btn-danger mr-3"
+          type="submit"
+          [disabled]="registroForm.invalid"
+        >
+          <i class="cxi-profile mr-1"></i> Registrar Cliente
+        </button>
+
+        <button *ngIf="load_btn" type="button" class="btn btn-secondary mr-3" disabled>
+          <span class="spinner-grow spinner-grow-sm mr-2" role="status" aria-hidden="true"></span>
+          Registrando...
+        </button>
+
+        <a [routerLink]="['/panel/clientes']" class="btn btn-dark">
+          <i class="cxi-arrow-left mr-1"></i> Cancelar
+        </a>
+      </div>
+
+      <small class="text-danger" *ngIf="registroForm.submitted && registroForm.invalid">
+        <i class="cxi-warning mr-1"></i> Revise los campos obligatorios antes de continuar.
+      </small>
+    </div>
+
+  </div>
+</form>

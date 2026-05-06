@@ -1,0 +1,129 @@
+<app-sidebar></app-sidebar>
+
+<!-- Encabezado de página -->
+<div class="border-bottom pt-5 mt-2 mb-5">
+  <h1 class="mt-2 mt-md-4 mb-3 pt-5">Gestión de Productos — MONTERO'S</h1>
+  <div class="d-flex flex-wrap flex-md-nowrap justify-content-between">
+    <p class="text-muted">
+      Este módulo muestra las reseñas registradas para el producto seleccionado dentro del catálogo de MONTERO'S.
+    </p>
+    <p class="font-size-sm font-weight-medium pl-md-4">
+      <a class="btn btn-dark btn-block px-4" [routerLink]="['/panel/productos']">
+        ← Regresar a Productos
+      </a>
+    </p>
+  </div>
+</div>
+
+<!-- Estado: producto no encontrado -->
+<div class="card box-shadow-sm" *ngIf="producto === undefined">
+  <div class="card-body text-center py-5">
+    <h3 class="mb-3">Registro no encontrado</h3>
+    <p class="text-muted mb-4">
+      El producto solicitado no existe o no está disponible en el sistema de MONTERO'S.
+    </p>
+    <div class="row">
+      <div class="col-3 mx-auto">
+        <img src="assets/img/advertencia.png" alt="Advertencia — registro no encontrado" style="width: 100%;">
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Estado: producto encontrado -->
+<div class="card box-shadow-sm" *ngIf="producto">
+
+  <div class="card-header">
+    <h5 class="mb-0">
+      Reseñas del producto:
+      <span class="text-muted fw-normal">{{ producto.titulo }}</span>
+    </h5>
+  </div>
+
+  <div class="card-body">
+    <div class="col-10">
+
+      <!-- Tarjeta horizontal del producto -->
+      <div class="card card-horizontal mb-4">
+        <div class="card-img-top text-center">
+          <img
+            [src]="url + 'obtener_portada/' + producto.portada"
+            class="img-thumbnail rounded-0 mt-4 mb-4"
+            alt="Imagen del producto {{ producto.titulo }}"
+            style="width: 80%;"
+          >
+        </div>
+        <div class="card-body">
+          <h6 class="card-title">{{ producto.titulo }}</h6>
+          <p class="card-text fs-sm">{{ producto.descripcion }}</p>
+          <span class="text-danger fw-semibold">Precio de Venta: S/ {{ producto.precio }}</span>
+          <br><br>
+          <a [routerLink]="['/panel/productos', producto._id]" class="btn btn-sm btn-dark">
+            Ver detalle del producto
+          </a>
+        </div>
+      </div>
+
+      <!-- Lista de reseñas -->
+      <ng-container *ngIf="reviews.length > 0; else sinReviews">
+        <div
+          class="col-12 mb-1"
+          *ngFor="let item of reviews | slice: (page-1)*pageSize : (page-1)*pageSize + pageSize"
+        >
+          <div class="mb-4 pb-4 border-bottom">
+            <div class="row">
+
+              <!-- Datos del cliente -->
+              <div class="col-md-3 col-sm-4 mb-sm-0 mb-3">
+                <h3 class="mb-2 font-size-lg">
+                  {{ item.cliente.nombres }} {{ item.cliente.apellidos }}
+                </h3>
+                <span class="d-block mb-3 font-size-sm text-muted">
+                  {{ item.createdAt | date: 'dd/MM/yyyy' }}
+                </span>
+
+                <!-- Calificación con estrellas -->
+                <div class="mt-n1 star-rating">
+                  <i class="sr-star cxi-star-filled" [ngClass]="{ 'active': item.clasificacion >= 1 }"></i>
+                  <i class="sr-star cxi-star-filled" [ngClass]="{ 'active': item.clasificacion >= 2 }"></i>
+                  <i class="sr-star cxi-star-filled" [ngClass]="{ 'active': item.clasificacion >= 3 }"></i>
+                  <i class="sr-star cxi-star-filled" [ngClass]="{ 'active': item.clasificacion >= 4 }"></i>
+                  <i class="sr-star cxi-star-filled" [ngClass]="{ 'active': item.clasificacion >= 5 }"></i>
+                </div>
+              </div>
+
+              <!-- Contenido de la reseña -->
+              <div class="col">
+                <p class="mb-1">
+                  <span class="fw-bold text-muted font-size-sm">{{ item.cliente.email }}</span>
+                </p>
+                <p class="mb-0">{{ item.review }}</p>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </ng-container>
+
+      <!-- Estado vacío -->
+      <ng-template #sinReviews>
+        <div class="row">
+          <div class="col-12 text-center py-4">
+            <h4 class="text-muted">Este producto aún no tiene reseñas registradas.</h4>
+          </div>
+        </div>
+      </ng-template>
+
+    </div>
+  </div>
+
+  <!-- Paginación -->
+  <div class="card-footer" *ngIf="reviews.length > pageSize">
+    <ngb-pagination
+      [(page)]="page"
+      [pageSize]="pageSize"
+      [collectionSize]="reviews.length"
+    ></ngb-pagination>
+  </div>
+
+</div>

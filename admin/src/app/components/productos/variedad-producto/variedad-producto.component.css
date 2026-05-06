@@ -1,0 +1,46 @@
+/* ============================================================
+    MONTERO'S — Panel Administrativo
+    Módulo: Variedades de Producto
+    ============================================================ */
+
+/* Tarjeta horizontal del producto */
+.card-horizontal {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+}
+
+.card-horizontal .card-img-top {
+  width: 180px;
+  min-width: 180px;
+  overflow: hidden;
+  border-right: 1px solid #e9ecef;
+}
+
+/* Acciones en el footer */
+.card-footer .gap-2 {
+  gap: 0.5rem;
+}
+
+@media (max-width: 576px) {
+  .card-horizontal {
+    flex-direction: column;
+  }
+
+  .card-horizontal .card-img-top {
+    width: 100%;
+    min-width: unset;
+    border-right: none;
+    border-bottom: 1px solid #e9ecef;
+  }
+
+  .card-footer {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .card-footer .btn {
+    width: 100%;
+    text-align: center;
+  }
+}

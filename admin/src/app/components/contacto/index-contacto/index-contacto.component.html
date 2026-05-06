@@ -1,0 +1,231 @@
+<app-sidebar></app-sidebar>
+
+<!-- ════════════════════════════════════════════════════════════
+      MÓDULO: Mensajes de Contacto — MONTERO'S
+      Panel Administrativo · JAIME PONCE MONTERO
+      ════════════════════════════════════════════════════════════ -->
+
+<!-- Encabezado del módulo -->
+<div class="border-bottom pt-5 mt-2 mb-5">
+  <h1 class="mt-2 mt-md-4 mb-3 pt-5">Mensajes de Contacto</h1>
+  <div class="d-flex flex-wrap flex-md-nowrap justify-content-between">
+    <p class="text-muted">
+      Gestione los mensajes recibidos a través del canal de contacto de <strong>MONTERO'S</strong>.
+      Revise, atienda y cierre cada comunicación de sus clientes.
+    </p>
+  </div>
+</div>
+
+<!-- ── Tarjeta principal ── -->
+<div class="card box-shadow-sm">
+
+  <!-- Encabezado de tarjeta -->
+  <div class="card-header d-flex align-items-center justify-content-between">
+    <h5 class="mb-0">
+      <i class="cxi-mail mr-2"></i>
+      Bandeja de mensajes — MONTERO'S
+    </h5>
+    <span class="badge badge-secondary">
+      {{ mensajes.length }} {{ mensajes.length === 1 ? 'mensaje' : 'mensajes' }}
+    </span>
+  </div>
+
+  <!-- Estado: cargando -->
+  <div class="card-body text-center py-5" *ngIf="load_data">
+    <div class="spinner-border text-primary mb-3" style="width: 2.5rem; height: 2.5rem;" role="status">
+      <span class="sr-only">Cargando mensajes...</span>
+    </div>
+    <p class="text-muted mb-0">Cargando mensajes de MONTERO'S...</p>
+  </div>
+
+  <!-- Estado: sin mensajes -->
+  <div class="card-body text-center py-5"
+       *ngIf="!load_data && mensajes.length === 0">
+    <i class="cxi-mail font-size-xl text-muted mb-3 d-block"></i>
+    <p class="text-muted mb-0">No hay mensajes registrados en este momento.</p>
+  </div>
+
+  <!-- Listado de mensajes -->
+  <div class="card-body" *ngIf="!load_data && mensajes.length > 0">
+
+    <div
+      class="mensaje-item mb-4 pb-4 border-bottom"
+      *ngFor="let item of mensajes | slice: (page-1)*pageSize : (page-1)*pageSize + pageSize; let indice = index">
+
+      <div class="row">
+
+        <!-- Columna: datos del remitente -->
+        <div class="col-md-3 col-sm-4 mb-3 mb-sm-0">
+          <h3 class="mb-1 font-size-lg font-weight-semibold">{{ item.cliente }}</h3>
+          <span class="d-block mb-2 font-size-sm text-muted">
+            <i class="cxi-calendar mr-1"></i>
+            {{ item.createdAt | date: 'dd/MM/yyyy HH:mm' }}
+          </span>
+
+          <!-- Badge de estado -->
+          <span class="badge badge-warning" *ngIf="item.estado === 'Abierto'">
+            <i class="cxi-time mr-1"></i> Abierto
+          </span>
+          <span class="badge badge-success" *ngIf="item.estado === 'Cerrado'">
+            <i class="cxi-check mr-1"></i> Cerrado
+          </span>
+        </div>
+
+        <!-- Columna: contenido del mensaje -->
+        <div class="col">
+          <p class="mb-3">
+            <span class="font-weight-bold text-dark">{{ item.correo }}</span>
+            <br>
+            <span class="text-muted mensaje-texto">{{ item.mensaje }}</span>
+          </p>
+
+          <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+
+            <!-- Acción: cerrar mensaje (solo si está abierto) -->
+            <button
+              *ngIf="item.estado === 'Abierto'"
+              type="button"
+              class="btn btn-sm btn-outline-warning"
+              [attr.data-toggle]="'modal'"
+              [attr.data-target]="'#modalCerrar-' + item._id">
+              <i class="cxi-close-circle mr-1"></i>
+              Cerrar mensaje
+            </button>
+
+            <span
+              *ngIf="item.estado === 'Cerrado'"
+              class="font-size-sm text-muted font-italic">
+              Mensaje atendido
+            </span>
+
+            <!-- Acción: ir al correo -->
+            <a
+              href="https://mail.google.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="btn btn-sm btn-dark">
+              <i class="cxi-mail mr-1"></i> Ir al correo
+            </a>
+
+          </div>
+        </div>
+        <!-- /col contenido -->
+
+      </div>
+      <!-- /row -->
+
+    </div>
+    <!-- /ngFor mensajes -->
+
+  </div>
+  <!-- /card-body listado -->
+
+  <!-- Paginación -->
+  <div class="card-footer" *ngIf="!load_data && mensajes.length > pageSize">
+    <ngb-pagination
+      [(page)]="page"
+      [pageSize]="pageSize"
+      [collectionSize]="mensajes.length"
+      [maxSize]="5"
+      [rotate]="true"
+      [boundaryLinks]="true">
+    </ngb-pagination>
+  </div>
+
+</div>
+<!-- /card principal -->
+
+
+<!-- ════════════════════════════════════════════════════════════
+      MODALES: Confirmación de cierre de mensaje
+      Extraídos del *ngFor para evitar problemas de z-index
+      y anidamiento incorrecto en el DOM.
+      ════════════════════════════════════════════════════════════ -->
+
+<ng-container
+  *ngFor="let item of mensajes">
+
+  <div
+    class="modal fade"
+    [id]="'modalCerrar-' + item._id"
+    tabindex="-1"
+    role="dialog"
+    [attr.aria-labelledby]="'modalCerrarLabel-' + item._id"
+    aria-hidden="true">
+
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+
+        <!-- Encabezado del modal -->
+        <div class="modal-header">
+          <h5
+            class="modal-title"
+            [id]="'modalCerrarLabel-' + item._id">
+            <i class="cxi-close-circle mr-2 text-warning"></i>
+            Cerrar mensaje
+          </h5>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Cancelar">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+
+        <!-- Cuerpo del modal -->
+        <div class="modal-body">
+          <p class="mb-2">
+            ¿Confirma que desea cerrar el mensaje del cliente
+            <strong>{{ item.cliente }}</strong>?
+          </p>
+          <p class="font-size-sm text-muted mb-0">
+            Esta acción marcará el mensaje como <strong>Cerrado</strong>
+            en el sistema de MONTERO'S.
+          </p>
+          <hr>
+          <p class="font-size-xs text-muted mb-0">
+            <i class="cxi-info mr-1"></i>
+            ID de referencia: <code>{{ item._id }}</code>
+          </p>
+        </div>
+
+        <!-- Pie del modal -->
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-secondary btn-sm"
+            data-dismiss="modal">
+            Cancelar
+          </button>
+
+          <!-- Botón activo -->
+          <button
+            *ngIf="!load_btn"
+            type="button"
+            class="btn btn-warning btn-sm"
+            (click)="cerrar(item._id)">
+            <i class="cxi-check mr-1"></i> Sí, cerrar mensaje
+          </button>
+
+          <!-- Botón de carga -->
+          <button
+            *ngIf="load_btn"
+            type="button"
+            class="btn btn-secondary btn-sm"
+            disabled>
+            <span
+              class="spinner-grow spinner-grow-sm mr-2"
+              role="status"
+              aria-hidden="true">
+            </span>
+            Cerrando...
+          </button>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+</ng-container>
+<!-- /modales -->

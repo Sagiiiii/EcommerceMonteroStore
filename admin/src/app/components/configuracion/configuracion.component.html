@@ -1,0 +1,221 @@
+<app-sidebar></app-sidebar>
+
+<!-- ════════════════════════════════════════════════
+      MÓDULO: Configuración General — MONTERO'S
+      Panel Administrativo · JAIME PONCE MONTERO
+      ════════════════════════════════════════════════ -->
+
+<div class="border-bottom pt-5 mt-2 mb-5">
+  <h1 class="mt-2 mt-md-4 mb-3 pt-5">Configuración del Sistema</h1>
+  <div class="d-flex flex-wrap flex-md-nowrap justify-content-between">
+    <p class="text-muted">
+      Administre la configuración general de <strong>MONTERO'S</strong>: nombre comercial, parámetros de facturación, categorías de productos y logotipo institucional.
+    </p>
+  </div>
+</div>
+
+<form #configForm="ngForm" (ngSubmit)="actualizar(configForm)">
+
+  <div class="card box-shadow-sm mb-4">
+
+    <!-- ── Encabezado de tarjeta ── -->
+    <div class="card-header d-flex align-items-center">
+      <h5 class="mb-0">
+        <i class="cxi-settings mr-2"></i>
+        Configuración General de MONTERO'S
+      </h5>
+    </div>
+
+    <div class="card-body">
+      <div style="max-width: 48rem;">
+
+        <!-- ── Campo: Nombre comercial ── -->
+        <div class="form-group row align-items-center">
+          <label
+            class="col-md-3 col-form-label font-weight-medium"
+            for="input-nombre-tienda">
+            Nombre comercial
+          </label>
+          <div class="col-md-9">
+            <input
+              class="form-control"
+              required
+              type="text"
+              id="input-nombre-tienda"
+              placeholder="Ej.: MONTERO'S"
+              name="titulo"
+              [(ngModel)]="config.titulo"
+              [ngModelOptions]="{ standalone: false }">
+            <small class="form-text text-muted">
+              Nombre que aparecerá en documentos, facturas y reportes del sistema.
+            </small>
+          </div>
+        </div>
+
+        <!-- ── Campo: Facturación (serie y correlativo) ── -->
+        <div class="form-group row align-items-center">
+          <label
+            class="col-md-3 col-form-label font-weight-medium"
+            for="input-serie">
+            Facturación
+          </label>
+          <div class="col-md-4">
+            <input
+              class="form-control"
+              required
+              type="number"
+              id="input-serie"
+              placeholder="Serie (Ej.: 001)"
+              name="serie"
+              [(ngModel)]="config.serie"
+              min="0">
+            <small class="form-text text-muted">Serie</small>
+          </div>
+          <div class="col-md-5">
+            <input
+              class="form-control"
+              required
+              type="number"
+              id="input-correlativo"
+              placeholder="Correlativo (Ej.: 0001)"
+              name="correlativo"
+              [(ngModel)]="config.correlativo"
+              min="0">
+            <small class="form-text text-muted">Correlativo</small>
+          </div>
+        </div>
+
+        <!-- ── Campo: Gestión de categorías ── -->
+        <div class="form-group row">
+          <label class="col-md-3 col-form-label font-weight-medium pt-2">
+            Categorías
+          </label>
+          <div class="col-md-9">
+
+            <!-- Inputs para nueva categoría -->
+            <div class="row mb-2">
+              <div class="col-md-5">
+                <input
+                  class="form-control"
+                  type="text"
+                  id="input-titulo-cat"
+                  placeholder="Nombre de categoría"
+                  name="titulo_cat"
+                  [(ngModel)]="titulo_cat">
+              </div>
+              <div class="col-md-5">
+                <input
+                  class="form-control"
+                  type="text"
+                  id="input-icono-cat"
+                  placeholder="Clase del ícono (Ej.: cxi-tag)"
+                  name="icono_cat"
+                  [(ngModel)]="icono_cat">
+              </div>
+              <div class="col-md-2 d-flex align-items-center">
+                <button
+                  type="button"
+                  class="btn btn-sm btn-outline-primary"
+                  (click)="agregar_cat()">
+                  <i class="cxi-plus mr-1"></i> Agregar
+                </button>
+              </div>
+            </div>
+
+            <!-- Tabla de categorías registradas -->
+            <div class="table-responsive mt-3" *ngIf="config?.categorias">
+              <table class="table table-sm table-hover">
+                <thead class="thead-dark">
+                  <tr>
+                    <th scope="col">Categoría</th>
+                    <th scope="col">Ícono</th>
+                    <th scope="col" class="text-center">Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+
+                  <!-- Sin categorías registradas -->
+                  <tr *ngIf="config.categorias.length === 0">
+                    <td colspan="3" class="text-center py-3">
+                      <span class="text-muted">
+                        <i class="cxi-info mr-1"></i>
+                        No hay categorías registradas. Agregue la primera categoría para MONTERO'S.
+                      </span>
+                    </td>
+                  </tr>
+
+                  <!-- Listado de categorías -->
+                  <tr *ngFor="let item of config.categorias; let indice = index">
+                    <td class="align-middle">{{ item.titulo }}</td>
+                    <td class="align-middle">
+                      <i class="{{ item.icono }} mr-2"></i>
+                      <code>{{ item.icono }}</code>
+                    </td>
+                    <td class="text-center align-middle">
+                      <button
+                        type="button"
+                        class="btn btn-sm btn-outline-danger"
+                        title="Eliminar categoría"
+                        (click)="eliminar_categoria(indice)">
+                        <i class="cxi-trash mr-1"></i> Eliminar
+                      </button>
+                    </td>
+                  </tr>
+
+                </tbody>
+              </table>
+            </div>
+            <!-- /tabla -->
+
+          </div>
+        </div>
+        <!-- /categorías -->
+
+        <!-- ── Campo: Logo institucional ── -->
+        <div class="form-group row align-items-center">
+          <label
+            class="col-md-3 col-form-label font-weight-medium"
+            for="input-logo">
+            Logotipo
+          </label>
+          <div class="col-md-9">
+            <div class="cs-file-drop-area">
+              <div class="cs-file-drop-preview img-thumbnail rounded">
+                <img [src]="imgSelect" alt="Logotipo actual de MONTERO'S">
+              </div>
+              <span class="cs-file-drop-message">
+                Arrastre la imagen aquí o haga clic para seleccionarla
+              </span>
+              <small class="cs-file-drop-hint">
+                Formatos admitidos: JPG, PNG, WEBP, GIF · Tamaño máximo: 4 MB
+              </small>
+              <input
+                type="file"
+                class="cs-file-drop-input"
+                id="input-logo"
+                accept="image/png, image/jpeg, image/jpg, image/webp, image/gif"
+                (change)="fileChangeEvent($event)">
+            </div>
+          </div>
+        </div>
+        <!-- /logo -->
+
+      </div>
+    </div>
+    <!-- /card-body -->
+
+    <!-- ── Pie de tarjeta: acciones ── -->
+    <div class="card-footer d-flex align-items-center">
+      <button class="btn btn-primary mr-3" type="submit">
+        <i class="cxi-check mr-1"></i> Guardar cambios
+      </button>
+      <a class="btn btn-secondary" [routerLink]="['/panel/productos']">
+        Ir a Productos
+        <i class="cxi-angle-right font-size-base align-middle ml-1"></i>
+      </a>
+    </div>
+
+  </div>
+  <!-- /card -->
+
+</form>

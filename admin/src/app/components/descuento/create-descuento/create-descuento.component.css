@@ -1,0 +1,63 @@
+/* ════════════════════════════════════════════════════════════════
+    create-descuento.component.css
+    Estilos del módulo Registro de Descuento — MONTERO'S
+    Panel Administrativo · JAIME PONCE MONTERO
+    ════════════════════════════════════════════════════════════════ */
+
+/* ── Encabezado del módulo ─────────────────────────────────────── */
+.border-bottom h1 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #2d2d2d;
+  letter-spacing: -0.02em;
+}
+
+/* ── Tarjeta ───────────────────────────────────────────────────── */
+.card.box-shadow-sm {
+  border: 1px solid #e8e8e8;
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.card-header {
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #e8e8e8;
+  padding: 1rem 1.25rem;
+}
+
+.card-header h5 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #2d2d2d;
+}
+
+.card-footer {
+  background-color: #f8f9fa;
+  border-top: 1px solid #e8e8e8;
+  padding: 1rem 1.25rem;
+}
+
+/* ── Formulario ────────────────────────────────────────────────── */
+.form-label {
+  font-weight: 500;
+  font-size: 0.875rem;
+  color: #444;
+}
+
+.form-text.text-muted {
+  font-size: 0.775rem;
+}
+
+/* ── Vista previa del banner ───────────────────────────────────── */
+.img-thumbnail {
+  max-height: 220px;
+  object-fit: cover;
+  border-radius: 0.375rem;
+}
+
+/* ── Input group % ─────────────────────────────────────────────── */
+.input-group-text {
+  font-weight: 600;
+  color: #495057;
+  background-color: #f0f0f0;
+}
