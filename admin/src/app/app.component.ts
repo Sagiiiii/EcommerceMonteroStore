@@ -1,15 +1,15 @@
-import { Component, DoCheck } from '@angular/core';
+import { Component } from '@angular/core';
 
-@Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
-})
-export class AppComponent implements DoCheck {
-  title = 'admin';
-  public isDemo = false;
+  // ════════════════════════════════════════════════════════════════
+  //  AppComponent — Componente raíz
+  //  Panel Administrativo MONTERO'S · JAIME PONCE MONTERO
+  // ════════════════════════════════════════════════════════════════
 
-  ngDoCheck(): void {
-    this.isDemo = localStorage.getItem('demo_mode') === 'true';
+  @Component({
+    selector: 'app-root',
+    templateUrl: './app.component.html',
+    styleUrls: ['./app.component.css']
+  })
+  export class AppComponent {
+    title = 'MONTERO\'S — Panel Administrativo';
   }
-}

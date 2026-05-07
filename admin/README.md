@@ -1,70 +1,140 @@
-# 🛵 Soreus Motors — Panel Administrativo
+# 🛍️ MONTERO'S — Panel Administrativo
 
-Panel de administración desarrollado con Angular 16 para gestionar el e-commerce de Soreus Motors E.I.R.L.
+Panel de administración desarrollado con **Angular 16** para gestionar el e-commerce de **MONTERO'S**.
 
-## 🚀 Stack
+**Representante:** JAIME PONCE MONTERO
+
+---
+
+## 🚀 Stack tecnológico
 
 | Tecnología | Uso |
 |---|---|
 | Angular 16 | Framework frontend |
-| Bootstrap 5 | Estilos y componentes |
-| Chart.js | Gráficos KPI |
-| JWT | Autenticación |
-| Socket.io Client | Tiempo real |
-| ExcelJS | Exportar reportes |
+| Bootstrap 4 (tema) | Estilos y componentes UI |
+| Chart.js 4 | Gráficos KPI del dashboard |
+| JWT (`@auth0/angular-jwt`) | Autenticación de administradores |
+| ExcelJS + FileSaver | Exportar reportes a Excel |
+| ngx-tinymce | Editor de contenido enriquecido |
+| ng-bootstrap | Paginación y componentes Angular |
+
+---
 
 ## 📄 Módulos del panel
 
-- **Dashboard** — KPIs: ventas diarias, mensuales, mejores clientes y productos
-- **Productos** — CRUD completo con imágenes, inventario y variedades
-- **Clientes** — Listado y gestión de clientes registrados
-- **Ventas** — Historial de ventas con filtros por fecha y cambio de estado
-- **Cupones** — Gestión de cupones de descuento
-- **Descuentos** — Banners de descuento con fechas de vigencia
-- **Mensajes** — Bandeja de mensajes de contacto
-- **Configuración** — Logo, título, serie/correlativo y categorías
+| Módulo | Descripción |
+|---|---|
+| **Dashboard** | KPIs: ganancias totales/mensuales, ventas diarias, mejores clientes e ítems |
+| **Productos** | CRUD completo: portada, galería, variedades, inventario y reseñas |
+| **Clientes** | Listado, registro y edición de clientes registrados |
+| **Ventas** | Historial con filtro por fechas y cambio de estado de órdenes |
+| **Cupones** | Gestión de cupones de descuento (porcentaje y valor fijo) |
+| **Descuentos** | Campañas de descuento con banners y fechas de vigencia |
+| **Mensajes** | Bandeja de mensajes de contacto (abrir/cerrar) |
+| **Configuración** | Logo, título, serie/correlativo de facturación y categorías |
+| **Perfil** | Edición de datos personales del administrador |
+
+---
 
 ## ⚙️ Instalación local
 
-### 1. Requisitos previos
+### Requisitos previos
 - Node.js v18+
-- Backend corriendo en `http://localhost:4201`
+- Backend corriendo en `http://localhost:3000`
 
-### 2. Clonar e instalar
+### Clonar e instalar
 ```bash
-git clone https://github.com/Sagiiiii/ecommerce_admin.git
-cd ecommerce_admin
-npm install --legacy-openssl
+git clone <url-del-repositorio>
+cd monteros-admin
+npm install
 ```
 
-### 3. Levantar el servidor
+### Levantar el servidor de desarrollo
 ```bash
-npx ng serve
+npm start
 # Panel disponible en http://localhost:4200
 ```
 
-## 🎯 Credenciales demo
-
-| Email | Password |
-|---|---|
-| sagitaforever64@gmail.com | 12345678 |
-
-> En la pantalla de login usa el botón **⚡ Ingresar como Admin Demo**
-
-## 🗂️ Estructura
+### Build de producción
+```bash
+npm run build
+# Archivos generados en dist/admin/
 ```
-ecommerce_admin/
-├── src/app/
-│   ├── components/     # Componentes por módulo
-│   ├── guards/         # Protección de rutas
-│   └── services/       # Comunicación con API
-└── package.json
-```
-
-## ⚠️ Importante
-
-El panel requiere que el backend esté corriendo en `http://localhost:4201`.
-Para cambiar la URL del backend edita `src/app/services/global.ts`.
 
 ---
-Desarrollado por **David A. Garcia Giron** · Huancayo, Perú 🇵🇪
+
+## 🔧 Configuración de la API
+
+Edita `src/app/services/global.ts` para cambiar la URL del backend:
+
+```typescript
+// Desarrollo local
+export const GLOBAL = {
+  url: 'http://localhost:3000/api/'
+};
+
+// Producción
+// url: 'https://tu-backend.up.railway.app/api/'
+```
+
+---
+
+## 🗂️ Estructura del proyecto
+
+```
+src/
+├── app/
+│   ├── components/
+│   │   ├── clientes/
+│   │   ├── configuracion/
+│   │   ├── contacto/
+│   │   ├── cupones/
+│   │   ├── descuento/
+│   │   ├── error404/
+│   │   ├── inicio/
+│   │   ├── login/
+│   │   ├── perfil/
+│   │   ├── productos/
+│   │   ├── registro/
+│   │   ├── sidebar/
+│   │   └── ventas/
+│   ├── guards/
+│   │   └── admin.guard.ts
+│   └── services/
+│       ├── admin.service.ts
+│       ├── cliente.service.ts
+│       ├── cupon.service.ts
+│       ├── descuento.service.ts
+│       ├── global.ts
+│       └── producto.service.ts
+├── assets/
+│   ├── css/
+│   ├── fonts/
+│   ├── img/
+│   ├── js/
+│   ├── tinymce/
+│   └── vendor/
+├── index.html
+├── main.ts
+└── styles.css
+```
+
+---
+
+## 🌐 Despliegue en Netlify
+
+El archivo `netlify.toml` incluye la configuración necesaria. Solo conecta tu repositorio en Netlify y el despliegue es automático.
+
+> ⚠️ El redirect `/* → /index.html` está configurado para que Angular Router funcione correctamente con rutas directas.
+
+---
+
+## ⚠️ Notas importantes
+
+- El panel usa **Bootstrap 4** (incluido en el tema). No mezclar con Bootstrap 5.
+- El backend debe estar corriendo para que el panel funcione correctamente.
+- Las contraseñas de administradores se hashean con **bcryptjs** en el backend.
+
+---
+
+*Desarrollado para **MONTERO'S** · JAIME PONCE MONTERO · Perú 🇵🇪*

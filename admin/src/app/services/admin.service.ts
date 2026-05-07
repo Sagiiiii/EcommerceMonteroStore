@@ -1,167 +1,157 @@
 import { Injectable } from '@angular/core';
-import { Observable } from "rxjs";
-import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
-import { GLOBAL } from "./global";
-import { JwtHelperService, JwtModule } from '@auth0/angular-jwt';
+import { Observable } from 'rxjs';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { GLOBAL } from './global';
+import { JwtHelperService } from '@auth0/angular-jwt';
+
+// ════════════════════════════════════════════════════════════════
+//  AdminService — MONTERO'S · Panel Administrativo
+//  Gestiona: autenticación, perfil, configuración del sistema,
+//  mensajes de contacto, ventas y KPIs del dashboard.
+// ════════════════════════════════════════════════════════════════
 
 @Injectable({
   providedIn: 'root'
 })
 export class AdminService {
 
-  public url;
+  public url: string;
 
-  constructor(
-    private _http: HttpClient,
-  ) {
-    // Inicializar la URL con el valor de la URL global
+  constructor(private _http: HttpClient) {
     this.url = GLOBAL.url;
   }
 
-  // Método para iniciar sesión como administrador
+  // ── Autenticación ─────────────────────────────────────────────
+
   login_admin(data: any): Observable<any> {
-    let headers = new HttpHeaders().set('Content-Type', 'application/json');
-    return this._http.post(this.url + 'login_admin', data, { headers: headers });
+    const headers = new HttpHeaders().set('Content-Type', 'application/json');
+    return this._http.post(this.url + 'login_admin', data, { headers });
   }
 
-  // Método para registrar un admin por un administrador
   registro_admin(data: any): Observable<any> {
-    let headers = new HttpHeaders().set('Content-Type', 'application/json');
-    return this._http.post(this.url + 'registro_admin', data, { headers: headers });
+    const headers = new HttpHeaders().set('Content-Type', 'application/json');
+    return this._http.post(this.url + 'registro_admin', data, { headers });
   }
 
-  // Método para obtener un cliente por un administrador
-  obtener_admin(id: any, token: any): Observable<any> {
-    let headers = new HttpHeaders({'Content-Type':'application/json', 'Authorization': token});
-    return this._http.get(this.url + 'obtener_admin/' + id, { headers: headers });
-  }
-
-  actualizar_perfil_admin(id:any,data:any,token:any):Observable<any>{
-    let headers = new HttpHeaders({'Content-Type':'application/json','Authorization':token});
-    return this._http.put(this.url + 'actualizar_perfil_admin/'+id,data,{headers:headers});
-  }
-
-  // Método para obtener el token de autenticación almacenado en el almacenamiento local
   getToken(): string | null {
     return localStorage.getItem('token');
   }
 
-  // Método para verificar la autenticación y los roles permitidos del usuario actual
+  /**
+   * Verifica que el JWT sea válido, no esté expirado
+   * y que el rol del usuario esté en los roles permitidos.
+   */
   public isAuthenticate(allowRoles: string[]): boolean {
     const token: string | null = localStorage.getItem('token');
-
-    if (!token) {
-      return false;
-    }
+    if (!token) return false;
 
     try {
       const helper = new JwtHelperService();
-      var decodedToken = helper.decodeToken(token);
 
-      console.log(decodedToken);
-
-      if(helper.isTokenExpired(token)){
+      if (helper.isTokenExpired(token)) {
         localStorage.clear();
         return false;
       }
 
+      const decodedToken = helper.decodeToken(token);
       if (!decodedToken) {
-        console.log('ERROR DECODING TOKEN');
         localStorage.removeItem('token');
         return false;
       }
-    } catch (error) {
-      console.log('ERROR DECODING TOKEN');
+
+      return allowRoles.includes(decodedToken['role']);
+
+    } catch {
       localStorage.removeItem('token');
       return false;
     }
-
-    return allowRoles.includes(decodedToken['role']);
   }
 
-  // Método para obtener un cliente por un administrador
+  // ── Perfil ────────────────────────────────────────────────────
+
+  obtener_admin(id: any, token: any): Observable<any> {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': token });
+    return this._http.get(this.url + 'obtener_admin/' + id, { headers });
+  }
+
+  actualizar_perfil_admin(id: any, data: any, token: any): Observable<any> {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': token });
+    return this._http.put(this.url + 'actualizar_perfil_admin/' + id, data, { headers });
+  }
+
+  // ── Configuración ─────────────────────────────────────────────
+
   obtener_config_admin(token: any): Observable<any> {
-    let headers = new HttpHeaders({'Content-Type':'application/json', 'Authorization': token});
-    return this._http.get(this.url + 'obtener_config_admin', { headers: headers });
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': token });
+    return this._http.get(this.url + 'obtener_config_admin', { headers });
   }
 
-  // Método para actualizar un producto por un administrador
   actualiza_config_admin(id: any, data: any, token: any): Observable<any> {
     if (data.logo) {
-      let headers = new HttpHeaders({'Authorization': token});
+      const headers = new HttpHeaders({ 'Authorization': token });
       const fd = new FormData();
-      fd.append('titulo', data.titulo);
-      fd.append('serie', data.serie);
+      fd.append('titulo',      data.titulo);
+      fd.append('serie',       data.serie);
       fd.append('correlativo', data.correlativo);
-      fd.append('categorias', JSON.stringify(data.categorias));
-      fd.append('logo', data.logo);
-      return this._http.put(this.url + 'actualiza_config_admin/' + id, fd, { headers: headers });
+      fd.append('categorias',  JSON.stringify(data.categorias));
+      fd.append('logo',        data.logo);
+      return this._http.put(this.url + 'actualiza_config_admin/' + id, fd, { headers });
     } else {
-      let headers = new HttpHeaders({'Content-Type':'application/json', 'Authorization': token});
-      return this._http.put(this.url + 'actualiza_config_admin/'+id, data, { headers: headers });
+      const headers = new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': token });
+      return this._http.put(this.url + 'actualiza_config_admin/' + id, data, { headers });
     }
   }
 
   obtener_config_publico(): Observable<any> {
-    let headers = new HttpHeaders().set('Content-Type', 'application/json');
-    return this._http.get(this.url + 'obtener_config_publico', { headers: headers });
+    const headers = new HttpHeaders().set('Content-Type', 'application/json');
+    return this._http.get(this.url + 'obtener_config_publico', { headers });
   }
+
+  // ── Mensajes ──────────────────────────────────────────────────
 
   obtener_mensaje_admin(token: any): Observable<any> {
-    let headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': token
-    });
-    return this._http.get(this.url + 'obtener_mensaje_admin', { headers: headers });
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': token });
+    return this._http.get(this.url + 'obtener_mensaje_admin', { headers });
   }
 
-  cerrar_mensaje_admin(id: any,data: any, token: any): Observable<any> {
-    let headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': token
-    });
-    return this._http.put(this.url + 'cerrar_mensaje_admin/'+id,data, { headers: headers });
+  cerrar_mensaje_admin(id: any, data: any, token: any): Observable<any> {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': token });
+    return this._http.put(this.url + 'cerrar_mensaje_admin/' + id, data, { headers });
   }
+
+  // ── Ventas ────────────────────────────────────────────────────
 
   obtener_ventas_admin(desde: any, hasta: any, token: any): Observable<any> {
-    let headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': token
-    });
-    return this._http.get(this.url + 'obtener_ventas_admin/'+desde+'/'+hasta, { headers: headers });
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': token });
+    return this._http.get(this.url + 'obtener_ventas_admin/' + desde + '/' + hasta, { headers });
   }
 
   obtener_ordenes_detalle_cliente(id: any, token: any): Observable<any> {
-    let headers = new HttpHeaders({'Content-Type':'application/json', 'Authorization': token});
-    return this._http.get(this.url + 'obtener_ordenes_detalle_cliente/'+id, { headers: headers });
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': token });
+    return this._http.get(this.url + 'obtener_ordenes_detalle_cliente/' + id, { headers });
   }
 
-  // KPI
+  // ── KPIs ──────────────────────────────────────────────────────
 
   kpi_ganancias_mensuales_admin(token: any): Observable<any> {
-    let headers = new HttpHeaders({'Content-Type':'application/json', 'Authorization': token});
-    return this._http.get(this.url + 'kpi_ganancias_mensuales_admin', { headers: headers });
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': token });
+    return this._http.get(this.url + 'kpi_ganancias_mensuales_admin', { headers });
   }
 
   kpi_mejores_cliente(token: any, fecha_ini: string, fecha_fin: string): Observable<any> {
-    let headers = new HttpHeaders({'Content-Type':'application/json', 'Authorization': token});
-    let params = new HttpParams()
-      .set('fecha_ini', fecha_ini)
-      .set('fecha_fin', fecha_fin);
-    return this._http.get(this.url + 'kpi_mejores_cliente', { headers: headers, params: params });
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': token });
+    const params  = new HttpParams().set('fecha_ini', fecha_ini).set('fecha_fin', fecha_fin);
+    return this._http.get(this.url + 'kpi_mejores_cliente', { headers, params });
   }
 
   kpi_ganancias_diaria_admin(token: any): Observable<any> {
-    let headers = new HttpHeaders({'Content-Type':'application/json', 'Authorization': token});
-    return this._http.get(this.url + 'kpi_ganancias_diaria_admin', { headers: headers });
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': token });
+    return this._http.get(this.url + 'kpi_ganancias_diaria_admin', { headers });
   }
 
   kpi_mejores_items(token: any, fecha_ini: string, fecha_fin: string): Observable<any> {
-    let headers = new HttpHeaders({'Content-Type':'application/json', 'Authorization': token});
-    let params = new HttpParams()
-      .set('fecha_ini', fecha_ini)
-      .set('fecha_fin', fecha_fin);
-    return this._http.get(this.url + 'kpi_mejores_items', { headers: headers, params: params });
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': token });
+    const params  = new HttpParams().set('fecha_ini', fecha_ini).set('fecha_fin', fecha_fin);
+    return this._http.get(this.url + 'kpi_mejores_items', { headers, params });
   }
-
 }

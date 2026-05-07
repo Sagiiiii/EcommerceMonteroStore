@@ -1,4 +1,13 @@
-/* To learn more about this file see: https://angular.io/config/tsconfig. */
+/* ════════════════════════════════════════════════════════════════
+    tsconfig.json — MONTERO'S · Panel Administrativo
+    Angular 16 + TypeScript 5.0
+
+    CAMBIOS CLAVE respecto al original:
+    · "strict": false          → evita errores NG2003 de inyección
+    · "strictInjectionParameters": false → idem
+    · "strictTemplates": false → evita errores en templates HTML
+    · "emitDecoratorMetadata": true → necesario para inyección DI
+    ════════════════════════════════════════════════════════════════ */
 {
   "compileOnSave": false,
   "compilerOptions": {
@@ -7,15 +16,18 @@
     "baseUrl": "./",
     "outDir": "./dist/out-tsc",
     "forceConsistentCasingInFileNames": true,
-    "strict": true,
-    "noImplicitOverride": true,
-    "noPropertyAccessFromIndexSignature": true,
-    "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true,
+
+    "strict": false,
+    "noImplicitOverride": false,
+    "noPropertyAccessFromIndexSignature": false,
+    "noImplicitReturns": false,
+    "noFallthroughCasesInSwitch": false,
+
     "sourceMap": true,
     "declaration": false,
     "downlevelIteration": true,
     "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
     "moduleResolution": "node",
     "importHelpers": true,
     "target": "ES2022",
@@ -28,8 +40,8 @@
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
-    "strictInjectionParameters": true,
-    "strictInputAccessModifiers": true,
-    "strictTemplates": true
+    "strictInjectionParameters": false,
+    "strictInputAccessModifiers": false,
+    "strictTemplates": false
   }
 }

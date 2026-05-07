@@ -1,1 +1,149 @@
 /* You can add global styles to this file, and also import other style files */
+/* ════════════════════════════════════════════════════════════════
+   styles.css — Estilos globales del Panel Administrativo
+   MONTERO'S · JAIME PONCE MONTERO
+   ════════════════════════════════════════════════════════════════ */
+
+/* ── Reset y base ─────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+               'Helvetica Neue', Arial, sans-serif;
+  font-size: 0.9rem;
+  color: #2d2d2d;
+  background-color: #f4f5f7;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ── Contenido principal desplazado por el sidebar ────────────── */
+.cs-offcanvas-enabled .col-xl-9 {
+  padding-left: 280px;
+  padding-right: 1.5rem;
+  padding-top: 80px; /* altura del navbar fijo */
+}
+
+@media (max-width: 1199.98px) {
+  .cs-offcanvas-enabled .col-xl-9 {
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-top: 80px;
+  }
+}
+
+/* ── Router outlet — sin margen extra ─────────────────────────── */
+app-root {
+  display: block;
+}
+
+/* ── Scrollbar personalizado ──────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+/* ── Utilidades globales Bootstrap 4 compat ───────────────────── */
+.font-size-xs   { font-size: 0.75rem  !important; }
+.font-size-sm   { font-size: 0.825rem !important; }
+.font-size-base { font-size: 0.9rem   !important; }
+.font-size-lg   { font-size: 1.1rem   !important; }
+.font-size-xl   { font-size: 1.5rem   !important; }
+
+.font-weight-medium   { font-weight: 500 !important; }
+.font-weight-semibold { font-weight: 600 !important; }
+
+.gap-1 { gap: 0.25rem !important; }
+.gap-2 { gap: 0.5rem  !important; }
+.gap-3 { gap: 0.75rem !important; }
+.gap-4 { gap: 1rem    !important; }
+
+/* ── Badges Bootstrap 4 (el tema los usa) ─────────────────────── */
+.badge-primary   { background-color: #007bff; color: #fff; }
+.badge-secondary { background-color: #6c757d; color: #fff; }
+.badge-success   { background-color: #28a745; color: #fff; }
+.badge-danger    { background-color: #dc3545; color: #fff; }
+.badge-warning   { background-color: #ffc107; color: #212529; }
+.badge-info      { background-color: #17a2b8; color: #fff; }
+.badge-dark      { background-color: #343a40; color: #fff; }
+.badge-light     { background-color: #f8f9fa; color: #212529; }
+
+/* ── Tarjetas globales ─────────────────────────────────────────── */
+.card {
+  border: 1px solid #e8e8e8;
+  border-radius: 0.5rem;
+}
+
+.card.box-shadow-sm {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+/* ── ngb-pagination alineada a la derecha ─────────────────────── */
+ngb-pagination {
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* ── Spinner de carga global ──────────────────────────────────── */
+.spinner-border {
+  display: inline-block;
+  width: 2rem;
+  height: 2rem;
+  border: 0.2em solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: spinner-border 0.75s linear infinite;
+}
+
+@keyframes spinner-border {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Estrellas de reseñas ─────────────────────────────────────── */
+.star-rating .sr-star {
+  color: #dee2e6;
+  font-size: 1.1rem;
+}
+.star-rating .sr-star.active {
+  color: #ffc107;
+}
+
+/* ── Corrección: offcanvas sidebar siempre visible en desktop ──── */
+@media (min-width: 992px) {
+  .cs-offcanvas.cs-offcanvas-expand {
+    transform: none !important;
+    visibility: visible !important;
+  }
+}
+
+/* ── iziToast — posición correcta sobre el sidebar ───────────── */
+.iziToast-wrapper-topRight {
+  z-index: 99999 !important;
+}
+
+/* ── Tabla: columnas no se comprimen demasiado ────────────────── */
+.table td,
+.table th {
+  white-space: nowrap;
+}
+
+.table td.text-wrap,
+.table th.text-wrap {
+  white-space: normal;
+}

@@ -1,3 +1,25 @@
+# ════════════════════════════════════════════════════════════════
+#  netlify.toml — MONTERO'S · Panel Administrativo
+#  Configuración de despliegue en Netlify
+# ════════════════════════════════════════════════════════════════
+
 [build]
   command = "npx ng build --configuration production"
   publish = "dist/admin"
+
+# ── Redirect SPA (OBLIGATORIO para Angular Router) ───────────────
+# Sin este bloque, cualquier ruta directa (ej: /panel/productos)
+# devuelve 404 en Netlify porque no existe como archivo físico.
+# Angular Router maneja las rutas en el cliente, no el servidor.
+[[redirects]]
+  from   = "/*"
+  to     = "/index.html"
+  status = 200
+
+# ── Headers de seguridad ─────────────────────────────────────────
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options        = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy        = "strict-origin-when-cross-origin"
