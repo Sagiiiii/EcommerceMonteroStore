@@ -18,13 +18,33 @@
   </div>
 </div>
 
+<!-- Filtros de almacén -->
+<div class="almacen-tabs mb-3">
+  <button class="almacen-tab" [class.almacen-tab--active]="almacenFiltro === 'todos'"
+    (click)="setAlmacen('todos')">
+    Todos
+  </button>
+  <button class="almacen-tab almacen-tab--hyo" [class.almacen-tab--active]="almacenFiltro === 'huancayo'"
+    (click)="setAlmacen('huancayo')">
+    <span class="almacen-dot almacen-dot--hyo"></span> Huancayo
+  </button>
+  <button class="almacen-tab almacen-tab--aya" [class.almacen-tab--active]="almacenFiltro === 'ayacucho'"
+    (click)="setAlmacen('ayacucho')">
+    <span class="almacen-dot almacen-dot--aya"></span> Ayacucho
+  </button>
+</div>
+
 <div class="card box-shadow-sm">
 
-  <!-- Encabezado + buscador unificado -->
+  <!-- Encabezado + buscador -->
   <div class="card-header">
     <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
       <h5 class="mb-0">
-        <i class="cxi-bag mr-2"></i> Catálogo de productos — MONTERO'S
+        <i class="cxi-bag mr-2"></i>
+        Catálogo — MONTERO'S
+        <span class="badge badge-secondary ml-2" *ngIf="almacenFiltro !== 'todos'">
+          {{ almacenFiltro | titlecase }}
+        </span>
       </h5>
       <div class="d-flex gap-2" style="max-width: 500px; width: 100%;">
         <div class="input-group input-group-sm">
@@ -57,6 +77,7 @@
           <tr>
             <th scope="col" style="width:70px;">Portada</th>
             <th scope="col">Título</th>
+            <th scope="col">Almacén</th>
             <th scope="col">Stock</th>
             <th scope="col">Precio</th>
             <th scope="col">Categoría</th>
@@ -68,7 +89,7 @@
 
           <!-- Cargando -->
           <tr *ngIf="load_data">
-            <td colspan="7" class="text-center py-4">
+            <td colspan="8" class="text-center py-4">
               <div class="spinner-border text-primary" style="width:2rem;height:2rem;" role="status">
                 <span class="sr-only">Cargando productos...</span>
               </div>
@@ -78,7 +99,7 @@
 
           <!-- Sin resultados -->
           <tr *ngIf="!load_data && productos.length === 0">
-            <td colspan="7" class="text-center py-4">
+            <td colspan="8" class="text-center py-4">
               <i class="cxi-bag font-size-xl text-muted d-block mb-2"></i>
               <span class="text-muted">No se encontraron productos registrados.</span>
             </td>
@@ -93,18 +114,26 @@
                   alt="Portada {{ item.titulo }}">
               </td>
               <td class="align-middle font-weight-medium">{{ item.titulo }}</td>
+              <td class="align-middle">
+                <span class="badge-almacen"
+                  [class.badge-almacen--hyo]="item.almacen === 'huancayo'"
+                  [class.badge-almacen--aya]="item.almacen === 'ayacucho'">
+                  {{ item.almacen === 'huancayo' ? 'Huancayo' : item.almacen === 'ayacucho' ? 'Ayacucho' : (item.almacen | titlecase) }}
+                </span>
+              </td>
               <td class="align-middle">{{ item.stock }}</td>
               <td class="align-middle">S/ {{ item.precio | number:'1.2-2' }}</td>
               <td class="align-middle">{{ item.categoria }}</td>
               <td class="align-middle">{{ item.nventas }}</td>
               <td class="text-center align-middle">
-                <div class="btn-group">
+                <div class="btn-group" [class.show]="openDropdownId === item._id">
                   <button class="btn btn-sm btn-outline-secondary dropdown-toggle"
-                    type="button" data-toggle="dropdown"
-                    aria-haspopup="true" aria-expanded="false">
+                    type="button"
+                    (click)="toggleDropdown(item._id, $event)">
                     Acciones
                   </button>
-                  <div class="dropdown-menu dropdown-menu-right">
+                  <div class="dropdown-menu dropdown-menu-right"
+                    [class.show]="openDropdownId === item._id">
                     <a class="dropdown-item" [routerLink]="['/panel/productos', item._id]">
                       <i class="cxi-edit mr-2"></i> Editar
                     </a>
@@ -122,8 +151,7 @@
                     </a>
                     <div class="dropdown-divider"></div>
                     <button type="button" class="dropdown-item text-danger"
-                      [attr.data-toggle]="'modal'"
-                      [attr.data-target]="'#modalEliminar-' + item._id">
+                      (click)="abrirModal(item._id, $event)">
                       <i class="cxi-trash mr-2"></i> Eliminar
                     </button>
                   </div>
@@ -159,7 +187,7 @@
           <h5 class="modal-title">
             <i class="cxi-trash mr-2 text-danger"></i> Eliminar producto
           </h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Cancelar">
+          <button type="button" class="close" (click)="cerrarModalBtn(item._id)" aria-label="Cancelar">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
@@ -170,7 +198,7 @@
           </p>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-secondary btn-sm" (click)="cerrarModalBtn(item._id)">Cancelar</button>
           <button *ngIf="!load_btn" type="button" class="btn btn-danger btn-sm" (click)="eliminar(item._id)">
             <i class="cxi-trash mr-1"></i> Sí, eliminar
           </button>

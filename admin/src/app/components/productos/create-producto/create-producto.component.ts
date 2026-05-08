@@ -21,7 +21,7 @@ declare var iziToast: any;
 export class CreateProductoComponent implements OnInit {
 
   // ── Modelo del producto ───────────────────────────────────────
-  public producto: any = { categoria: '' };
+  public producto: any = { categoria: '', almacen: 'huancayo' };
 
   // ── Configuración global (categorías) ────────────────────────
   public config_global: any = {};

@@ -9,7 +9,7 @@ const multiparty           = multipartyMiddleware({ uploadDir: './uploads/produc
 
 // ── Producto (admin) ───────────────────────────────────
 router.post  ('/registro_producto_admin',                [auth.auth, multiparty], productoController.registro_producto_admin);
-router.get   ('/listar_productos_admin/:filtro?',         auth.auth,              productoController.listar_productos_filtro_admin);
+router.get   ('/listar_productos_admin/:filtro?/:almacen?', auth.auth,             productoController.listar_productos_filtro_admin);
 router.get   ('/obtener_portada/:img',                                            productoController.obtener_portada);
 router.get   ('/obtener_producto_admin/:id',              auth.auth,              productoController.obtener_producto_admin);
 router.put   ('/actualizar_producto_admin/:id',          [auth.auth, multiparty], productoController.actualizar_producto_admin);

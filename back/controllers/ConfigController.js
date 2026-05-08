@@ -115,9 +115,33 @@ const obtener_config_publico = async function (req, res) {
     }
 };
 
+const subir_icono_categoria = function (req, res) {
+    if (!isAdmin(req, res)) return;
+    try {
+        if (!req.files || !req.files.icono) {
+            return res.status(400).send({ message: 'No se recibió imagen' });
+        }
+        const img_name = req.files.icono.path.split(/[/\\]/).pop();
+        res.status(200).send({ data: img_name });
+    } catch (error) {
+        res.status(500).send({ message: 'Error de Servidor' });
+    }
+};
+
+const obtener_icono_categoria = function (req, res) {
+    const img  = req.params.img;
+    const ruta = `./uploads/configuraciones/${img}`;
+    fs.stat(ruta, function (err) {
+        const archivo = err ? './uploads/default.jpg' : ruta;
+        res.status(200).sendFile(path.resolve(archivo));
+    });
+};
+
 module.exports = {
     obtener_config_admin,
     actualiza_config_admin,
     obtener_logo,
-    obtener_config_publico
+    obtener_config_publico,
+    subir_icono_categoria,
+    obtener_icono_categoria,
 };

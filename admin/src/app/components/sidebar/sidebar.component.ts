@@ -3,6 +3,8 @@ import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AdminService } from 'src/app/services/admin.service';
 import { SidebarStateService } from 'src/app/services/sidebar-state.service';
+import { ConfigStateService } from 'src/app/services/config-state.service';
+import { GLOBAL } from 'src/app/services/global';
 
 @Component({
   selector: 'app-sidebar',
@@ -14,30 +16,45 @@ export class SidebarComponent implements OnInit, OnDestroy {
   public user_admin: any = {};
   public currentYear: number = new Date().getFullYear();
   public collapsed = false;
+  public logoSrc: string = 'assets/img/monteros-fondo-negro.png';
+  public nombreComercial: string = "MONTERO'S";
 
-  private id: string = '';
   private token: string = '';
-  private sub: Subscription = new Subscription();
+  private id: string = '';
+  private subs = new Subscription();
+  private url: string = '';
 
   constructor(
     private _adminService: AdminService,
     private _router: Router,
-    public sidebarState: SidebarStateService
-  ) {}
+    public sidebarState: SidebarStateService,
+    public configState: ConfigStateService
+  ) {
+    this.url = GLOBAL.url;
+  }
 
   ngOnInit(): void {
     this.token = localStorage.getItem('token') ?? '';
     this.id    = localStorage.getItem('_id')   ?? '';
     this.cargarAdmin();
+    this.cargarConfig();
 
-    // Suscribirse al estado globals
-    this.sub = this.sidebarState.collapsed$.subscribe(val => {
-      this.collapsed = val;
-    });
+    this.subs.add(
+      this.sidebarState.collapsed$.subscribe(val => this.collapsed = val)
+    );
+
+    this.subs.add(
+      this.configState.config$.subscribe(cfg => {
+        this.nombreComercial = cfg.titulo || "MONTERO'S";
+        if (cfg.logo) {
+          this.logoSrc = this.url + 'obtener_logo/' + cfg.logo;
+        }
+      })
+    );
   }
 
   ngOnDestroy(): void {
-    this.sub.unsubscribe();
+    this.subs.unsubscribe();
   }
 
   toggle(): void {
@@ -55,6 +72,20 @@ export class SidebarComponent implements OnInit, OnDestroy {
     this._adminService.obtener_admin(this.id, this.token).subscribe({
       next: (response) => { this.user_admin = response?.data ?? {}; },
       error: (err) => { console.error('[SidebarComponent]', err); }
+    });
+  }
+
+  private cargarConfig(): void {
+    this._adminService.obtener_config_publico().subscribe({
+      next: (response) => {
+        if (response?.data) {
+          this.configState.update({
+            titulo: response.data.titulo || "MONTERO'S",
+            logo:   response.data.logo   || ''
+          });
+        }
+      },
+      error: () => {}
     });
   }
 }

@@ -55,7 +55,12 @@ const registro_producto_admin = async function (req, res) {
 const listar_productos_filtro_admin = async function (req, res) {
     if (!isAdmin(req, res)) return;
     try {
-        const reg = await Producto.find({ titulo: new RegExp(req.params.filtro, 'i') });
+        const filtroVal = (!req.params.filtro || req.params.filtro === '_') ? '' : req.params.filtro;
+        const query = { titulo: new RegExp(filtroVal, 'i') };
+        if (req.params.almacen && req.params.almacen !== 'todos') {
+            query.almacen = req.params.almacen;
+        }
+        const reg = await Producto.find(query);
         res.status(200).send({ data: reg });
     } catch (error) {
         res.status(500).send({ message: 'Error de Servidor', data: undefined });
@@ -94,6 +99,7 @@ const actualizar_producto_admin = async function (req, res) {
             categoria  : data.categoria,
             descripcion: data.descripcion,
             contenido  : data.contenido,
+            almacen    : data.almacen,
         };
 
         if (req.files && req.files.portada) {

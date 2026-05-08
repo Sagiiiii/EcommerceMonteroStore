@@ -81,7 +81,8 @@ export class UpdateProductoComponent implements OnInit {
       precio:      this.producto.precio,
       categoria:   this.producto.categoria,
       descripcion: this.producto.descripcion,
-      contenido:   this.producto.contenido
+      contenido:   this.producto.contenido,
+      almacen:     this.producto.almacen || 'huancayo'
     };
 
     if (this.file) {

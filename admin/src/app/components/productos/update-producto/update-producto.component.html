@@ -89,6 +89,17 @@
                 </select>
               </div>
 
+              <div class="col-lg-4 form-group">
+                <label class="form-label" for="select-almacen">
+                  <i class="cxi-map-pin mr-1"></i> Almacén
+                </label>
+                <select class="form-control custom-select" id="select-almacen"
+                  required name="almacen" [(ngModel)]="producto.almacen">
+                  <option value="huancayo">Huancayo</option>
+                  <option value="ayacucho">Ayacucho</option>
+                </select>
+              </div>
+
               <div class="col-lg-12 form-group">
                 <label class="form-label" for="input-descripcion">
                   <i class="cxi-comment mr-1"></i> Descripción corta

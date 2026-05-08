@@ -135,3 +135,48 @@
   font-size: 0.775rem;
   margin-top: 0.3rem;
 }
+
+/* ── Fila compacta de nueva categoría ──────────────────────────── */
+.cat-add-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.cat-add-nombre {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Botón selector de ícono — cuadrado pequeño */
+.cat-icon-pick-btn {
+  width: 31px;
+  height: 31px;
+  padding: 0;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 6px;
+}
+
+/* Preview dentro del botón cuando hay imagen */
+.cat-icon-pick-preview {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Ícono en la tabla de categorías */
+.cat-icon-img {
+  width: 26px;
+  height: 26px;
+  object-fit: contain;
+  border-radius: 4px;
+  border: 1px solid #dee2e6;
+  background: #f8f9fa;
+  vertical-align: middle;
+}
+
+.font-size-sm { font-size: 0.8125rem; }

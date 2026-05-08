@@ -18,6 +18,7 @@ const ProductoSchema = Schema({
     titulo_variedad : { type: String, required: false },
     categoria       : { type: String, required: true },
     estado          : { type: String, default: 'edicion', required: true },
+    almacen         : { type: String, enum: ['huancayo', 'ayacucho'], default: 'huancayo', required: true },
     createdAt       : { type: Date, default: Date.now, required: true },
 });
 

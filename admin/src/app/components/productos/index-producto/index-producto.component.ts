@@ -1,17 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { GLOBAL } from 'src/app/services/global';
 import { ProductoService } from 'src/app/services/producto.service';
 import { Workbook } from 'exceljs';
 import * as fs from 'file-saver';
 
-declare var $: any;
 declare var iziToast: any;
-
-// ════════════════════════════════════════════════════════════════
-//  IndexProductoComponent
-//  Listado, búsqueda, eliminación y exportación Excel de los
-//  productos del catálogo de MONTERO'S.
-// ════════════════════════════════════════════════════════════════
+declare var $: any;
 
 @Component({
   selector: 'app-index-producto',
@@ -20,25 +14,17 @@ declare var iziToast: any;
 })
 export class IndexProductoComponent implements OnInit {
 
-  // ── Lista de productos ────────────────────────────────────────
   public productos: Array<any> = [];
-
-  // ── Estados de UI ─────────────────────────────────────────────
   public load_data: boolean = true;
   public load_btn:  boolean = false;
-
-  // ── Paginación ────────────────────────────────────────────────
   public page:     number = 1;
   public pageSize: number = 10;
-
-  // ── Filtro ────────────────────────────────────────────────────
   public filtro: string = '';
-
-  // ── Contexto ──────────────────────────────────────────────────
+  public almacenFiltro: string = 'todos';
+  public openDropdownId: string | null = null;
   public token: string = '';
   public url:   string = '';
 
-  // ─────────────────────────────────────────────────────────────
   constructor(private _productoService: ProductoService) {
     this.token = localStorage.getItem('token') ?? '';
     this.url   = GLOBAL.url;
@@ -48,7 +34,21 @@ export class IndexProductoComponent implements OnInit {
     this.initData();
   }
 
-  // ══ MÉTODOS PÚBLICOS ══════════════════════════════════════════
+  @HostListener('document:click')
+  cerrarDropdowns(): void {
+    this.openDropdownId = null;
+  }
+
+  toggleDropdown(id: string, event: Event): void {
+    event.stopPropagation();
+    this.openDropdownId = this.openDropdownId === id ? null : id;
+  }
+
+  setAlmacen(almacen: string): void {
+    this.almacenFiltro = almacen;
+    this.page = 1;
+    this.initData();
+  }
 
   filtrar(): void {
     this.page = 1;
@@ -57,7 +57,8 @@ export class IndexProductoComponent implements OnInit {
 
   resetear(): void {
     this.filtro = '';
-    this.page   = 1;
+    this.almacenFiltro = 'todos';
+    this.page = 1;
     this.initData();
   }
 
@@ -86,11 +87,11 @@ export class IndexProductoComponent implements OnInit {
       { header: 'ID',               key: 'col1',  width: 26 },
       { header: 'Portada',          key: 'col2',  width: 20 },
       { header: 'Producto',         key: 'col3',  width: 35 },
-      { header: 'Stock',            key: 'col4',  width: 12 },
-      { header: 'Precio (S/.)',     key: 'col5',  width: 15 },
-      { header: 'Categoría',        key: 'col6',  width: 25 },
-      { header: 'N° Ventas',        key: 'col7',  width: 12 },
-      { header: 'N° Puntos',        key: 'col8',  width: 12 },
+      { header: 'Almacén',          key: 'col4',  width: 14 },
+      { header: 'Stock',            key: 'col5',  width: 12 },
+      { header: 'Precio (S/.)',     key: 'col6',  width: 15 },
+      { header: 'Categoría',        key: 'col7',  width: 25 },
+      { header: 'N° Ventas',        key: 'col8',  width: 12 },
       { header: 'Estado',           key: 'col9',  width: 15 },
       { header: 'Descripción',      key: 'col10', width: 40 },
       { header: 'Fecha de creación',key: 'col11', width: 20 },
@@ -98,9 +99,8 @@ export class IndexProductoComponent implements OnInit {
 
     this.productos.forEach(p => {
       worksheet.addRow([
-        p._id, p.portada, p.titulo, p.stock, p.precio,
-        p.categoria, p.nventas, p.nventas, p.estado,
-        p.descripcion, p.createdAt
+        p._id, p.portada, p.titulo, p.almacen, p.stock, p.precio,
+        p.categoria, p.nventas, p.estado, p.descripcion, p.createdAt
       ]);
     });
 
@@ -111,11 +111,9 @@ export class IndexProductoComponent implements OnInit {
     });
   }
 
-  // ══ MÉTODOS PRIVADOS ══════════════════════════════════════════
-
   private initData(): void {
     this.load_data = true;
-    this._productoService.listar_productos_admin(this.filtro, this.token).subscribe({
+    this._productoService.listar_productos_admin(this.filtro, this.almacenFiltro, this.token).subscribe({
       next: (response) => {
         this.productos  = response?.data ?? [];
         this.load_data  = false;
@@ -128,9 +126,18 @@ export class IndexProductoComponent implements OnInit {
     });
   }
 
+  abrirModal(id: string, event: Event): void {
+    event.stopPropagation();
+    this.openDropdownId = null;
+    $(`#modalEliminar-${id}`).modal('show');
+  }
+
+  cerrarModalBtn(id: string): void {
+    $(`#modalEliminar-${id}`).modal('hide');
+  }
+
   private cerrarModal(id: string): void {
     $(`#modalEliminar-${id}`).modal('hide');
-    $('.modal-backdrop').remove();
   }
 
   private mostrarExito(mensaje: string): void {

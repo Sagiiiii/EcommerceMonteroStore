@@ -1,6 +1,8 @@
 'use strict';
 
-require('dotenv').config();
+require('dotenv').config({ path: __dirname + '/.env' });
+
+console.log("URI:", process.env.MONGO_URI);
 
 const cors        = require('cors');
 const express     = require('express');
@@ -68,7 +70,7 @@ app.use('/api', descuentoRoute);
 // ── Inicio del servidor ────────────────────────────────
 async function startServer() {
     try {
-        await mongoose.connect(process.env.MONGODB_URI, {
+        await mongoose.connect(process.env.MONGO_URI, {
             useUnifiedTopology: true,
             useNewUrlParser   : true,
         });

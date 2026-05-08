@@ -14,12 +14,15 @@ export class ProductoService {
     fd.append('titulo', data.titulo); fd.append('stock', data.stock);
     fd.append('precio', data.precio); fd.append('descripcion', data.descripcion);
     fd.append('contenido', data.contenido); fd.append('categoria', data.categoria);
+    fd.append('almacen', data.almacen || 'huancayo');
     fd.append('portada', file);
     return this._http.post(this.url + 'registro_producto_admin', fd, { headers });
   }
-  listar_productos_admin(filtro: any, token: any): Observable<any> {
+  listar_productos_admin(filtro: any, almacen: any, token: any): Observable<any> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': token });
-    return this._http.get(this.url + 'listar_productos_admin/' + filtro, { headers });
+    const f = filtro ? encodeURIComponent(filtro) : '_';
+    const a = almacen || 'todos';
+    return this._http.get(this.url + 'listar_productos_admin/' + f + '/' + a, { headers });
   }
   obtener_producto_admin(id: any, token: any): Observable<any> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': token });
@@ -32,6 +35,7 @@ export class ProductoService {
       fd.append('titulo', data.titulo); fd.append('stock', data.stock);
       fd.append('precio', data.precio); fd.append('descripcion', data.descripcion);
       fd.append('contenido', data.contenido); fd.append('categoria', data.categoria);
+      fd.append('almacen', data.almacen || 'huancayo');
       fd.append('portada', data.portada);
       return this._http.put(this.url + 'actualizar_producto_admin/' + id, fd, { headers });
     } else {

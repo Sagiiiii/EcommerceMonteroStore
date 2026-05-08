@@ -1,185 +1,175 @@
-import { Component, OnInit, OnChanges } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { AdminService } from 'src/app/services/admin.service';
+import { ConfigStateService } from 'src/app/services/config-state.service';
 import { GLOBAL } from 'src/app/services/global';
 import { v4 as uuidv4 } from 'uuid';
 
 declare var iziToast: any;
-
-// ════════════════════════════════════════════════════════════════
-//  ConfiguracionComponent
-//  Gestión de la configuración general del sistema MONTERO'S.
-//  Permite administrar nombre comercial, series de facturación,
-//  categorías de productos y logotipo institucional.
-// ════════════════════════════════════════════════════════════════
 
 @Component({
   selector: 'app-configuracion',
   templateUrl: './configuracion.component.html',
   styleUrls: ['./configuracion.component.css']
 })
-export class ConfiguracionComponent implements OnInit, OnChanges {
+export class ConfiguracionComponent implements OnInit {
 
-  // ── Autenticación ──────────────────────────────────────────────
   public token: string = '';
-
-  // ── Configuración general del sistema ─────────────────────────
   public config: any = { categorias: [] };
+  public url: string = '';
+  private configId: string = '';
 
-  // ── Campos auxiliares para nueva categoría ────────────────────
-  public titulo_cat: string = '';
-  public icono_cat: string = '';
-
-  // ── Manejo de imagen / logo ───────────────────────────────────
+  // ── Logo principal ────────────────────────────────────────────
   public imgSelect: string | ArrayBuffer = 'assets/img/01.jpg';
   public file: File | undefined = undefined;
 
-  // ── URL base de la API ────────────────────────────────────────
-  public url: string = '';
+  // ── Nueva categoría ──────────────────────────────────────────
+  public titulo_cat: string = '';
+  public icono_file: File | undefined = undefined;
+  public icono_preview: string = '';
+  public subiendo_icono: boolean = false;
 
-  // ── ID de configuración (debe ser dinámico, no hardcodeado) ───
-  // NOTA: Se obtiene desde la respuesta del servidor.
-  // Si el backend no lo devuelve en `response.data._id`, revisar endpoint.
-  private configId: string = '';
+  private readonly TIPOS_IMAGEN: string[] = ['image/png', 'image/jpeg', 'image/jpg', 'image/webp', 'image/gif', 'image/svg+xml'];
+  private readonly MAX_SIZE: number = 4_000_000;
 
-  // ── Tipos de imagen permitidos ────────────────────────────────
-  private readonly TIPOS_IMAGEN_PERMITIDOS: string[] = [
-    'image/png',
-    'image/jpeg',
-    'image/jpg',
-    'image/webp',
-    'image/gif'
-  ];
-
-  // ── Tamaño máximo de imagen: 4 MB ────────────────────────────
-  private readonly TAMANO_MAXIMO_IMAGEN: number = 4_000_000;
-
-  // ─────────────────────────────────────────────────────────────
-  constructor(private _adminService: AdminService) {
+  constructor(
+    private _adminService: AdminService,
+    private _configState: ConfigStateService
+  ) {
     this.token = localStorage.getItem('token') ?? '';
-    this.url = GLOBAL.url;
+    this.url   = GLOBAL.url;
   }
 
-  // ─────────────────────────────────────────────────────────────
   ngOnInit(): void {
     this.cargarConfiguracion();
   }
 
-  ngOnChanges(): void {
-    // Reservado para futuros bindings de @Input()
-  }
-
-  // ══ MÉTODOS PÚBLICOS ══════════════════════════════════════════
-
-  /**
-   * Guarda los cambios de configuración en el servidor.
-   * Requiere que el formulario sea válido.
-   */
   actualizar(configForm: NgForm): void {
     if (!configForm.valid) {
-      this.mostrarError('Por favor, complete correctamente todos los campos obligatorios.');
+      this.mostrarError('Complete correctamente todos los campos obligatorios.');
       return;
     }
-
     if (!this.configId) {
-      this.mostrarError('No se pudo identificar la configuración. Recargue la página e intente nuevamente.');
+      this.mostrarError('No se pudo identificar la configuración. Recargue la página.');
       return;
     }
 
     const payload = {
-      titulo:       configForm.value.titulo,
-      serie:        configForm.value.serie,
-      correlativo:  configForm.value.correlativo,
-      categorias:   this.config.categorias,
-      logo:         this.file
+      titulo:      configForm.value.titulo,
+      serie:       configForm.value.serie,
+      correlativo: configForm.value.correlativo,
+      categorias:  this.config.categorias,
+      logo:        this.file
     };
 
     this._adminService.actualiza_config_admin(this.configId, payload, this.token).subscribe({
-      next: (_response) => {
-        this.mostrarExito('La configuración de MONTERO\'S se actualizó correctamente.');
+      next: (response) => {
+        this.mostrarExito('Configuración de MONTERO\'S actualizada correctamente.');
+        // Propagar cambios al sidebar y pestaña del navegador
+        const data = response?.data ?? {};
+        this._configState.update({
+          titulo: data.titulo || configForm.value.titulo,
+          logo:   data.logo   || this.config.logo
+        });
+        if (data.logo) this.config.logo = data.logo;
       },
       error: (err) => {
-        console.error('[ConfiguracionComponent] Error al actualizar configuración:', err);
+        console.error('[ConfiguracionComponent] Error al actualizar:', err);
         this.mostrarError('Ocurrió un error al guardar los cambios. Intente nuevamente.');
       }
     });
   }
 
-  /**
-   * Agrega una nueva categoría a la lista.
-   * Requiere título e ícono válidos.
-   */
-  agregar_cat(): void {
-    const titulo = this.titulo_cat.trim();
-    const icono  = this.icono_cat.trim();
+  // ── Icono de categoría ────────────────────────────────────────
 
-    if (!titulo || !icono) {
-      this.mostrarError('Debe ingresar un nombre y un ícono para la categoría.');
-      return;
-    }
-
-    this.config.categorias.push({
-      titulo,
-      icono,
-      _id: uuidv4()
-    });
-
-    this.titulo_cat = '';
-    this.icono_cat  = '';
+  triggerIconoInput(): void {
+    (document.getElementById('input-icono-file') as HTMLInputElement)?.click();
   }
 
-  /**
-   * Elimina la categoría en la posición indicada.
-   */
+  iconoFileChange(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (!input.files || !input.files[0]) { this.icono_file = undefined; this.icono_preview = ''; return; }
+    const archivo = input.files[0];
+    if (!this.TIPOS_IMAGEN.includes(archivo.type)) {
+      this.mostrarError('El ícono debe ser una imagen válida (JPG, PNG, WEBP, SVG o GIF).');
+      return;
+    }
+    if (archivo.size > this.MAX_SIZE) {
+      this.mostrarError('La imagen del ícono no puede superar los 4 MB.');
+      return;
+    }
+    this.icono_file = archivo;
+    const reader = new FileReader();
+    reader.onload = () => { this.icono_preview = reader.result as string; };
+    reader.readAsDataURL(archivo);
+  }
+
+  agregar_cat(): void {
+    const titulo = this.titulo_cat.trim();
+    if (!titulo) { this.mostrarError('Debe ingresar el nombre de la categoría.'); return; }
+    if (!this.icono_file) { this.mostrarError('Debe seleccionar una imagen de ícono para la categoría.'); return; }
+
+    this.subiendo_icono = true;
+    this._adminService.subir_icono_categoria(this.icono_file, this.token).subscribe({
+      next: (response) => {
+        this.config.categorias.push({
+          titulo,
+          icono:    response.data,
+          tipo:     'imagen',
+          _id:      uuidv4()
+        });
+        this.titulo_cat   = '';
+        this.icono_file   = undefined;
+        this.icono_preview = '';
+        this.subiendo_icono = false;
+        const input = document.getElementById('input-icono-file') as HTMLInputElement;
+        if (input) input.value = '';
+      },
+      error: () => {
+        this.mostrarError('Error al subir el ícono. Intente nuevamente.');
+        this.subiendo_icono = false;
+      }
+    });
+  }
+
   eliminar_categoria(indice: number): void {
     if (indice >= 0 && indice < this.config.categorias.length) {
       this.config.categorias.splice(indice, 1);
     }
   }
 
-  /**
-   * Maneja el cambio de archivo para el logotipo.
-   * Valida tipo y tamaño antes de aceptar la imagen.
-   */
+  iconoSrc(item: any): string {
+    return this.url + 'obtener_icono_categoria/' + item.icono;
+  }
+
+  esImagen(item: any): boolean {
+    return item.tipo === 'imagen' || /\.(jpg|jpeg|png|webp|gif|svg)$/i.test(item.icono || '');
+  }
+
+  // ── Logo principal ────────────────────────────────────────────
+
   fileChangeEvent(event: Event): void {
     const input = event.target as HTMLInputElement;
-
-    if (!input.files || !input.files[0]) {
-      this.resetearImagen();
-      this.mostrarError('No se seleccionó ninguna imagen.');
-      return;
-    }
-
+    if (!input.files || !input.files[0]) { this.resetearImagen(); return; }
     const archivo = input.files[0];
-
-    if (!this.TIPOS_IMAGEN_PERMITIDOS.includes(archivo.type)) {
+    if (!this.TIPOS_IMAGEN.includes(archivo.type)) {
       this.resetearImagen();
       this.mostrarError('El archivo debe ser una imagen válida (JPG, PNG, WEBP o GIF).');
       return;
     }
-
-    if (archivo.size > this.TAMANO_MAXIMO_IMAGEN) {
+    if (archivo.size > this.MAX_SIZE) {
       this.resetearImagen();
       this.mostrarError('La imagen no puede superar los 4 MB.');
       return;
     }
-
-    // Lectura y previsualización
     const reader = new FileReader();
-    reader.onload = () => {
-      if (reader.result) {
-        this.imgSelect = reader.result;
-      }
-    };
+    reader.onload = () => { if (reader.result) this.imgSelect = reader.result; };
     reader.readAsDataURL(archivo);
     this.file = archivo;
   }
 
-  // ══ MÉTODOS PRIVADOS ══════════════════════════════════════════
+  // ── Privados ──────────────────────────────────────────────────
 
-  /**
-   * Carga la configuración actual desde el servidor.
-   */
   private cargarConfiguracion(): void {
     this._adminService.obtener_config_admin(this.token).subscribe({
       next: (response) => {
@@ -193,44 +183,21 @@ export class ConfiguracionComponent implements OnInit, OnChanges {
       },
       error: (err) => {
         console.error('[ConfiguracionComponent] Error al cargar configuración:', err);
-        this.mostrarError('No se pudo cargar la configuración. Intente recargar la página.');
+        this.mostrarError('No se pudo cargar la configuración. Recargue la página.');
       }
     });
   }
 
-  /**
-   * Restablece la imagen seleccionada al valor por defecto.
-   */
   private resetearImagen(): void {
     this.imgSelect = 'assets/img/01.jpg';
     this.file = undefined;
   }
 
-  /**
-   * Muestra una notificación de éxito con iziToast.
-   */
   private mostrarExito(mensaje: string): void {
-    iziToast.show({
-      title: 'Actualizado',
-      titleColor: '#1DC74C',
-      theme: 'dark',
-      class: 'text-success',
-      position: 'topRight',
-      message: mensaje
-    });
+    iziToast.show({ title: 'Actualizado', titleColor: '#1DC74C', theme: 'dark', class: 'text-success', position: 'topRight', message: mensaje });
   }
 
-  /**
-   * Muestra una notificación de error con iziToast.
-   */
   private mostrarError(mensaje: string): void {
-    iziToast.show({
-      title: 'Error',
-      titleColor: '#FF3B30',
-      theme: 'dark',
-      class: 'text-danger',
-      position: 'topRight',
-      message: mensaje
-    });
+    iziToast.show({ title: 'Error', titleColor: '#FF3B30', theme: 'dark', class: 'text-danger', position: 'topRight', message: mensaje });
   }
 }

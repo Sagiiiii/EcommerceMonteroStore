@@ -91,34 +91,39 @@
           <div class="col-md-9">
 
             <!-- Inputs para nueva categoría -->
-            <div class="row mb-2">
-              <div class="col-md-5">
-                <input
-                  class="form-control"
-                  type="text"
-                  id="input-titulo-cat"
-                  placeholder="Nombre de categoría"
-                  name="titulo_cat"
-                  [(ngModel)]="titulo_cat">
-              </div>
-              <div class="col-md-5">
-                <input
-                  class="form-control"
-                  type="text"
-                  id="input-icono-cat"
-                  placeholder="Clase del ícono (Ej.: cxi-tag)"
-                  name="icono_cat"
-                  [(ngModel)]="icono_cat">
-              </div>
-              <div class="col-md-2 d-flex align-items-center">
-                <button
-                  type="button"
-                  class="btn btn-sm btn-outline-primary"
-                  (click)="agregar_cat()">
-                  <i class="cxi-plus mr-1"></i> Agregar
-                </button>
-              </div>
+            <input type="file" id="input-icono-file" class="d-none"
+              accept="image/png,image/jpeg,image/jpg,image/webp,image/gif,image/svg+xml"
+              (change)="iconoFileChange($event)">
+
+            <div class="cat-add-row mb-1">
+              <input
+                class="form-control form-control-sm cat-add-nombre"
+                type="text"
+                placeholder="Nombre de categoría"
+                name="titulo_cat"
+                [(ngModel)]="titulo_cat">
+
+              <button type="button"
+                class="btn btn-sm btn-outline-secondary cat-icon-pick-btn"
+                title="Seleccionar imagen de ícono"
+                (click)="triggerIconoInput()">
+                <img *ngIf="icono_preview" [src]="icono_preview" class="cat-icon-pick-preview">
+                <i *ngIf="!icono_preview" class="cxi-photo"></i>
+              </button>
+
+              <button type="button"
+                class="btn btn-sm btn-primary"
+                [disabled]="subiendo_icono"
+                (click)="agregar_cat()">
+                <span *ngIf="!subiendo_icono"><i class="cxi-plus"></i></span>
+                <span *ngIf="subiendo_icono">
+                  <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+                </span>
+              </button>
             </div>
+            <small class="form-text text-muted mb-2">
+              Haga clic en <i class="cxi-photo"></i> para elegir el ícono de la categoría.
+            </small>
 
             <!-- Tabla de categorías registradas -->
             <div class="table-responsive mt-3" *ngIf="config?.categorias">
@@ -146,8 +151,11 @@
                   <tr *ngFor="let item of config.categorias; let indice = index">
                     <td class="align-middle">{{ item.titulo }}</td>
                     <td class="align-middle">
-                      <i class="{{ item.icono }} mr-2"></i>
-                      <code>{{ item.icono }}</code>
+                      <img *ngIf="esImagen(item)"
+                        [src]="iconoSrc(item)"
+                        [alt]="item.titulo"
+                        class="cat-icon-img mr-2">
+                      <i *ngIf="!esImagen(item)" class="{{ item.icono }} mr-2"></i>
                     </td>
                     <td class="text-center align-middle">
                       <button

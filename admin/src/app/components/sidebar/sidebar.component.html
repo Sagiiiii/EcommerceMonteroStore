@@ -3,8 +3,8 @@
   <!-- Logo -->
   <div class="monteros-sidebar__logo">
     <a [routerLink]="['/inicio']" class="monteros-sidebar__logo-link">
-      <img src="assets/img/monteros-fondo-negro.png" alt="MONTERO'S" class="monteros-sidebar__logo-img">
-      <span class="monteros-sidebar__logo-text">MONTERO'S</span>
+      <img [src]="logoSrc" [alt]="nombreComercial" class="monteros-sidebar__logo-img">
+      <span class="monteros-sidebar__logo-text">{{ nombreComercial }}</span>
     </a>
     <div class="monteros-sidebar__logo-line"></div>
   </div>
@@ -161,7 +161,7 @@
   </div>
 
   <div class="monteros-sidebar__footer">
-    <p class="monteros-sidebar__footer-text">&copy; {{ currentYear }} MONTERO'S · Panel Admin</p>
+    <p class="monteros-sidebar__footer-text">&copy; {{ currentYear }} {{ nombreComercial }} · Panel Admin</p>
   </div>
 
 </aside>

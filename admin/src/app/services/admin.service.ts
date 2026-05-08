@@ -107,6 +107,13 @@ export class AdminService {
     return this._http.get(this.url + 'obtener_config_publico', { headers });
   }
 
+  subir_icono_categoria(file: File, token: string): Observable<any> {
+    const headers = new HttpHeaders({ 'Authorization': token });
+    const fd = new FormData();
+    fd.append('icono', file);
+    return this._http.post(this.url + 'subir_icono_categoria', fd, { headers });
+  }
+
   // ── Mensajes ──────────────────────────────────────────────────
 
   obtener_mensaje_admin(token: any): Observable<any> {

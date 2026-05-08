@@ -89,14 +89,14 @@
 }
 
 .filter-btn:hover {
-  background: var(--gold-pale);
-  color: var(--gold);
+  background: rgba(201,168,76,.12);
+  color: #c9a84c;
 }
 
 .filter-btn--active {
-  background: var(--gold) !important;
+  background: rgba(201,168,76,.80) !important;
   color: #fff !important;
-  box-shadow: 0 2px 8px rgba(201,168,76,.35);
+  box-shadow: 0 2px 8px rgba(201,168,76,.25);
 }
 
 .store-dot {
