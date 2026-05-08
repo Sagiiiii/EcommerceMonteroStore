@@ -1,28 +1,28 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AdminService } from 'src/app/services/admin.service';
 import { SidebarStateService } from 'src/app/services/sidebar-state.service';
 
 @Component({
-  selector: 'app-sidebar',
-  templateUrl: './sidebar.component.html',
-  styleUrls: ['./sidebar.component.css']
+  selector: 'app-navbar',
+  templateUrl: './navbar.component.html',
+  styleUrls: ['./navbar.component.css']
 })
-export class SidebarComponent implements OnInit, OnDestroy {
+export class NavbarComponent implements OnInit, OnDestroy {
 
   public user_admin: any = {};
-  public currentYear: number = new Date().getFullYear();
   public collapsed = false;
+  public dropdownOpen = false;     // ← controla el dropdown
 
-  private id: string = '';
+  private id:    string = '';
   private token: string = '';
   private sub: Subscription = new Subscription();
 
   constructor(
     private _adminService: AdminService,
     private _router: Router,
-    public sidebarState: SidebarStateService
+    private sidebarState: SidebarStateService
   ) {}
 
   ngOnInit(): void {
@@ -30,7 +30,6 @@ export class SidebarComponent implements OnInit, OnDestroy {
     this.id    = localStorage.getItem('_id')   ?? '';
     this.cargarAdmin();
 
-    // Suscribirse al estado globals
     this.sub = this.sidebarState.collapsed$.subscribe(val => {
       this.collapsed = val;
     });
@@ -40,8 +39,25 @@ export class SidebarComponent implements OnInit, OnDestroy {
     this.sub.unsubscribe();
   }
 
-  toggle(): void {
+  toggleSidebar(): void {
     this.sidebarState.toggle();
+  }
+
+  toggleDropdown(): void {
+    this.dropdownOpen = !this.dropdownOpen;
+  }
+
+  closeDropdown(): void {
+    this.dropdownOpen = false;
+  }
+
+  // Cierra el dropdown al hacer clic fuera
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent): void {
+    const target = event.target as HTMLElement;
+    if (!target.closest('.monteros-navbar__user')) {
+      this.dropdownOpen = false;
+    }
   }
 
   logout(): void {
@@ -54,7 +70,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
     if (!this.id || !this.token) return;
     this._adminService.obtener_admin(this.id, this.token).subscribe({
       next: (response) => { this.user_admin = response?.data ?? {}; },
-      error: (err) => { console.error('[SidebarComponent]', err); }
+      error: (err) => { console.error('[NavbarComponent]', err); }
     });
   }
 }

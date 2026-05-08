@@ -1,0 +1,104 @@
+<!-- NavbarComponent — MONTERO'S -->
+
+<header class="monteros-navbar" [class.monteros-navbar--collapsed]="collapsed">
+
+  <!-- ── Hamburguesa desktop ──────────────────────────────────── -->
+  <button class="monteros-navbar__hamburger d-none d-lg-flex"
+    (click)="toggleSidebar()"
+    [attr.aria-label]="collapsed ? 'Expandir menú' : 'Colapsar menú'">
+    <span class="monteros-navbar__hamburger-bar"></span>
+    <span class="monteros-navbar__hamburger-bar"></span>
+    <span class="monteros-navbar__hamburger-bar"></span>
+  </button>
+
+  <!-- ── Logo móvil ───────────────────────────────────────────── -->
+  <a class="monteros-navbar__brand d-lg-none" [routerLink]="['/inicio']">
+    <img src="assets/img/monteros-fondo-negro.png" alt="MONTERO'S" height="36">
+  </a>
+
+  <!-- ── Hamburguesa móvil ────────────────────────────────────── -->
+  <button class="monteros-navbar__toggler d-block d-lg-none"
+    type="button" data-toggle="offcanvas" data-target="componentsNav"
+    aria-label="Abrir menú">
+    <span class="monteros-navbar__toggler-icon"></span>
+    <span class="monteros-navbar__toggler-icon"></span>
+    <span class="monteros-navbar__toggler-icon"></span>
+  </button>
+
+  <!-- ── Acciones derecha ─────────────────────────────────────── -->
+  <div class="monteros-navbar__actions ml-auto d-none d-lg-flex align-items-center">
+
+    <!-- Campana -->
+    <button class="monteros-navbar__icon-btn" aria-label="Notificaciones">
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+        fill="none" stroke="currentColor" stroke-width="1.8"
+        stroke-linecap="round" stroke-linejoin="round">
+        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+        <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+      </svg>
+      <span class="monteros-navbar__badge">3</span>
+    </button>
+
+    <div class="monteros-navbar__divider"></div>
+
+    <!-- Usuario + dropdown Angular puro (sin Bootstrap JS) -->
+    <div class="monteros-navbar__user" [class.monteros-navbar__user--open]="dropdownOpen">
+
+      <button class="monteros-navbar__user-btn"
+        type="button"
+        (click)="toggleDropdown()"
+        [attr.aria-expanded]="dropdownOpen">
+        <img [src]="'assets/img/user.png'"
+          class="monteros-navbar__avatar"
+          [alt]="'Avatar ' + user_admin.nombres">
+        <div class="monteros-navbar__user-info d-none d-xl-block">
+          <span class="monteros-navbar__user-name">
+            {{ user_admin.nombres }}, {{ user_admin.apellidos }}
+          </span>
+          <span class="monteros-navbar__user-role"> - Administrador</span>
+        </div>
+        <svg class="monteros-navbar__chevron"
+          xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+          viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="6 9 12 15 18 9"/>
+        </svg>
+      </button>
+
+      <!-- Dropdown controlado por Angular -->
+      <div class="monteros-navbar__dropdown" *ngIf="dropdownOpen">
+        <div class="monteros-navbar__dropdown-header">
+          <p class="monteros-navbar__dropdown-name">
+            {{ user_admin.nombres }}, {{ user_admin.apellidos }}
+          </p>
+          <p class="monteros-navbar__dropdown-email">{{ user_admin.email }}</p>
+        </div>
+        <div class="monteros-navbar__dropdown-divider"></div>
+        <a [routerLink]="['/panel/perfil']"
+          class="monteros-navbar__dropdown-item"
+          (click)="closeDropdown()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15"
+            viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+            <circle cx="12" cy="7" r="4"/>
+          </svg>
+          Mi perfil
+        </a>
+        <div class="monteros-navbar__dropdown-divider"></div>
+        <button class="monteros-navbar__dropdown-item monteros-navbar__dropdown-item--danger"
+          type="button" (click)="logout()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15"
+            viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+            <polyline points="16 17 21 12 16 7"/>
+            <line x1="21" y1="12" x2="9" y2="12"/>
+          </svg>
+          Cerrar sesión
+        </button>
+      </div>
+    </div>
+
+  </div>
+</header>

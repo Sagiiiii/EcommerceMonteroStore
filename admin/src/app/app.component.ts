@@ -1,15 +1,21 @@
 import { Component } from '@angular/core';
+import { Router, NavigationEnd } from '@angular/router';
 
-  // ════════════════════════════════════════════════════════════════
-  //  AppComponent — Componente raíz
-  //  Panel Administrativo MONTERO'S · JAIME PONCE MONTERO
-  // ════════════════════════════════════════════════════════════════
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
+})
+export class AppComponent {
+  mostrarLayout = false;
+  private rutasPublicas = ['/login', '/register', '/error404'];
 
-  @Component({
-    selector: 'app-root',
-    templateUrl: './app.component.html',
-    styleUrls: ['./app.component.css']
-  })
-  export class AppComponent {
-    title = 'MONTERO\'S — Panel Administrativo';
+  constructor(private router: Router) {
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        const url = event.urlAfterRedirects;
+        this.mostrarLayout = !this.rutasPublicas.some(r => url.startsWith(r));
+      }
+    });
   }
+}

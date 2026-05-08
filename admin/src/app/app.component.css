@@ -1,4 +1,24 @@
-/* app.component.css — MONTERO'S
-    Estilos globales del componente raíz.
-    Los estilos de aplicación global van en styles.css.
-  */
+/* app.component.css — MONTERO'S */
+
+  :host { display: block; min-height: 100vh; }
+
+  .panel-main {
+    margin-left: 280px;
+    margin-top: 64px;
+    min-height: calc(100vh - 64px);
+    background: #f2f1ed;
+    padding: 1.25rem 1.75rem;        /* menos padding arriba: 2rem → 1.25rem */
+    transition: margin-left 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .panel-main--collapsed {
+    margin-left: 62px;               /* se pega al sidebar colapsado */
+  }
+
+  @media (max-width: 991.98px) {
+    .panel-main,
+    .panel-main--collapsed {
+      margin-left: 0;
+      padding: 1rem;
+    }
+  }

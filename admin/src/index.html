@@ -7,69 +7,35 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Panel Administrativo MONTERO'S — Sistema de gestión comercial">
   <meta name="author" content="MONTERO'S · JAIME PONCE MONTERO">
-
-  <!-- Favicons -->
-  <link rel="apple-touch-icon" sizes="180x180" href="assets/img/apple-touch-icon.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="assets/img/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/img/monteros-fondo-negro.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/img/monteros-fondo-negro.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/img/monteros-fondo-negro.png">
   <link rel="manifest" href="assets/img/site.webmanifest">
   <link rel="mask-icon" color="#5bbad5" href="assets/img/safari-pinned-tab.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600&display=swap" rel="stylesheet">
   <meta name="msapplication-TileColor" content="#766df4">
   <meta name="theme-color" content="#ffffff">
-
-  <!-- Simplebar (scrollbar personalizado del tema) -->
   <link rel="stylesheet" media="screen" href="assets/vendor/simplebar/dist/simplebar.min.css">
-
-  <!-- Tema principal (Bootstrap 4 incluido) -->
   <link rel="stylesheet" media="screen" href="assets/css/theme.min.css">
-
-  <!-- iziToast -->
   <link rel="stylesheet" href="assets/css/iziToast.min.css">
-
-  <!-- Íconos Createx -->
   <link rel="stylesheet" href="assets/fonts/createx-icons.ttf">
-
-  <!--
-    NOTA: NO se carga Bootstrap 5 por CDN.
-    El tema (theme.min.css) ya incluye Bootstrap 4.
-    Mezclar Bootstrap 4 y 5 causa conflictos de clases
-    (mr-*/ml-* vs ms-*/me-*, badge-* vs bg-*, etc.)
-  -->
 </head>
-
 <body>
-  <main class="container-fluid pb-3 pb-sm-4">
-    <section class="cs-offcanvas-enabled row pb-3 pb-md-4">
-      <div class="col-xl-9">
-        <app-root></app-root>
-      </div>
-    </section>
-  </main>
 
-  <!-- Botón volver arriba -->
+  <app-root></app-root>
+
   <a class="btn-scroll-top" href="#top" data-scroll data-fixed-element>
     <span class="btn-scroll-top-tooltip text-muted font-size-sm mr-2">Top</span>
     <i class="btn-scroll-top-icon cxi-angle-up"></i>
   </a>
 
-  <!-- jQuery (Bootstrap 4 requiere jQuery) -->
   <script src="assets/vendor/jquery/dist/jquery.slim.min.js"></script>
-
-  <!-- Bootstrap 4 JS (incluido en el bundle del tema) -->
   <script src="assets/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-
-  <!-- Plugins del tema -->
   <script src="assets/vendor/simplebar/dist/simplebar.min.js"></script>
   <script src="assets/vendor/smooth-scroll/dist/smooth-scroll.polyfills.min.js"></script>
-
-  <!-- Scripts del tema -->
   <script src="assets/js/theme.min.js"></script>
-
-  <!-- iziToast -->
   <script src="assets/js/iziToast.min.js"></script>
-
-  <!-- Chart.js (para el dashboard) -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-
 </body>
 </html>

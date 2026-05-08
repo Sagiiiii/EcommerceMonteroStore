@@ -1,153 +1,167 @@
-<!-- ════════════════════════════════════════════════════════════
-      COMPONENTE: Sidebar — MONTERO'S
-      Panel Administrativo · JAIME PONCE MONTERO
-      ════════════════════════════════════════════════════════════ -->
+<aside class="monteros-sidebar" [class.monteros-sidebar--collapsed]="collapsed" id="componentsNav">
 
-<!-- ── Navbar superior ── -->
-<header class="navbar navbar-expand navbar-light fixed-top navbar-box-shadow bg-light px-3 px-lg-4"
-  data-scroll-header data-fixed-element>
-
-  <!-- Logo móvil -->
-  <a class="navbar-brand d-lg-none" [routerLink]="['/inicio']">
-    <img src="assets/img/components/logo/logo-dark.svg" alt="MONTERO'S" width="130">
-  </a>
-
-  <!-- Botón hamburguesa móvil -->
-  <button class="navbar-toggler d-block d-lg-none mr-3 ml-auto"
-    type="button" data-toggle="offcanvas" data-target="componentsNav">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-
-  <!-- Menú derecho (desktop) -->
-  <ul class="navbar-nav ml-auto d-none d-lg-flex align-items-center">
-    <li class="nav-item dropdown">
-      <a class="nav-tool dropdown-toggle py-0"
-        data-toggle="dropdown"
-        style="cursor: pointer; text-decoration: none;">
-        <img src="assets/img/user.png"
-          class="mr-2"
-          style="width:30px; border-radius:100%;"
-          alt="Avatar {{ user_admin.nombres }}">
-        {{ user_admin.nombres }}
-      </a>
-      <div class="dropdown-menu dropdown-menu-right">
-        <a [routerLink]="['/panel/perfil']" class="dropdown-item">
-          <i class="cxi-profile mr-2"></i> Mi perfil
-        </a>
-        <div class="dropdown-divider"></div>
-        <a class="dropdown-item text-danger" style="cursor: pointer;" (click)="logout()">
-          <i class="cxi-logout mr-2"></i> Cerrar sesión
-        </a>
-      </div>
-    </li>
-  </ul>
-
-</header>
-<!-- /navbar -->
-
-
-<!-- ── Sidebar (Off-canvas) ── -->
-<aside class="cs-offcanvas cs-offcanvas-expand bg-dark" id="componentsNav">
-
-  <!-- Logo desktop -->
-  <div class="cs-offcanvas-cap d-none d-lg-block py-2 bg-dark">
-    <a class="navbar-brand pl-0 py-2" [routerLink]="['/inicio']">
-      <img src="assets/img/monteros-fondo-negro.png" alt="MONTERO'S" width="210">
+  <!-- Logo -->
+  <div class="monteros-sidebar__logo">
+    <a [routerLink]="['/inicio']" class="monteros-sidebar__logo-link">
+      <img src="assets/img/monteros-fondo-negro.png" alt="MONTERO'S" class="monteros-sidebar__logo-img">
+      <span class="monteros-sidebar__logo-text">MONTERO'S</span>
     </a>
-    <span class="badge badge-warning">Admin</span>
-  </div>
-
-  <!-- Perfil del administrador -->
-  <div class="cs-offcanvas-cap d-none d-lg-block py-3 bg-dark text-center">
-    <img src="assets/img/user.png"
-      class="rounded-circle mb-2"
-      alt="Avatar {{ user_admin.nombres }}"
-      style="width:80px; height:80px; object-fit:cover; border:2px solid rgba(255,255,255,.2);">
-    <p class="h6 text-light mt-2 mb-0">
-      {{ user_admin.nombres }}, {{ user_admin.apellidos }}
-    </p>
-    <p class="font-size-sm text-muted mt-1 mb-0">{{ user_admin.email }}</p>
-  </div>
-
-  <!-- Botones de acción (desktop) -->
-  <div class="cs-offcanvas-cap d-none d-lg-block py-0 bg-dark">
-    <div class="d-flex py-3 px-3 border-bottom border-secondary">
-      <a class="btn btn-secondary btn-block mr-2"
-        [routerLink]="['/panel/perfil']">
-        <i class="cxi-profile mr-1"></i> Mi perfil
-      </a>
-      <a class="btn btn-danger btn-block mt-0"
-        style="cursor: pointer;" (click)="logout()">
-        <i class="cxi-lock mr-1"></i> Cerrar sesión
-      </a>
-    </div>
+    <div class="monteros-sidebar__logo-line"></div>
   </div>
 
   <!-- Control móvil -->
-  <div class="cs-offcanvas-cap d-flex d-lg-none bg-dark px-3 py-2 align-items-center justify-content-between">
-    <div class="d-flex align-items-center">
-      <h5 class="text-light mb-0 mr-2">Menú</h5>
-      <span class="badge badge-warning">Admin</span>
-    </div>
-    <button class="close text-light" type="button"
-      data-dismiss="offcanvas" aria-label="Cerrar menú">
-      <span aria-hidden="true">&times;</span>
+  <div class="monteros-sidebar__mobile-header d-flex d-lg-none">
+    <h5 class="monteros-sidebar__mobile-title">Menú</h5>
+    <button class="monteros-sidebar__close" type="button" data-dismiss="offcanvas" aria-label="Cerrar menú">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
     </button>
   </div>
 
-  <!-- Navegación principal -->
-  <div class="cs-offcanvas-body px-0 pt-4 pb-grid-gutter"
-    data-simplebar data-simplebar-inverse>
-
-    <h6 class="font-size-xs text-uppercase text-muted px-4 mt-2 mb-3"
-      style="letter-spacing:.08em;">
-      Menú principal
-    </h6>
-    <hr class="hr-gradient hr-light mb-2 opacity-25">
-
-    <nav class="nav nav-light flex-column">
-      <a class="nav-link px-4 py-2"
-        [routerLink]="['/inicio']" routerLinkActive="active">
-        <i class="cxi-grid mr-3"></i> Inicio
+  <!-- Perfil — exactamente igual que antes -->
+  <div class="monteros-sidebar__profile">
+    <div class="monteros-sidebar__avatar-wrapper">
+      <img [src]="'assets/img/user.png'" class="monteros-sidebar__avatar" [alt]="'Avatar ' + user_admin.nombres">
+      <div class="monteros-sidebar__avatar-ring"></div>
+    </div>
+    <div class="monteros-sidebar__user-info">
+      <p class="monteros-sidebar__user-name">{{ user_admin.nombres }}, {{ user_admin.apellidos }}</p>
+      <p class="monteros-sidebar__user-email">{{ user_admin.email }}</p>
+    </div>
+    <div class="monteros-sidebar__profile-actions">
+      <a [routerLink]="['/panel/perfil']" class="monteros-sidebar__action-btn">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+          fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+        </svg>
+        Ver perfil
       </a>
-      <a class="nav-link px-4 py-2"
-        [routerLink]="['/panel/clientes']" routerLinkActive="active">
-        <i class="cxi-profile mr-3"></i> Clientes
-      </a>
-      <a class="nav-link px-4 py-2"
-        [routerLink]="['/panel/productos']" routerLinkActive="active">
-        <i class="cxi-bag mr-3"></i> Productos
-      </a>
-      <a class="nav-link px-4 py-2"
-        [routerLink]="['/panel/cupones']" routerLinkActive="active">
-        <i class="cxi-star mr-3"></i> Cupones
-      </a>
-      <a class="nav-link px-4 py-2"
-        [routerLink]="['/panel/descuentos']" routerLinkActive="active">
-        <i class="cxi-minus-round mr-3"></i> Descuentos
-      </a>
-      <a class="nav-link px-4 py-2"
-        [routerLink]="['/panel/contactos']" routerLinkActive="active">
-        <i class="cxi-wechat mr-3"></i> Mensajes
-      </a>
-      <a class="nav-link px-4 py-2"
-        [routerLink]="['/panel/ventas']" routerLinkActive="active">
-        <i class="cxi-cart mr-3"></i> Ventas
-      </a>
-      <a class="nav-link px-4 py-2"
-        [routerLink]="['/panel/configuracion']" routerLinkActive="active">
-        <i class="cxi-settings mr-3"></i> Configuración
-      </a>
-    </nav>
-
+      <button class="monteros-sidebar__action-btn monteros-sidebar__action-btn--danger" type="button" (click)="logout()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+          fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+          <polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/>
+        </svg>
+        Salir
+      </button>
+    </div>
   </div>
 
-  <!-- Pie del sidebar -->
-  <div class="cs-offcanvas-cap d-none d-lg-block py-2 bg-dark">
-    <p class="text-center text-muted font-size-xs mb-0 px-3">
-      &copy; {{ currentYear }} MONTERO'S · Panel Administrativo
-    </p>
+  <!-- Navegación — exactamente igual que antes -->
+  <div class="monteros-sidebar__nav-wrapper">
+    <p class="monteros-sidebar__section-label">Menú principal</p>
+    <nav class="monteros-sidebar__nav">
+
+      <a class="monteros-sidebar__nav-link" [routerLink]="['/inicio']"
+        routerLinkActive="monteros-sidebar__nav-link--active" [routerLinkActiveOptions]="{ exact: true }">
+        <span class="monteros-sidebar__nav-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
+            <rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/>
+          </svg>
+        </span>
+        <span class="monteros-sidebar__nav-text">Inicio</span>
+        <span class="monteros-sidebar__tooltip">Inicio</span>
+      </a>
+
+      <a class="monteros-sidebar__nav-link" [routerLink]="['/panel/clientes']"
+        routerLinkActive="monteros-sidebar__nav-link--active">
+        <span class="monteros-sidebar__nav-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+          </svg>
+        </span>
+        <span class="monteros-sidebar__nav-text">Clientes</span>
+        <span class="monteros-sidebar__tooltip">Clientes</span>
+      </a>
+
+      <a class="monteros-sidebar__nav-link" [routerLink]="['/panel/productos']"
+        routerLinkActive="monteros-sidebar__nav-link--active">
+        <span class="monteros-sidebar__nav-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+            <line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/>
+          </svg>
+        </span>
+        <span class="monteros-sidebar__nav-text">Productos</span>
+        <span class="monteros-sidebar__tooltip">Productos</span>
+      </a>
+
+      <a class="monteros-sidebar__nav-link" [routerLink]="['/panel/cupones']"
+        routerLinkActive="monteros-sidebar__nav-link--active">
+        <span class="monteros-sidebar__nav-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/>
+            <line x1="7" y1="7" x2="7.01" y2="7"/>
+          </svg>
+        </span>
+        <span class="monteros-sidebar__nav-text">Cupones</span>
+        <span class="monteros-sidebar__tooltip">Cupones</span>
+      </a>
+
+      <a class="monteros-sidebar__nav-link" [routerLink]="['/panel/descuentos']"
+        routerLinkActive="monteros-sidebar__nav-link--active">
+        <span class="monteros-sidebar__nav-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="19" y1="5" x2="5" y2="19"/>
+            <circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/>
+          </svg>
+        </span>
+        <span class="monteros-sidebar__nav-text">Descuentos</span>
+        <span class="monteros-sidebar__tooltip">Descuentos</span>
+      </a>
+
+      <a class="monteros-sidebar__nav-link" [routerLink]="['/panel/contactos']"
+        routerLinkActive="monteros-sidebar__nav-link--active">
+        <span class="monteros-sidebar__nav-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+          </svg>
+        </span>
+        <span class="monteros-sidebar__nav-text">Mensajes</span>
+        <span class="monteros-sidebar__tooltip">Mensajes</span>
+      </a>
+
+      <a class="monteros-sidebar__nav-link" [routerLink]="['/panel/ventas']"
+        routerLinkActive="monteros-sidebar__nav-link--active">
+        <span class="monteros-sidebar__nav-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+          </svg>
+        </span>
+        <span class="monteros-sidebar__nav-text">Ventas</span>
+        <span class="monteros-sidebar__tooltip">Ventas</span>
+      </a>
+
+      <a class="monteros-sidebar__nav-link" [routerLink]="['/panel/configuracion']"
+        routerLinkActive="monteros-sidebar__nav-link--active">
+        <span class="monteros-sidebar__nav-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+          </svg>
+        </span>
+        <span class="monteros-sidebar__nav-text">Configuración</span>
+        <span class="monteros-sidebar__tooltip">Configuración</span>
+      </a>
+
+    </nav>
+  </div>
+
+  <div class="monteros-sidebar__footer">
+    <p class="monteros-sidebar__footer-text">&copy; {{ currentYear }} MONTERO'S · Panel Admin</p>
   </div>
 
 </aside>
-<!-- /sidebar -->

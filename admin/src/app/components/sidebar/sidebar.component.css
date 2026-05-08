@@ -1,50 +1,376 @@
+/* sidebar.component.css — MONTERO'S */
+
+/* ── Variables ──────────────────────────────────────────────────── */
+:root {
+  --sb-expanded:  280px;
+  --sb-collapsed: 62px;
+  --sb-speed:     0.3s;
+  --sb-ease:      cubic-bezier(0.4, 0, 0.2, 1);
+  --gold:         #c9a84c;
+  --gold-light:   #e0bb6a;
+  --gold-dim:     rgba(201,168,76,.10);
+  --gold-border:  rgba(201,168,76,.28);
+  --gold-glow:    rgba(201,168,76,.25);
+  --sb-bg:        #0d0e16;
+  --text-bright:  #f0ece0;
+  --text-muted:   rgba(240,236,224,.38);
+}
+
 /* ════════════════════════════════════════════════════════════════
-    sidebar.component.css — MONTERO'S
-    Panel Administrativo · JAIME PONCE MONTERO
-    ════════════════════════════════════════════════════════════════ */
-
-/* ── Nav links ─────────────────────────────────────────────────── */
-.nav.nav-light .nav-link {
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: rgba(255, 255, 255, 0.65);
-  border-radius: 0.375rem;
-  margin: 0 0.5rem;
-  transition: background-color 0.15s ease, color 0.15s ease;
+   BASE — idéntico a tu código original
+   ════════════════════════════════════════════════════════════════ */
+.monteros-sidebar {
+  width: 280px;
+  background: #0d0e16;
+  border-right: 1px solid rgba(201,168,76,.12);
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 0; left: 0; bottom: 0;
+  height: 100vh;
+  z-index: 1000;
+  overflow: hidden;
+  font-family: 'Sora', sans-serif;
+  /* ÚNICO cambio al original: animación de width */
+  transition: width var(--sb-speed) var(--sb-ease);
 }
 
-.nav.nav-light .nav-link:hover {
-  color: #fff;
-  background-color: rgba(255, 255, 255, 0.08);
+.monteros-sidebar::before {
+  content: ''; position: absolute;
+  top: 0; left: 0; right: 0; height: 180px;
+  background: radial-gradient(ellipse at 50% -20%, rgba(201,168,76,.09) 0%, transparent 70%);
+  pointer-events: none; z-index: 0;
 }
 
-.nav.nav-light .nav-link.active {
-  color: #fff;
-  background-color: rgba(255, 255, 255, 0.12);
+/* ════════════════════════════════════════════════════════════════
+   LOGO — igual al original + fila para el botón toggle
+   ════════════════════════════════════════════════════════════════ */
+.monteros-sidebar__logo {
+  padding: 0.5rem 0.5rem 0.5rem;
+  flex-shrink: 0; position: relative; z-index: 1;
 }
 
-.nav.nav-light .nav-link i {
-  opacity: 0.75;
-  font-size: 1rem;
-  vertical-align: middle;
+/* Fila: logo izquierda + toggle derecha */
+.monteros-sidebar__logo-header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.5rem;
+  padding-top: 2rem;    /* space below the absolute toggle (28px + 4px top) */
+  padding-right: 40px;  /* avoid overlap with toggle on right */
 }
 
-/* ── Avatar ────────────────────────────────────────────────────── */
-.rounded-circle {
-  border-radius: 50% !important;
+.monteros-sidebar__logo-link {
+  display: flex; align-items: center; gap: 0.20rem; text-decoration: none;
+  overflow: hidden; flex: 1;
 }
 
-/* ── Pie de página del sidebar ─────────────────────────────────── */
-.font-size-xs {
-  font-size: 0.775rem;
+.monteros-sidebar__logo-img {
+  width: 70px; height: 70px; object-fit: contain;
+  display: block; filter: brightness(1.1); flex-shrink: 0;
+  transition: width var(--sb-speed) var(--sb-ease),
+              height var(--sb-speed) var(--sb-ease);
 }
 
-/* ── Dropdown del navbar ───────────────────────────────────────── */
-.dropdown-menu-right {
-  right: 0;
-  left: auto;
+.monteros-sidebar__logo-text {
+  font-family: 'Sora', sans-serif; font-size: 1.375rem; font-weight: 700;
+  color: #f0ece0; letter-spacing: 0.06em; text-transform: uppercase; line-height: 1;
+  white-space: nowrap; overflow: hidden;
+  transition: opacity var(--sb-speed) var(--sb-ease),
+              width var(--sb-speed) var(--sb-ease);
 }
 
-.dropdown-item.text-danger:hover {
-  background-color: #fff5f5;
+/* ── Botón hamburguesa — esquina superior DERECHA, sin borde ────── */
+.monteros-sidebar__toggle {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 5px;
+  width: 28px;
+  height: 28px;
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  padding: 0 4px;
+  outline: none;
+  transition: background .2s;
+  z-index: 10;
+}
+
+.monteros-sidebar__toggle:hover {
+  background: rgba(201,168,76,.10);
+}
+
+.monteros-sidebar__toggle-bar {
+  display: block;
+  height: 2px;
+  background: rgba(240,236,224,.65);
+  border-radius: 2px;
+  transition: width .3s var(--sb-ease), background .2s;
+}
+.monteros-sidebar__toggle-bar:nth-child(1) { width: 16px; }
+.monteros-sidebar__toggle-bar:nth-child(2) { width: 11px; }
+.monteros-sidebar__toggle-bar:nth-child(3) { width: 16px; }
+
+.monteros-sidebar__toggle:hover .monteros-sidebar__toggle-bar {
+  background: var(--gold);
+}
+
+.monteros-sidebar__logo-line {
+  height: 1px;
+  background: linear-gradient(90deg, rgba(201,168,76,.30) 0%, transparent 100%);
+  margin-top: 1rem; margin-left: -0.5rem; margin-right: -0.5rem;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   PERFIL — idéntico al original
+   ════════════════════════════════════════════════════════════════ */
+.monteros-sidebar__profile {
+  padding: 1.5rem 1.5rem 1.125rem;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  width: 100%;
+  gap: 0.75rem;
+  border-bottom: 1px solid rgba(201,168,76,.08);
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.monteros-sidebar__avatar-wrapper {
+  position: relative; display: inline-flex; margin: 0 auto;
+}
+
+.monteros-sidebar__avatar {
+  width: 100px; height: 100px; border-radius: 22px;
+  object-fit: cover; position: relative; z-index: 1; display: block;
+  transition: width var(--sb-speed) var(--sb-ease),
+              height var(--sb-speed) var(--sb-ease),
+              border-radius var(--sb-speed) var(--sb-ease);
+}
+
+.monteros-sidebar__avatar-ring {
+  position: absolute; inset: -3px; border-radius: 26px; z-index: 0;
+  background: linear-gradient(145deg, #c9a84c 0%, rgba(201,168,76,.25) 50%, #c9a84c 100%);
+  box-shadow: 0 0 18px rgba(201,168,76,.28), 0 0 36px rgba(201,168,76,.08);
+  transition: inset var(--sb-speed) var(--sb-ease),
+              border-radius var(--sb-speed) var(--sb-ease);
+}
+
+.monteros-sidebar__user-info {
+  text-align: center; width: 100%;
+  opacity: 1; max-height: 60px; overflow: hidden;
+  transition: opacity var(--sb-speed) var(--sb-ease),
+              max-height var(--sb-speed) var(--sb-ease);
+}
+.monteros-sidebar__user-name {
+  font-size: 0.875rem; font-weight: 600; color: #f0ece0;
+  margin: 0 0 0.25rem; line-height: 1.3;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.monteros-sidebar__user-email {
+  font-size: 0.7125rem; color: rgba(240,236,224,.38); margin: 0;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+
+.monteros-sidebar__profile-actions {
+  display: flex; gap: 0.5rem; width: 100%; margin-top: 0.125rem;
+  opacity: 1; max-height: 48px; overflow: hidden;
+  transition: opacity var(--sb-speed) var(--sb-ease),
+              max-height var(--sb-speed) var(--sb-ease);
+}
+.monteros-sidebar__action-btn {
+  flex: 1; display: flex; align-items: center; justify-content: center; gap: 0.4rem;
+  padding: 0.5rem 0.625rem; font-size: 0.75rem; font-weight: 500;
+  font-family: 'Sora', sans-serif; color: rgba(201,168,76,.85);
+  background: transparent; border: 1px solid rgba(201,168,76,.28); border-radius: 8px;
+  cursor: pointer; text-decoration: none;
+  transition: background .2s, border-color .2s, color .2s, box-shadow .2s;
+  outline: none; white-space: nowrap;
+}
+.monteros-sidebar__action-btn:hover {
+  background: rgba(201,168,76,.11); border-color: rgba(201,168,76,.5);
+  color: #e0bb6a; box-shadow: 0 0 10px rgba(201,168,76,.12); text-decoration: none;
+}
+.monteros-sidebar__action-btn svg { opacity: .65; flex-shrink: 0; }
+.monteros-sidebar__action-btn:hover svg { opacity: 1; }
+.monteros-sidebar__action-btn--danger { color: rgba(224,112,112,.75); border-color: rgba(224,112,112,.22); }
+.monteros-sidebar__action-btn--danger:hover {
+  background: rgba(224,112,112,.09); border-color: rgba(224,112,112,.42); color: #f08080; box-shadow: none;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   MOBILE HEADER — idéntico al original
+   ════════════════════════════════════════════════════════════════ */
+.monteros-sidebar__mobile-header {
+  padding: 1rem 1.25rem; align-items: center;
+  justify-content: space-between; border-bottom: 1px solid rgba(201,168,76,.1);
+}
+.monteros-sidebar__mobile-title { font-size: 0.9375rem; font-weight: 600; color: #f0ece0; margin: 0; }
+.monteros-sidebar__close {
+  display: flex; align-items: center; justify-content: center; width: 32px; height: 32px;
+  background: transparent; border: 1px solid rgba(201,168,76,.28); border-radius: 8px;
+  color: rgba(240,236,224,.4); cursor: pointer; transition: all .2s; outline: none; padding: 0;
+}
+.monteros-sidebar__close:hover { background: rgba(201,168,76,.09); color: #c9a84c; }
+
+/* ════════════════════════════════════════════════════════════════
+   NAVEGACIÓN — idéntico al original
+   ════════════════════════════════════════════════════════════════ */
+.monteros-sidebar__section-label {
+  font-size: 0.65rem; font-weight: 600; letter-spacing: .10em; text-transform: uppercase;
+  color: rgba(240,236,224,.35); padding: 1rem 1.5rem 0.5rem; margin: 0;
+  white-space: nowrap; overflow: hidden;
+  transition: opacity var(--sb-speed) var(--sb-ease);
+}
+
+.monteros-sidebar__nav-wrapper {
+  flex: 1; overflow-y: auto; overflow-x: hidden;
+  padding-bottom: 1rem; position: relative; z-index: 1;
+}
+.monteros-sidebar__nav-wrapper::-webkit-scrollbar { width: 4px; }
+.monteros-sidebar__nav-wrapper::-webkit-scrollbar-track { background: transparent; }
+.monteros-sidebar__nav-wrapper::-webkit-scrollbar-thumb { background: rgba(201,168,76,.25); border-radius: 4px; }
+
+.monteros-sidebar__nav { padding: 0 0.75rem; display: flex; flex-direction: column; gap: 2px; }
+
+.monteros-sidebar__nav-link {
+  display: flex; align-items: center; gap: 0.75rem; padding: 0.625rem 0.875rem;
+  border-radius: 8px; color: rgba(240,236,224,.52); text-decoration: none;
+  font-size: 0.8375rem; font-weight: 500;
+  transition: color .18s, background .18s, padding var(--sb-speed) var(--sb-ease);
+  position: relative; white-space: nowrap; overflow: hidden;
+}
+.monteros-sidebar__nav-link::before {
+  content: ''; position: absolute; left: 0; top: 50%;
+  transform: translateY(-50%) scaleY(0); width: 3px; height: 60%; background: #c9a84c;
+  border-radius: 0 3px 3px 0; transition: transform .2s ease;
+}
+.monteros-sidebar__nav-link:hover { color: #f0ece0; background: rgba(255,255,255,.04); text-decoration: none; }
+.monteros-sidebar__nav-link:hover .monteros-sidebar__nav-icon { color: #c9a84c; }
+.monteros-sidebar__nav-link:hover::before { transform: translateY(-50%) scaleY(1); }
+.monteros-sidebar__nav-link--active { color: #e0bb6a !important; background: rgba(201,168,76,.10) !important; }
+.monteros-sidebar__nav-link--active::before { transform: translateY(-50%) scaleY(1) !important; }
+.monteros-sidebar__nav-link--active .monteros-sidebar__nav-icon { color: #c9a84c !important; background: rgba(201,168,76,.15) !important; }
+
+.monteros-sidebar__nav-icon {
+  display: flex; align-items: center; justify-content: center; width: 32px; height: 32px;
+  border-radius: 8px; background: rgba(255,255,255,.04); color: rgba(240,236,224,.38);
+  flex-shrink: 0; transition: all .18s ease;
+}
+
+.monteros-sidebar__nav-text {
+  flex: 1; overflow: hidden;
+  transition: opacity var(--sb-speed) var(--sb-ease),
+              width var(--sb-speed) var(--sb-ease);
+}
+
+/* Tooltip — solo visible en collapsed */
+.monteros-sidebar__tooltip {
+  position: absolute; left: calc(100% + 14px); top: 50%; transform: translateY(-50%);
+  background: #1c1d28; color: #f0ece0;
+  font-size: 0.75rem; font-weight: 500; padding: 0.4rem 0.875rem;
+  border-radius: 7px; border: 1px solid rgba(201,168,76,.22);
+  white-space: nowrap; pointer-events: none; opacity: 0;
+  z-index: 9999; box-shadow: 0 4px 20px rgba(0,0,0,.45);
+  transition: opacity .15s ease;
+}
+.monteros-sidebar__tooltip::before {
+  content: ''; position: absolute; right: 100%; top: 50%; transform: translateY(-50%);
+  border: 5px solid transparent; border-right-color: rgba(201,168,76,.22);
+}
+
+/* ════════════════════════════════════════════════════════════════
+   FOOTER — idéntico al original
+   ════════════════════════════════════════════════════════════════ */
+.monteros-sidebar__footer {
+  padding: 0.875rem 1.5rem; border-top: 1px solid rgba(201,168,76,.08);
+  flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+  position: relative; z-index: 1; overflow: hidden;
+}
+.monteros-sidebar__footer-text {
+  font-size: 0.68rem; color: rgba(240,236,224,.35); margin: 0; text-align: center;
+  white-space: nowrap;
+  transition: opacity var(--sb-speed) var(--sb-ease);
+}
+
+/* ════════════════════════════════════════════════════════════════
+   ESTADO COLAPSADO — solo afecta elementos específicos
+   ════════════════════════════════════════════════════════════════ */
+.monteros-sidebar--collapsed {
+  width: 62px !important;
+}
+
+/* Collapsed: logo centered, toggle stays absolute top-right */
+.monteros-sidebar--collapsed .monteros-sidebar__logo {
+  padding: 0.5rem 0 0.5rem;
+}
+.monteros-sidebar--collapsed .monteros-sidebar__logo-header {
+  justify-content: center;
+  padding-top: 2.25rem; /* push logo below the toggle (28px + 4px top + gap) */
+  padding-right: 0;
+}
+.monteros-sidebar--collapsed .monteros-sidebar__logo-link {
+  flex: 0;
+  justify-content: center;
+}
+.monteros-sidebar--collapsed .monteros-sidebar__logo-img {
+  width: 46px; height: 46px;
+}
+.monteros-sidebar--collapsed .monteros-sidebar__logo-text {
+  opacity: 0; width: 0; overflow: hidden;
+}
+/* Barras del toggle se igualan al colapsar */
+.monteros-sidebar--collapsed .monteros-sidebar__toggle-bar:nth-child(1),
+.monteros-sidebar--collapsed .monteros-sidebar__toggle-bar:nth-child(2),
+.monteros-sidebar--collapsed .monteros-sidebar__toggle-bar:nth-child(3) {
+  width: 20px;
+}
+
+/* Perfil: avatar pequeño, ocultar nombre/email/botones */
+.monteros-sidebar--collapsed .monteros-sidebar__profile {
+  padding: 0.875rem 0 !important; gap: 0 !important;
+}
+.monteros-sidebar--collapsed .monteros-sidebar__avatar {
+  width: 40px; height: 40px; border-radius: 10px;
+}
+.monteros-sidebar--collapsed .monteros-sidebar__avatar-ring {
+  inset: -2px; border-radius: 13px;
+}
+.monteros-sidebar--collapsed .monteros-sidebar__user-info {
+  opacity: 0; max-height: 0;
+}
+.monteros-sidebar--collapsed .monteros-sidebar__profile-actions {
+  opacity: 0; max-height: 0;
+}
+
+/* Nav: centrar íconos, ocultar texto */
+.monteros-sidebar--collapsed .monteros-sidebar__section-label { opacity: 0; }
+.monteros-sidebar--collapsed .monteros-sidebar__nav { padding: 0 0.5rem; }
+.monteros-sidebar--collapsed .monteros-sidebar__nav-link {
+  padding: 0.625rem; justify-content: center; gap: 0;
+}
+.monteros-sidebar--collapsed .monteros-sidebar__nav-link::before { display: none; }
+.monteros-sidebar--collapsed .monteros-sidebar__nav-icon { width: 40px; height: 40px; border-radius: 10px; }
+.monteros-sidebar--collapsed .monteros-sidebar__nav-text { opacity: 0; width: 0; }
+.monteros-sidebar--collapsed .monteros-sidebar__nav-link:hover .monteros-sidebar__tooltip { opacity: 1; }
+
+/* Footer: ocultar texto */
+.monteros-sidebar--collapsed .monteros-sidebar__footer-text { opacity: 0; }
+
+/* ── Responsive ──────────────────────────────────────────────── */
+@media (max-width: 991.98px) {
+  .monteros-sidebar {
+    transform: translateX(-100%);
+    transition: transform var(--sb-speed) var(--sb-ease), width var(--sb-speed) var(--sb-ease);
+    width: 280px !important;
+  }
+  .monteros-sidebar.show { transform: translateX(0); }
 }

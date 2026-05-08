@@ -1,196 +1,360 @@
-<app-sidebar></app-sidebar>
-
 <!-- ════════════════════════════════════════════════════════════
-      MÓDULO: Dashboard Principal — MONTERO'S
-      Panel Administrativo · JAIME PONCE MONTERO
-      ════════════════════════════════════════════════════════════ -->
+     Dashboard Empresarial — MONTERO'S
+     Business Intelligence · Panel Administrativo
+     ════════════════════════════════════════════════════════════ -->
 
-<div class="border-bottom pt-5 mt-2 mb-5">
-  <h1 class="mt-2 mt-md-4 mb-3 pt-5">Panel de Control</h1>
-  <div class="d-flex flex-wrap flex-md-nowrap justify-content-between">
-    <p class="text-muted">
-      Resumen ejecutivo de ventas, ganancias y estadísticas clave de <strong>MONTERO'S</strong>.
-    </p>
+<!-- ── Header con filtros ──────────────────────────────────────── -->
+<div class="dash-header">
+  <div class="dash-header__left">
+    <h1 class="dash-title">Panel de Control</h1>
+    <p class="dash-subtitle">Business Intelligence · MONTERO'S</p>
   </div>
-</div>
-
-<!-- ══ TARJETAS KPI ══════════════════════════════════════════════ -->
-<div class="row mb-4">
-
-  <!-- KPI 1: Ganancia total -->
-  <div class="col-12 col-sm-6 col-xl-3 mb-3">
-    <div class="card kpi-card h-100">
-      <div class="card-body">
-        <div class="row align-items-center">
-          <div class="col">
-            <h6 class="kpi-label">Ganancia total</h6>
-            <span class="kpi-value" *ngIf="load_data">
-              S/ {{ total_ganancia | number:'1.2-2' }}
-            </span>
-            <span class="kpi-value kpi-value--placeholder" *ngIf="!load_data">
-              S/ —
-            </span>
-          </div>
-          <div class="col-auto">
-            <div class="kpi-icon kpi-icon--success">
-              <i class="cxi-cart"></i>
-            </div>
-          </div>
-        </div>
+  <div class="dash-header__right">
+    <!-- Selector de rango -->
+    <div class="dash-filters">
+      <div class="filter-group">
+        <button class="filter-btn" [class.filter-btn--active]="rangoActivo === '7d'" (click)="setRango('7d')">7 días</button>
+        <button class="filter-btn" [class.filter-btn--active]="rangoActivo === '30d'" (click)="setRango('30d')">30 días</button>
+        <button class="filter-btn" [class.filter-btn--active]="rangoActivo === '90d'" (click)="setRango('90d')">90 días</button>
+        <button class="filter-btn" [class.filter-btn--active]="rangoActivo === 'año'" (click)="setRango('año')">Este año</button>
+      </div>
+      <div class="filter-group">
+        <button class="filter-btn filter-btn--store" [class.filter-btn--active]="almacenActivo === 'todos'" (click)="setAlmacen('todos')">
+          <span class="store-dot store-dot--all"></span> Todos
+        </button>
+        <button class="filter-btn filter-btn--store" [class.filter-btn--active]="almacenActivo === 'huancayo'" (click)="setAlmacen('huancayo')">
+          <span class="store-dot store-dot--h"></span> Huancayo
+        </button>
+        <button class="filter-btn filter-btn--store" [class.filter-btn--active]="almacenActivo === 'ayacucho'" (click)="setAlmacen('ayacucho')">
+          <span class="store-dot store-dot--a"></span> Ayacucho
+        </button>
       </div>
     </div>
   </div>
+</div>
 
-  <!-- KPI 2: Ganancia del mes -->
-  <div class="col-12 col-sm-6 col-xl-3 mb-3">
-    <div class="card kpi-card h-100">
-      <div class="card-body">
-        <div class="row align-items-center">
-          <div class="col">
-            <h6 class="kpi-label">
-              Ganancia — {{ load_data ? meses : 'Mes actual' }}
-            </h6>
-            <span class="kpi-value" *ngIf="load_data">
-              S/ {{ total_ganancia_mes | number:'1.2-2' }}
-            </span>
-            <span class="kpi-value kpi-value--placeholder" *ngIf="!load_data">
-              S/ —
-            </span>
-          </div>
-          <div class="col-auto">
-            <div class="kpi-icon kpi-icon--primary">
-              <i class="cxi-calendar"></i>
-            </div>
-          </div>
-        </div>
+<!-- ── Banda de estado ──────────────────────────────────────────── -->
+<div class="dash-status-bar">
+  <span class="status-dot status-dot--live"></span>
+  <span class="status-text">Datos en tiempo real</span>
+  <span class="status-divider">·</span>
+  <span class="status-text">Última actualización: {{ ultimaActualizacion }}</span>
+  <span class="status-divider">·</span>
+  <span class="status-text">Almacén activo: <strong>{{ almacenActivo | titlecase }}</strong></span>
+</div>
+
+<!-- ══ FILA 1: KPIs principales ══════════════════════════════════ -->
+<div class="kpi-grid">
+
+  <div class="kpi-card">
+    <div class="kpi-card__icon kpi-card__icon--gold">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+      </svg>
+    </div>
+    <div class="kpi-card__body">
+      <span class="kpi-card__label">Ventas totales</span>
+      <span class="kpi-card__value">S/ {{ kpis.ventas_totales | number:'1.2-2' }}</span>
+      <span class="kpi-card__trend" [class.kpi-card__trend--up]="kpis.ventas_trend > 0" [class.kpi-card__trend--down]="kpis.ventas_trend < 0">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <polyline [attr.points]="kpis.ventas_trend >= 0 ? '18 15 12 9 6 15' : '6 9 12 15 18 9'"/>
+        </svg>
+        {{ kpis.ventas_trend | number:'1.1-1' }}%
+      </span>
+    </div>
+  </div>
+
+  <div class="kpi-card">
+    <div class="kpi-card__icon kpi-card__icon--green">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/>
+      </svg>
+    </div>
+    <div class="kpi-card__body">
+      <span class="kpi-card__label">Ganancia neta</span>
+      <span class="kpi-card__value">S/ {{ kpis.ganancia_neta | number:'1.2-2' }}</span>
+      <span class="kpi-card__trend" [class.kpi-card__trend--up]="kpis.ganancia_trend > 0" [class.kpi-card__trend--down]="kpis.ganancia_trend < 0">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <polyline [attr.points]="kpis.ganancia_trend >= 0 ? '18 15 12 9 6 15' : '6 9 12 15 18 9'"/>
+        </svg>
+        {{ kpis.ganancia_trend | number:'1.1-1' }}%
+      </span>
+    </div>
+  </div>
+
+  <div class="kpi-card">
+    <div class="kpi-card__icon kpi-card__icon--blue">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>
+      </svg>
+    </div>
+    <div class="kpi-card__body">
+      <span class="kpi-card__label">Ticket promedio</span>
+      <span class="kpi-card__value">S/ {{ kpis.ticket_promedio | number:'1.2-2' }}</span>
+      <span class="kpi-card__sub">por transacción</span>
+    </div>
+  </div>
+
+  <div class="kpi-card">
+    <div class="kpi-card__icon kpi-card__icon--purple">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
+        <path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+      </svg>
+    </div>
+    <div class="kpi-card__body">
+      <span class="kpi-card__label">Clientes activos</span>
+      <span class="kpi-card__value">{{ kpis.clientes_activos }}</span>
+      <span class="kpi-card__sub">{{ kpis.clientes_nuevos }} nuevos este mes</span>
+    </div>
+  </div>
+
+  <div class="kpi-card">
+    <div class="kpi-card__icon kpi-card__icon--orange">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/>
+        <path d="M16 10a4 4 0 0 1-8 0"/>
+      </svg>
+    </div>
+    <div class="kpi-card__body">
+      <span class="kpi-card__label">Órdenes totales</span>
+      <span class="kpi-card__value">{{ kpis.ordenes_totales }}</span>
+      <span class="kpi-card__trend" [class.kpi-card__trend--up]="kpis.ordenes_trend > 0" [class.kpi-card__trend--down]="kpis.ordenes_trend < 0">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <polyline [attr.points]="kpis.ordenes_trend >= 0 ? '18 15 12 9 6 15' : '6 9 12 15 18 9'"/>
+        </svg>
+        {{ kpis.ordenes_trend | number:'1.1-1' }}%
+      </span>
+    </div>
+  </div>
+
+  <div class="kpi-card kpi-card--alert" [class.kpi-card--danger]="kpis.stock_critico > 5">
+    <div class="kpi-card__icon kpi-card__icon--red">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+        <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+      </svg>
+    </div>
+    <div class="kpi-card__body">
+      <span class="kpi-card__label">Stock crítico</span>
+      <span class="kpi-card__value">{{ kpis.stock_critico }}</span>
+      <span class="kpi-card__sub">productos bajo mínimo</span>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══ FILA 2: Almacenes ════════════════════════════════════════ -->
+<div class="almacen-grid">
+
+  <div class="almacen-card almacen-card--h">
+    <div class="almacen-card__header">
+      <span class="almacen-badge almacen-badge--h">HYO</span>
+      <h3 class="almacen-card__title">Huancayo</h3>
+    </div>
+    <div class="almacen-card__stats">
+      <div class="almacen-stat">
+        <span class="almacen-stat__label">Ventas</span>
+        <span class="almacen-stat__value">S/ {{ almacenes.huancayo.ventas | number:'1.2-2' }}</span>
+      </div>
+      <div class="almacen-stat">
+        <span class="almacen-stat__label">Órdenes</span>
+        <span class="almacen-stat__value">{{ almacenes.huancayo.ordenes }}</span>
+      </div>
+      <div class="almacen-stat">
+        <span class="almacen-stat__label">Stock items</span>
+        <span class="almacen-stat__value">{{ almacenes.huancayo.stock }}</span>
       </div>
     </div>
+    <div class="almacen-card__bar">
+      <div class="almacen-bar-fill almacen-bar-fill--h"
+        [style.width]="almacenes.huancayo.porcentaje + '%'"></div>
+    </div>
+    <span class="almacen-card__pct">{{ almacenes.huancayo.porcentaje }}% del total</span>
   </div>
 
-  <!-- KPI 3: N° de ventas del mes -->
-  <div class="col-12 col-sm-6 col-xl-3 mb-3">
-    <div class="card kpi-card h-100">
-      <div class="card-body">
-        <div class="row align-items-center">
-          <div class="col">
-            <h6 class="kpi-label">
-              Ventas — {{ load_data ? meses : 'Mes actual' }}
-            </h6>
-            <span class="kpi-value" *ngIf="load_data">
-              {{ count_ventas_porcent }}
-            </span>
-            <span class="kpi-value kpi-value--placeholder" *ngIf="!load_data">
-              —
-            </span>
-          </div>
-          <div class="col-auto">
-            <div class="kpi-icon kpi-icon--warning">
-              <i class="cxi-files"></i>
-            </div>
-          </div>
-        </div>
+  <div class="almacen-card almacen-card--a">
+    <div class="almacen-card__header">
+      <span class="almacen-badge almacen-badge--a">AYA</span>
+      <h3 class="almacen-card__title">Ayacucho</h3>
+    </div>
+    <div class="almacen-card__stats">
+      <div class="almacen-stat">
+        <span class="almacen-stat__label">Ventas</span>
+        <span class="almacen-stat__value">S/ {{ almacenes.ayacucho.ventas | number:'1.2-2' }}</span>
+      </div>
+      <div class="almacen-stat">
+        <span class="almacen-stat__label">Órdenes</span>
+        <span class="almacen-stat__value">{{ almacenes.ayacucho.ordenes }}</span>
+      </div>
+      <div class="almacen-stat">
+        <span class="almacen-stat__label">Stock items</span>
+        <span class="almacen-stat__value">{{ almacenes.ayacucho.stock }}</span>
       </div>
     </div>
+    <div class="almacen-card__bar">
+      <div class="almacen-bar-fill almacen-bar-fill--a"
+        [style.width]="almacenes.ayacucho.porcentaje + '%'"></div>
+    </div>
+    <span class="almacen-card__pct">{{ almacenes.ayacucho.porcentaje }}% del total</span>
   </div>
 
-  <!-- KPI 4: Mes anterior -->
-  <div class="col-12 col-sm-6 col-xl-3 mb-3">
-    <div class="card kpi-card h-100">
-      <div class="card-body">
-        <div class="row align-items-center">
-          <div class="col">
-            <h6 class="kpi-label">
-              Mes anterior — {{ load_data ? mes_anterior : '...' }}
-            </h6>
-            <span class="kpi-value" *ngIf="load_data">
-              S/ {{ total_mes_anterior | number:'1.2-2' }}
-            </span>
-            <span class="kpi-value kpi-value--placeholder" *ngIf="!load_data">
-              S/ —
-            </span>
-          </div>
-          <div class="col-auto">
-            <div class="kpi-icon kpi-icon--secondary">
-              <i class="cxi-files"></i>
-            </div>
-          </div>
-        </div>
+  <!-- Mini KPI: Crecimiento -->
+  <div class="growth-card">
+    <div class="growth-card__header">
+      <span class="growth-label">Crecimiento mensual</span>
+      <span class="growth-value" [class.growth-value--up]="kpis.crecimiento_mensual > 0">
+        {{ kpis.crecimiento_mensual > 0 ? '+' : '' }}{{ kpis.crecimiento_mensual | number:'1.1-1' }}%
+      </span>
+    </div>
+    <div class="growth-sparkline">
+      <canvas id="chart-sparkline" height="50"></canvas>
+    </div>
+  </div>
+
+  <!-- Mini KPI: Clientes recurrentes -->
+  <div class="retention-card">
+    <div class="retention-header">
+      <span class="retention-label">Retención de clientes</span>
+    </div>
+    <div class="retention-donut">
+      <canvas id="chart-retencion" height="110"></canvas>
+    </div>
+    <div class="retention-legend">
+      <span class="ret-dot ret-dot--recurrent"></span>
+      <span>Recurrentes {{ kpis.clientes_recurrentes }}%</span>
+      <span class="ret-dot ret-dot--new"></span>
+      <span>Nuevos {{ 100 - kpis.clientes_recurrentes }}%</span>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══ FILA 3: Gráficos principales ════════════════════════════ -->
+<div class="charts-main-grid">
+
+  <!-- Gráfico 1: Ventas por mes (barras) -->
+  <div class="chart-card chart-card--wide">
+    <div class="chart-card__header">
+      <div>
+        <h4 class="chart-card__title">Ventas por mes</h4>
+        <p class="chart-card__sub">Comparativo Huancayo vs Ayacucho</p>
+      </div>
+      <div class="chart-card__legend">
+        <span class="legend-dot" style="background:#c9a84c"></span> Huancayo
+        <span class="legend-dot" style="background:#1e3a5f; margin-left:1rem"></span> Ayacucho
       </div>
     </div>
+    <div class="chart-card__body">
+      <canvas id="chart-ventas-mensuales" height="260"></canvas>
+    </div>
+  </div>
+
+  <!-- Gráfico 2: Ventas por día -->
+  <div class="chart-card">
+    <div class="chart-card__header">
+      <div>
+        <h4 class="chart-card__title">Ventas por día</h4>
+        <p class="chart-card__sub">Semana actual</p>
+      </div>
+    </div>
+    <div class="chart-card__body">
+      <canvas id="chart-ventas-diarias" height="220"></canvas>
+    </div>
   </div>
 
 </div>
-<!-- /KPIs -->
 
+<!-- ══ FILA 4: Top productos + Clientes ════════════════════════ -->
+<div class="charts-secondary-grid">
 
-<!-- ══ GRÁFICO: Ventas mensuales ═════════════════════════════════ -->
-<div class="card box-shadow-sm mt-3">
-  <div class="card-header d-flex align-items-center">
-    <h5 class="mb-0">
-      <i class="cxi-calendar mr-2"></i> Ventas mensuales
-    </h5>
-  </div>
-  <div class="card-body">
-    <div *ngIf="load_data">
-      <canvas id="chart-ventas-mensuales"></canvas>
+  <!-- Top 5 productos (barra horizontal) -->
+  <div class="chart-card chart-card--productos">
+    <div class="chart-card__header">
+      <div>
+        <h4 class="chart-card__title">Top productos</h4>
+        <p class="chart-card__sub">Por volumen de ventas</p>
+      </div>
     </div>
-    <div class="chart-empty" *ngIf="!load_data">
-      <i class="cxi-info d-block mb-2"></i>
-      No hay datos disponibles para este gráfico.
+    <div class="chart-card__body">
+      <canvas id="chart-top-productos" height="220"></canvas>
     </div>
   </div>
+
+  <!-- Distribución de clientes (donut) -->
+  <div class="chart-card chart-card--clientes">
+    <div class="chart-card__header">
+      <div>
+        <h4 class="chart-card__title">Mejores clientes</h4>
+        <p class="chart-card__sub">Por monto acumulado</p>
+      </div>
+    </div>
+    <div class="chart-card__body chart-card__body--center">
+      <canvas id="chart-mejores-clientes" height="220"></canvas>
+    </div>
+  </div>
+
+  <!-- Ganancias vs Costos (área) -->
+  <div class="chart-card chart-card--financiero">
+    <div class="chart-card__header">
+      <div>
+        <h4 class="chart-card__title">Ganancias vs Costos</h4>
+        <p class="chart-card__sub">Tendencia mensual (S/.)</p>
+      </div>
+    </div>
+    <div class="chart-card__body">
+      <canvas id="chart-ganancias-costos" height="220"></canvas>
+    </div>
+  </div>
+
 </div>
 
-<!-- ══ GRÁFICO: Mejores clientes ════════════════════════════════ -->
-<div class="card box-shadow-sm mt-4">
-  <div class="card-header d-flex align-items-center">
-    <h5 class="mb-0">
-      <i class="cxi-profile mr-2"></i> Mejores clientes
-    </h5>
-  </div>
-  <div class="card-body">
-    <div *ngIf="load_data">
-      <canvas id="chart-mejores-clientes"></canvas>
-    </div>
-    <div class="chart-empty" *ngIf="!load_data">
-      <i class="cxi-info d-block mb-2"></i>
-      No hay datos disponibles para este gráfico.
-    </div>
-  </div>
-</div>
+<!-- ══ FILA 5: Stock por almacén + Tabla productos críticos ════ -->
+<div class="charts-bottom-grid">
 
-<!-- ══ GRÁFICO: Ventas diarias ═══════════════════════════════════ -->
-<div class="card box-shadow-sm mt-4">
-  <div class="card-header d-flex align-items-center">
-    <h5 class="mb-0">
-      <i class="cxi-time mr-2"></i> Ventas diarias
-    </h5>
-  </div>
-  <div class="card-body">
-    <div *ngIf="load_data">
-      <canvas id="chart-ventas-diarias"></canvas>
+  <!-- Stock por almacén -->
+  <div class="chart-card">
+    <div class="chart-card__header">
+      <div>
+        <h4 class="chart-card__title">Stock por almacén</h4>
+        <p class="chart-card__sub">Disponibilidad actual</p>
+      </div>
     </div>
-    <div class="chart-empty" *ngIf="!load_data">
-      <i class="cxi-info d-block mb-2"></i>
-      No hay datos disponibles para este gráfico.
+    <div class="chart-card__body">
+      <canvas id="chart-stock-almacen" height="220"></canvas>
     </div>
   </div>
-</div>
 
-<!-- ══ GRÁFICO: Mejores ítems ════════════════════════════════════ -->
-<div class="card box-shadow-sm mt-4 mb-5">
-  <div class="card-header d-flex align-items-center">
-    <h5 class="mb-0">
-      <i class="cxi-attach mr-2"></i> Mejores ítems
-    </h5>
-  </div>
-  <div class="card-body">
-    <div *ngIf="load_data">
-      <canvas id="chart-mejores-items"></canvas>
+  <!-- Tabla: Productos con stock crítico -->
+  <div class="table-card">
+    <div class="table-card__header">
+      <h4 class="chart-card__title">⚠ Stock crítico</h4>
+      <span class="badge-alert">{{ productosAlerta.length }} alertas</span>
     </div>
-    <div class="chart-empty" *ngIf="!load_data">
-      <i class="cxi-info d-block mb-2"></i>
-      No hay datos disponibles para este gráfico.
+    <div class="table-card__body">
+      <table class="dash-table">
+        <thead>
+          <tr>
+            <th>Producto</th>
+            <th>Almacén</th>
+            <th>Stock</th>
+            <th>Estado</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let p of productosAlerta">
+            <td>{{ p.nombre }}</td>
+            <td>{{ p.almacen }}</td>
+            <td><strong>{{ p.stock }}</strong></td>
+            <td>
+              <span class="stock-badge" [class.stock-badge--critico]="p.stock < 5" [class.stock-badge--bajo]="p.stock >= 5">
+                {{ p.stock < 5 ? 'Crítico' : 'Bajo' }}
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
+
 </div>

@@ -1,1 +1,8 @@
-<router-outlet></router-outlet>
+<ng-container *ngIf="mostrarLayout">
+  <app-sidebar></app-sidebar>
+  <app-navbar></app-navbar>
+</ng-container>
+
+<div [class.panel-main]="mostrarLayout">
+  <router-outlet></router-outlet>
+</div>

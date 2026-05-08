@@ -12,6 +12,7 @@ import { routing }            from './app.routing';
 // ── Componentes generales ─────────────────────────────────────
 import { InicioComponent }    from './components/inicio/inicio.component';
 import { SidebarComponent }   from './components/sidebar/sidebar.component';
+import { NavbarComponent } from './components/navbar/navbar.component';
 import { LoginComponent }     from './components/login/login.component';
 import { RegistroComponent }  from './components/registro/registro.component';
 import { PerfilComponent }    from './components/perfil/perfil.component';
@@ -49,6 +50,7 @@ import { IndexContactoComponent } from './components/contacto/index-contacto/ind
 import { IndexVentasComponent }   from './components/ventas/index-ventas/index-ventas.component';
 import { DetalleVentasComponent } from './components/ventas/detalle-ventas/detalle-ventas.component';
 
+
 // ════════════════════════════════════════════════════════════════
 //  AppModule — Módulo raíz del Panel Administrativo MONTERO'S
 // ════════════════════════════════════════════════════════════════
@@ -60,6 +62,7 @@ import { DetalleVentasComponent } from './components/ventas/detalle-ventas/detal
     // Generales
     InicioComponent,
     SidebarComponent,
+    NavbarComponent,
     LoginComponent,
     RegistroComponent,
     PerfilComponent,
@@ -96,6 +99,7 @@ import { DetalleVentasComponent } from './components/ventas/detalle-ventas/detal
     // Ventas
     IndexVentasComponent,
     DetalleVentasComponent,
+
   ],
   imports: [
     BrowserModule,
