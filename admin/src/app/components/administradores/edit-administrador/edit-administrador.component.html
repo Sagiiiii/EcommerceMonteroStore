@@ -1,0 +1,130 @@
+<div class="border-bottom mb-4 pb-1">
+  <h1 class="mb-2">Editar Administrador</h1>
+  <div class="d-flex flex-wrap flex-md-nowrap justify-content-between align-items-center">
+    <p class="text-muted mb-0">
+      Modifique los datos del administrador en <strong>MONTERO'S</strong>.
+    </p>
+    <a [routerLink]="['/panel/administradores']" class="btn btn-sm btn-outline-secondary mt-2 mt-md-0">
+      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" class="mr-1"
+        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round">
+        <line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/>
+      </svg>
+      Volver al listado
+    </a>
+  </div>
+</div>
+
+<!-- Spinner -->
+<div class="card box-shadow-sm" *ngIf="load_data">
+  <div class="card-body text-center py-5">
+    <div class="spinner-border text-primary mb-3" style="width:2.5rem;height:2.5rem;" role="status">
+      <span class="sr-only">Cargando...</span>
+    </div>
+    <p class="text-muted mb-0">Cargando datos del administrador...</p>
+  </div>
+</div>
+
+<ng-container *ngIf="!load_data">
+  <form #editForm="ngForm" (ngSubmit)="guardar(editForm)" novalidate autocomplete="off">
+    <div class="card box-shadow-sm mb-4">
+
+      <div class="card-header d-flex align-items-center">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" class="mr-2 text-danger"
+          viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+          stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+          <circle cx="12" cy="7" r="4"/>
+        </svg>
+        <h5 class="mb-0">Datos del administrador</h5>
+      </div>
+
+      <div class="card-body">
+        <div class="row">
+
+          <!-- Nombres -->
+          <div class="col-md-6 form-group">
+            <label class="form-label" for="nombres">Nombres <span class="text-danger">*</span></label>
+            <input id="nombres" class="form-control" type="text" placeholder="Nombres completos"
+              required name="nombres" [(ngModel)]="admin.nombres" #nombresRef="ngModel">
+            <small class="text-danger" *ngIf="nombresRef.invalid && nombresRef.touched">
+              El nombre es obligatorio.
+            </small>
+          </div>
+
+          <!-- Apellidos -->
+          <div class="col-md-6 form-group">
+            <label class="form-label" for="apellidos">Apellidos <span class="text-danger">*</span></label>
+            <input id="apellidos" class="form-control" type="text" placeholder="Apellidos completos"
+              required name="apellidos" [(ngModel)]="admin.apellidos" #apellidosRef="ngModel">
+            <small class="text-danger" *ngIf="apellidosRef.invalid && apellidosRef.touched">
+              Los apellidos son obligatorios.
+            </small>
+          </div>
+
+          <!-- Correo (solo lectura) -->
+          <div class="col-md-6 form-group">
+            <label class="form-label" for="email">Correo electrónico</label>
+            <input id="email" class="form-control perfil-readonly" type="email"
+              name="email" [ngModel]="admin.email" readonly>
+            <small class="form-text text-muted">El correo no puede modificarse.</small>
+          </div>
+
+          <!-- Teléfono -->
+          <div class="col-md-6 form-group">
+            <label class="form-label" for="telefono">Teléfono <span class="text-danger">*</span></label>
+            <input id="telefono" class="form-control" type="tel" placeholder="Ej.: 987 654 321"
+              required name="telefono" [(ngModel)]="admin.telefono" #telefonoRef="ngModel">
+            <small class="text-danger" *ngIf="telefonoRef.invalid && telefonoRef.touched">
+              El teléfono es obligatorio.
+            </small>
+          </div>
+
+          <!-- DNI -->
+          <div class="col-md-6 form-group">
+            <label class="form-label" for="dni">DNI <span class="text-danger">*</span></label>
+            <input id="dni" class="form-control" type="text" placeholder="Ej.: 12345678"
+              required name="dni" maxlength="8" [(ngModel)]="admin.dni" #dniRef="ngModel">
+            <small class="text-danger" *ngIf="dniRef.invalid && dniRef.touched">
+              El DNI es obligatorio.
+            </small>
+          </div>
+
+          <!-- Nueva contraseña (opcional) -->
+          <div class="col-md-6 form-group">
+            <label class="form-label" for="nueva_password">Nueva contraseña</label>
+            <input id="nueva_password" class="form-control" type="password"
+              placeholder="Dejar vacío para no cambiar"
+              name="nueva_password" autocomplete="new-password"
+              [(ngModel)]="nueva_password">
+            <small class="form-text text-muted">Solo complete si desea cambiar la contraseña.</small>
+          </div>
+
+        </div>
+
+        <p class="text-muted small mt-1 mb-0">
+          <span class="text-danger">*</span> Campos obligatorios.
+          La foto de perfil la gestiona el propio administrador desde su cuenta.
+        </p>
+      </div>
+
+      <div class="card-footer d-flex align-items-center">
+        <button *ngIf="!load_btn" type="submit" class="btn btn-primary mr-3"
+          [disabled]="editForm.invalid">
+          <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" class="mr-1"
+            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+          Guardar cambios
+        </button>
+        <button *ngIf="load_btn" type="button" class="btn btn-secondary mr-3" disabled>
+          <span class="spinner-grow spinner-grow-sm mr-2" role="status" aria-hidden="true"></span>
+          Guardando...
+        </button>
+        <a [routerLink]="['/panel/administradores']" class="btn btn-dark">Cancelar</a>
+      </div>
+
+    </div>
+  </form>
+</ng-container>

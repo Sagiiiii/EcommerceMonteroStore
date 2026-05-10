@@ -1,0 +1,13 @@
+.admin-avatar {
+  width: 60px;
+  height: 38px;
+  border-radius: 20%;
+  object-fit: cover;
+}
+
+.font-weight-medium { font-weight: 500; }
+
+.table-responsive {
+  padding-left: 10px;
+  padding-right: 10px;
+}
