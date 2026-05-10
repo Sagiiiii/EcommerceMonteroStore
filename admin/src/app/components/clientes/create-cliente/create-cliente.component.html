@@ -130,7 +130,7 @@
           </label>
           <input id="localidad_otro" class="form-control" type="text"
             placeholder="Ej: Lima, Cusco, Ica..."
-            name="localidad_otro" required
+            name="localidad_otro"
             [(ngModel)]="localidad_otro">
           <small class="text-muted">Este cliente se asociará al almacén principal (Huancayo).</small>
         </div>
@@ -145,7 +145,8 @@
     <!-- Pie -->
     <div class="card-footer d-flex align-items-center justify-content-between">
       <div>
-        <button *ngIf="!load_btn" class="btn btn-danger mr-3" type="submit" [disabled]="registroForm.invalid">
+        <button *ngIf="!load_btn" class="btn btn-danger mr-3" type="submit"
+          [disabled]="registroForm.invalid || (localidad_sel === 'Otro' && !localidad_otro.trim())">
           <i class="cxi-profile mr-1"></i> Registrar Cliente
         </button>
         <button *ngIf="load_btn" type="button" class="btn btn-secondary mr-3" disabled>
