@@ -14,6 +14,7 @@ const ClienteSchema = Schema({
     genero       : { type: String, required: false },
     f_nacimiento : { type: String, required: false },
     dni          : { type: String, required: false },
+    localidad    : { type: String, default: 'Huancayo' },
     createdAt    : { type: Date, default: Date.now, required: true },
 });
 

@@ -14,17 +14,15 @@ declare var iziToast: any;
 export class CreateClienteComponent implements OnInit {
 
   public cliente: any = {
-    nombres: '',
-    apellidos: '',
-    email: '',
-    telefono: '',
-    f_nacimiento: '',
-    dni: '',
-    genero: '',
+    nombres: '', apellidos: '', email: '',
+    telefono: '', f_nacimiento: '', dni: '', genero: '', localidad: 'Huancayo',
   };
 
-  public token: string | null = null;
-  public load_btn: boolean = false;
+  public localidad_sel: string  = 'Huancayo';
+  public localidad_otro: string = '';
+
+  public token:    string | null = null;
+  public load_btn: boolean       = false;
 
   constructor(
     private _clienteService: ClienteService,
@@ -35,74 +33,51 @@ export class CreateClienteComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if (!this.token) {
-      this._router.navigate(['/login']);
-    }
+    if (!this.token) { this._router.navigate(['/login']); }
   }
 
-  /**
-   * Registra un nuevo cliente en el sistema MONTERO'S.
-   */
   registrarCliente(form: NgForm): void {
     if (form.invalid) {
-      this._mostrarError(
-        'Formulario incompleto',
-        'Complete todos los campos obligatorios antes de continuar.'
-      );
+      this._mostrarError('Formulario incompleto', 'Complete todos los campos obligatorios antes de continuar.');
       return;
     }
+    if (this.localidad_sel === 'Otro' && !this.localidad_otro.trim()) {
+      this._mostrarError('Campo requerido', 'Especifique el lugar de la localidad.');
+      return;
+    }
+
+    this.cliente.localidad = this.localidad_sel === 'Otro'
+      ? this.localidad_otro.trim()
+      : this.localidad_sel;
 
     this.load_btn = true;
 
     this._clienteService.registro_cliente_admin(this.cliente, this.token).subscribe({
       next: (_response) => {
         iziToast.show({
-          title: 'REGISTRO EXITOSO',
-          titleColor: '#1DC74C',
-          theme: 'dark',
-          class: 'text-success',
-          position: 'topRight',
-          message: 'El cliente fue registrado correctamente en MONTERO\'S.',
-          timeout: 4000,
+          title: 'REGISTRO EXITOSO', titleColor: '#1DC74C', theme: 'dark',
+          class: 'text-success', position: 'topRight',
+          message: 'El cliente fue registrado correctamente en MONTERO\'S.', timeout: 4000,
         });
-
         this._resetFormulario();
         this._router.navigate(['/panel/clientes']);
       },
       error: (error) => {
-        console.error('[CreateCliente] Error al registrar cliente:', error);
-        const mensaje = error?.error?.message
-          || 'Ocurrió un error al registrar el cliente. Intente nuevamente.';
+        const mensaje = error?.error?.message || 'Ocurrió un error al registrar el cliente. Intente nuevamente.';
         this._mostrarError('Error en el registro', mensaje);
         this.load_btn = false;
       }
     });
   }
 
-  /** Resetea el modelo del cliente a sus valores iniciales. */
   private _resetFormulario(): void {
-    this.cliente = {
-      nombres: '',
-      apellidos: '',
-      email: '',
-      telefono: '',
-      f_nacimiento: '',
-      dni: '',
-      genero: '',
-    };
+    this.cliente = { nombres: '', apellidos: '', email: '', telefono: '', f_nacimiento: '', dni: '', genero: '', localidad: 'Huancayo' };
+    this.localidad_sel  = 'Huancayo';
+    this.localidad_otro = '';
     this.load_btn = false;
   }
 
-  /** Muestra una notificación de error estandarizada. */
   private _mostrarError(titulo: string, mensaje: string): void {
-    iziToast.show({
-      title: titulo,
-      titleColor: '#FF0000',
-      theme: 'dark',
-      class: 'text-danger',
-      position: 'topRight',
-      message: mensaje,
-      timeout: 5000,
-    });
+    iziToast.show({ title: titulo, titleColor: '#FF0000', theme: 'dark', class: 'text-danger', position: 'topRight', message: mensaje, timeout: 5000 });
   }
 }

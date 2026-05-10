@@ -124,6 +124,7 @@ const actualizar_cliente_admin = async function (req, res) {
         f_nacimiento : data.f_nacimiento,
         dni          : data.dni,
         genero       : data.genero,
+        localidad    : data.localidad || 'Huancayo',
     });
     res.status(200).send({ data: reg });
 };
