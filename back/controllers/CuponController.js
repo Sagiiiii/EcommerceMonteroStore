@@ -97,10 +97,10 @@ const validar_cupon_cliente = async function (req, res) {
     if (!isAuth(req, res)) return;
     try {
         const data = await Cupon.findOne({ codigo: req.params.cupon });
-        if (!data || data.limite === 0) return res.status(200).send({ message: undefined });
-        res.status(200).send({ message: data });
+        if (!data || data.limite === 0) return res.status(200).send({ data: undefined, message: 'Cupón inválido o sin disponibilidad' });
+        res.status(200).send({ data });
     } catch (error) {
-        res.status(500).send({ message: 'Error de Servidor' });
+        res.status(500).send({ message: 'Error de Servidor', data: undefined });
     }
 };
 

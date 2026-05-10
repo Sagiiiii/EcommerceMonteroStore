@@ -1,0 +1,141 @@
+/* ── Barra principal ──────────────────────────────────────────── */
+.monteros-nav {
+  background-color: #0d0e16 !important;
+  border-bottom: 1px solid rgba(201,168,76,.15);
+  box-shadow: 0 2px 20px rgba(0,0,0,.45);
+}
+
+/* ── Brand: logo pequeño + texto ──────────────────────────────── */
+.monteros-nav__brand {
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.6rem;
+  text-decoration: none !important;
+}
+
+.monteros-nav__logo-img {
+  width: 52px;
+  height: 52px;
+  object-fit: contain;
+  filter: brightness(1.05);
+  flex-shrink: 0;
+}
+
+.monteros-nav__logo-text {
+  font-family: 'Sora', 'Segoe UI', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #f0ece0;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  line-height: 1;
+}
+
+/* ── Links de navegación ──────────────────────────────────────── */
+.monteros-nav .nav-link {
+  color: rgba(240,236,224,.72) !important;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: color .18s;
+}
+.monteros-nav .nav-link:hover,
+.monteros-nav .nav-link.active {
+  color: #c9a84c !important;
+}
+
+/* ── Dropdown oscuro ──────────────────────────────────────────── */
+.monteros-nav .dropdown-menu {
+  background: #13141f !important;
+  border: 1px solid rgba(201,168,76,.22) !important;
+  border-radius: 10px;
+  box-shadow: 0 8px 28px rgba(0,0,0,.5);
+  padding: 0.4rem 0;
+}
+.monteros-nav .dropdown-item {
+  color: rgba(240,236,224,.75) !important;
+  font-size: 0.855rem;
+  padding: 0.5rem 1.2rem;
+  transition: background .15s, color .15s;
+}
+.monteros-nav .dropdown-item:hover,
+.monteros-nav .dropdown-item.active {
+  background: rgba(201,168,76,.10) !important;
+  color: #c9a84c !important;
+}
+
+/* ── Herramientas (perfil, carrito) ──────────────────────────── */
+.monteros-nav .nav-tool {
+  color: rgba(240,236,224,.80) !important;
+  transition: color .18s;
+}
+.monteros-nav .nav-tool:hover {
+  color: #c9a84c !important;
+}
+.monteros-nav .nav-tool-icon,
+.monteros-nav .nav-tool-label {
+  color: inherit !important;
+}
+.monteros-nav .nav-tool-label {
+  font-size: 0.8rem;
+}
+
+/* Badge del carrito — gold */
+.monteros-nav .badge-dark {
+  background: #c9a84c !important;
+  color: #0d0e16 !important;
+  font-weight: 700;
+}
+
+/* Divider vertical */
+.monteros-nav .divider-vertical {
+  border-color: rgba(201,168,76,.22) !important;
+}
+
+/* ── Buscador desktop ─────────────────────────────────────────── */
+.monteros-nav__search-input {
+  background: rgba(255,255,255,.06) !important;
+  border: 1px solid rgba(201,168,76,.22) !important;
+  color: #f0ece0 !important;
+}
+.monteros-nav__search-input::placeholder {
+  color: rgba(240,236,224,.38) !important;
+}
+.monteros-nav__search-input:focus {
+  background: rgba(255,255,255,.09) !important;
+  border-color: rgba(201,168,76,.5) !important;
+  box-shadow: 0 0 0 3px rgba(201,168,76,.12) !important;
+}
+.monteros-nav__search-btn {
+  background: rgba(201,168,76,.12) !important;
+  border: 1px solid rgba(201,168,76,.22) !important;
+  border-left: none !important;
+  color: #c9a84c !important;
+}
+
+/* ── Menú móvil (collapse) ───────────────────────────────────── */
+.monteros-nav .navbar-collapse {
+  background: #0d0e16;
+}
+.monteros-nav .prepended-form-control,
+.monteros-nav .navbar-collapse .form-control {
+  background: rgba(255,255,255,.06) !important;
+  border: none !important;
+  color: #f0ece0 !important;
+}
+.monteros-nav .navbar-collapse .form-control::placeholder {
+  color: rgba(240,236,224,.38) !important;
+}
+.monteros-nav .navbar-collapse .input-group-text {
+  background: rgba(255,255,255,.06) !important;
+  border: none !important;
+  color: rgba(240,236,224,.5) !important;
+}
+
+/* ── Toggler móvil ────────────────────────────────────────────── */
+.monteros-nav .navbar-toggler {
+  border-color: rgba(201,168,76,.35) !important;
+}
+.monteros-nav .navbar-toggler-icon {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(201,168,76,0.9)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
+}

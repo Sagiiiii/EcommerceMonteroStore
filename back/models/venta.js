@@ -9,10 +9,10 @@ const VentaSchema = Schema({
     subtotal    : { type: Number,  required: true },
     envio_titulo: { type: String,  required: true },
     envio_precio: { type: Number,  required: true },
-    transaccion : { type: String,  required: true },
-    cupon       : { type: String,  required: true },
+    transaccion : { type: String,  required: false, default: '' },
+    cupon       : { type: String,  required: false, default: '' },
     estado      : { type: String,  required: true },
-    direccion   : { type: Schema.ObjectId, ref: 'direccion', required: true },
+    direccion   : { type: Schema.ObjectId, ref: 'direccion', required: false },
     nota        : { type: String,  required: false },
     createdAt   : { type: Date, default: Date.now, required: true },
 });

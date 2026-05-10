@@ -53,9 +53,7 @@ export class ClienteService {
 
     try {
       const helper = new JwtHelperService();
-      var decodedToken = helper.decodeToken(token);
-
-      console.log(decodedToken);
+      const decodedToken = helper.decodeToken(token);
 
       if(helper.isTokenExpired(token)){
         localStorage.clear();

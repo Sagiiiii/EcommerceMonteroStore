@@ -1,1 +1,89 @@
-/* You can add global styles to this file, and also import other style files */
+/* ── MONTERO'S — Tienda · Sistema de diseño dorado ──────────────── */
+
+:root {
+  --gold:         #c9a84c;
+  --gold-light:   #e0bb6a;
+  --gold-dark:    #a8882f;
+  --gold-pale:    rgba(201,168,76,.12);
+  --gold-border:  rgba(201,168,76,.35);
+  --text-dark:    #1e212c;
+  --text-mid:     #4a4f5e;
+  --text-soft:    #8a8fa0;
+  --radius:       8px;
+}
+
+/* ── Botones primarios → dorado ─────────────────────────────────── */
+.btn-primary,
+.btn-danger {
+  background-color: var(--gold) !important;
+  border-color:     var(--gold) !important;
+  color: #fff !important;
+}
+.btn-primary:hover,
+.btn-danger:hover {
+  background-color: var(--gold-dark) !important;
+  border-color:     var(--gold-dark) !important;
+}
+.btn-primary:focus,
+.btn-danger:focus {
+  box-shadow: 0 0 0 0.2rem rgba(201,168,76,.40) !important;
+}
+
+/* ── Outline → dorado ───────────────────────────────────────────── */
+.btn-outline-primary,
+.btn-outline-danger {
+  color:        var(--gold) !important;
+  border-color: var(--gold) !important;
+}
+.btn-outline-primary:hover,
+.btn-outline-danger:hover {
+  background-color: var(--gold) !important;
+  border-color:     var(--gold) !important;
+  color: #fff !important;
+}
+
+/* ── Textos de acento → dorado ──────────────────────────────────── */
+.text-primary,
+.text-danger {
+  color: var(--gold) !important;
+}
+a.text-primary:hover,
+a.text-danger:hover {
+  color: var(--gold-dark) !important;
+}
+
+/* ── Links de navegación activos ────────────────────────────────── */
+.navbar-nav .nav-link.active,
+.navbar-nav .nav-link:hover {
+  color: var(--gold) !important;
+}
+
+/* ── Inputs focus → dorado ──────────────────────────────────────── */
+.form-control:focus,
+.custom-select:focus {
+  border-color: var(--gold) !important;
+  box-shadow:   0 0 0 0.2rem rgba(201,168,76,.25) !important;
+}
+
+/* ── Estrellas de valoración ────────────────────────────────────── */
+.star-rating .sr-star.active,
+.star-rating .cxi-star-filled {
+  color: var(--gold) !important;
+}
+
+/* ── Spinner de carga ───────────────────────────────────────────── */
+.cs-page-spinner {
+  border-color: var(--gold) transparent transparent transparent !important;
+}
+
+/* ── Scrollbar "Back to top" ────────────────────────────────────── */
+.btn-scroll-top {
+  background-color: var(--gold) !important;
+  border-color:     var(--gold) !important;
+}
+
+/* ── Carrito offcanvas — botón Verificar ────────────────────────── */
+.cs-offcanvas-cap .btn-dark {
+  background-color: var(--gold) !important;
+  border-color:     var(--gold) !important;
+}

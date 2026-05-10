@@ -32,7 +32,7 @@ export class NavComponent implements OnInit{
 
   public subtotal = 0;
 
-  public socket = io('http://localhost:4201');
+  public socket = io('http://localhost:3000');
 
   public total_pagar = 0;
 
@@ -121,14 +121,13 @@ export class NavComponent implements OnInit{
   }  
 
   logout(){
-    window.location.reload();
     localStorage.removeItem('token');
     localStorage.removeItem('_id');
     localStorage.removeItem('user_data');
     this._router.navigate(['/']).then(() => {
       window.location.reload();
-    });;
-  } 
+    });
+  }
 
   open_modalcart(){
     if(!this.op_cart){
@@ -144,14 +143,15 @@ export class NavComponent implements OnInit{
     this.subtotal = 0;
     if(this.descuento_activo == undefined){
       this.carrito_arr.forEach(element => {
-        this.subtotal = this.subtotal + parseInt(element.producto.precio);
+        this.subtotal = this.subtotal + (parseInt(element.producto.precio) * element.cantidad);
       });
-    } else if(this.descuento_activo != undefined){
+    } else {
       this.carrito_arr.forEach(element => {
-        let new_precio = Math.round(parseInt(element.producto.precio) - (parseInt(element.producto.precio)*this.descuento_activo.descuento)/100); 
-        this.subtotal = this.subtotal + new_precio;
+        const precio_unitario = parseInt(element.producto.precio);
+        const precio_con_descuento = Math.round(precio_unitario - (precio_unitario * this.descuento_activo.descuento) / 100);
+        this.subtotal = this.subtotal + (precio_con_descuento * element.cantidad);
       });
-    }    
+    }
     this.total_pagar = this.subtotal;
   }
 

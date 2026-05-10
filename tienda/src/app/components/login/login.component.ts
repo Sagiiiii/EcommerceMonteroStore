@@ -24,7 +24,7 @@ export class LoginComponent implements OnInit{
     this.token = localStorage.getItem('token');
 
     if(this.token){
-      this._router.navigate(['/login']);
+      this._router.navigate(['/']);
     }
 
   }
@@ -135,22 +135,5 @@ export class LoginComponent implements OnInit{
       });
     }
   }
-
-  loginDemo() {
-    let data = {
-        email: 'cliente@demo.com',
-        password: 'demo1234',
-    };
-    this._clienteService.login_cliente(data).subscribe(
-        response => {
-            if (response.data) {
-                localStorage.setItem('token', response.token);
-                localStorage.setItem('_id', response.data._id);
-                localStorage.setItem('demo_mode', 'true'); // ← agregar
-                this._router.navigate(['/']);
-            }
-        }
-    );
-}
 
 }

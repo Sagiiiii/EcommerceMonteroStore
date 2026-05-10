@@ -3,16 +3,19 @@
   
   <!-- Navbar -->
   <!-- Remove "navbar-sticky" class to make navigation bar scrollable with the page -->
-  <div class="navbar navbar-expand-lg navbar-light bg-light navbar-sticky" data-fixed-element>
+  <div class="navbar navbar-expand-lg navbar-dark monteros-nav navbar-sticky" data-fixed-element>
     <div class="container px-0 px-xl-3">
-      <a href="index.html" class="navbar-brand order-lg-1 mr-0 pr-lg-3 mr-lg-4">
-        <img src="assets/img/logo02.png" alt="Soreus Logo" width="250">
+      <a [routerLink]="['/']" class="navbar-brand monteros-nav__brand order-lg-1 mr-0 pr-lg-3 mr-lg-4">
+        <img [src]="config_global?.logo ? url + 'obtener_logo/' + config_global.logo : 'assets/img/logo02.png'"
+             [alt]="config_global?.titulo || 'MONTERO\'S'"
+             class="monteros-nav__logo-img">
+        <span class="monteros-nav__logo-text">{{ config_global?.titulo || "MONTERO'S" }}</span>
       </a>
       <!-- Search desktop -->
-      <div class="input-group-overlay ml-4 d-lg-block d-none order-lg-3" style="max-width: 21rem;">
-        <input class="form-control appended-form-control" type="text" placeholder="Buscar Productos...">
+      <div class="input-group-overlay ml-4 d-lg-block d-none order-lg-3 monteros-nav__search" style="max-width: 21rem;">
+        <input class="form-control appended-form-control monteros-nav__search-input" type="text" placeholder="Buscar Productos...">
         <div class="input-group-append-overlay">
-          <span class="input-group-text"><i class="cxi-search lead align-middle"></i></span>
+          <span class="input-group-text monteros-nav__search-btn"><i class="cxi-search lead align-middle"></i></span>
         </div>
       </div>
       <!-- Toolbar -->

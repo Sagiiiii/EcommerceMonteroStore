@@ -37,6 +37,9 @@ const appRoute : Routes = [
     // CONTACTO
     {path: 'contacto', component: ContactoComponent},
 
+    // WILDCARD
+    {path: '**', redirectTo: '', pathMatch: 'full'},
+
 ]
 
 export const appRoutingProviders : any[]=[];

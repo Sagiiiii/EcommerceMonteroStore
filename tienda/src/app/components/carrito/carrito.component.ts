@@ -34,7 +34,7 @@ export class CarritoComponent implements OnInit{
   public subtotal = 0;
   public total_pagar : any = 0;
 
-  public socket = io('http://localhost:4201');
+  public socket = io('http://localhost:3000');
   public user_lc : any = undefined;
 
   public direccion_principal : any = {};
@@ -133,12 +133,9 @@ export class CarritoComponent implements OnInit{
       },
       onApprove : async (data:any,actions:any)=>{
         const order = await actions.order.capture();
-        //console.log('Order: ',order);
         this.venta.transaccion = order.purchase_units[0].payments.captures[0].id;
-        //console.log('This.Venta: ',this.venta);
-        //console.log('This.Dventa: ',this.dventa);
-
-        this.venta.detalles = this.dventa;
+        this.venta.cupon       = this.venta.cupon || '';
+        this.venta.detalles    = this.dventa;
         this._clienteService.registro_compra_cliente(this.venta,this.token).subscribe(
           response=>{
             //console.log(response);
@@ -183,27 +180,33 @@ export class CarritoComponent implements OnInit{
     this.subtotal = 0;
     if(this.descuento_activo == undefined){
       this.carrito_arr.forEach(element => {
-        this.subtotal = this.subtotal + parseInt(element.producto.precio);
+        this.subtotal = this.subtotal + (parseInt(element.producto.precio) * element.cantidad);
       });
-    } else if(this.descuento_activo != undefined){
+    } else {
       this.carrito_arr.forEach(element => {
-        let new_precio = Math.round(parseInt(element.producto.precio) - (parseInt(element.producto.precio)*this.descuento_activo.descuento)/100); 
-        this.subtotal = this.subtotal + new_precio;
+        const precio_unitario = parseInt(element.producto.precio);
+        const precio_con_descuento = Math.round(precio_unitario - (precio_unitario * this.descuento_activo.descuento) / 100);
+        this.subtotal = this.subtotal + (precio_con_descuento * element.cantidad);
       });
-    }    
+    }
     this.total_pagar = this.subtotal;
   }
 
   obtener_carrito(){
     this._clienteService.obtener_carrito_cliente(this.idCliente, this.token).subscribe(
       response => {
-        //console.log(response);
-        this.carrito_arr = response.data;
+        this.carrito_arr = response.data || [];
+        this.dventa = [];
 
-        this.carrito_arr.forEach(async element => {
+        this.carrito_arr.forEach(element => {
+          const precio_unitario = parseInt(element.producto.precio);
+          const precio_final = this.descuento_activo
+            ? Math.round(precio_unitario - (precio_unitario * this.descuento_activo.descuento) / 100)
+            : precio_unitario;
+
           this.dventa.push({
             producto: element.producto._id,
-            subtotal: element.producto.precio,
+            subtotal: precio_final * element.cantidad,
             variedad: element.variedad,
             cantidad: element.cantidad,
             cliente:  localStorage.getItem('_id')
@@ -211,9 +214,10 @@ export class CarritoComponent implements OnInit{
         });
 
         this.carrito_load = false;
-
         this.calcular_carrito();
-        this.calcular_total('Envio Gratis');
+
+        const primer_envio = this.envios.length > 0 ? this.envios[0].titulo : 'Envío Gratis';
+        this.calcular_total(primer_envio);
       }
     );
   }
@@ -285,7 +289,8 @@ export class CarritoComponent implements OnInit{
             console.log('get_charge_culqi Response: ',response)
 
             this.venta.transaccion = response.id;
-            this.venta.detalles = this.dventa;
+            this.venta.cupon       = this.venta.cupon || '';
+            this.venta.detalles    = this.dventa;
 
             this._clienteService.registro_compra_cliente(this.venta,this.token).subscribe(
               response=>{
@@ -320,12 +325,12 @@ export class CarritoComponent implements OnInit{
 
   pagar_cash() {
     this.btn_load = true;
-  
-    // Mensaje informativo
-    this.venta.metodoPago = "cash";  
-    // Agregar aquí cualquier otro proceso o llamada al backend si es necesario
-    this.venta.detalles = this.dventa;
-  
+
+    this.venta.metodoPago  = 'cash';
+    this.venta.transaccion = this.venta.transaccion || ('CASH-' + Date.now());
+    this.venta.cupon       = this.venta.cupon || '';
+    this.venta.detalles    = this.dventa;
+
     this._clienteService.registro_compra_cliente(this.venta, this.token).subscribe(
       response => {
         this.btn_load = false;
@@ -356,18 +361,17 @@ export class CarritoComponent implements OnInit{
           response=> {
             //console.log(response);
             if(response.data != undefined){
-              //descuento
               this.error_cupon = '';
-              //console.log(response);
-              if(response.data.tipo == 'Valor fijo'){
+              const tipo = (response.data.tipo || '').toLowerCase();
+              if(tipo === 'valor fijo' || tipo === 'precio_fijo'){
                 this.descuento = response.data.valor;
                 this.total_pagar = this.total_pagar - this.descuento;
-              } else if(response.data.tipo == 'Porcentaje'){
-                this.descuento = (this.total_pagar * response.data.valor)/100;
-                this.total_pagar = this.total_pagar - this.descuento;                
+              } else if(tipo === 'porcentaje'){
+                this.descuento = Math.round((this.total_pagar * response.data.valor) / 100);
+                this.total_pagar = this.total_pagar - this.descuento;
               }
             } else{
-              this.error_cupon = 'El cupon no se pudo canjear';
+              this.error_cupon = 'El cupón no se pudo canjear';
             }
           }
         );
