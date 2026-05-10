@@ -1,58 +1,50 @@
-/* ════════════════════════════════════════════════════════════════
-    configuracion.component.css
-    Estilos del módulo de Configuración General — MONTERO'S
-    Panel Administrativo · JAIME PONCE MONTERO
-   ════════════════════════════════════════════════════════════════ */
+/* configuracion.component.css — MONTERO'S */
 
-/* ── Encabezado del módulo ─────────────────────────────────────── */
 .border-bottom h1 {
-  font-size: 1.6rem;
+  font-family: 'Sora', sans-serif;
+  font-size: 1.5rem;
   font-weight: 700;
-  color: #2d2d2d;
+  color: #0f1117;
   letter-spacing: -0.02em;
 }
 
-/* ── Tarjeta principal ─────────────────────────────────────────── */
 .card.box-shadow-sm {
-  border: 1px solid #e8e8e8;
-  border-radius: 0.5rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(0,0,0,0.07);
+  border-radius: 14px;
+  box-shadow: 0 2px 12px rgba(0,0,0,.06), 0 1px 3px rgba(0,0,0,.04);
+  transition: box-shadow .25s ease, border-color .25s ease;
 }
-
+.card.box-shadow-sm:hover {
+  box-shadow: 0 8px 30px rgba(201,168,76,.18), 0 4px 12px rgba(0,0,0,.08);
+  border-color: rgba(201,168,76,.45);
+}
 .card-header {
-  background-color: #f8f9fa;
-  border-bottom: 1px solid #e8e8e8;
+  background-color: #ffffff;
+  border-bottom: 1px solid rgba(0,0,0,0.07);
+  padding: 1rem 1.25rem;
+}
+.card-header h5 { font-size: 1rem; font-weight: 600; color: #0f1117; }
+.card-footer {
+  background-color: #ffffff;
+  border-top: 1px solid rgba(0,0,0,0.07);
   padding: 1rem 1.25rem;
 }
 
-.card-header h5 {
-  font-size: 1rem;
-  font-weight: 600;
-  color: #2d2d2d;
-}
-
 /* ── Tabla de categorías ───────────────────────────────────────── */
+.table thead th,
 .table thead.thead-dark th {
-  background-color: #2d2d2d;
-  border-color: #3d3d3d;
-  font-size: 0.8rem;
+  background-color: #fafafa;
+  color: #8a8fa0;
+  border-color: rgba(0,0,0,0.07);
+  font-size: 0.70rem;
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.06em;
 }
+.table tbody tr:hover { background-color: #fafaf8; }
+.table td code { font-size: 0.78rem; color: #8a8fa0; background: transparent; padding: 0; }
 
-.table tbody tr:hover {
-  background-color: #f8f9fa;
-}
-
-.table td code {
-  font-size: 0.78rem;
-  color: #6c757d;
-  background: transparent;
-  padding: 0;
-}
-
-/* ── Zona de carga de logo (drag & drop) ───────────────────────── */
+/* ── Zona drag & drop de logo ───────────────────────────────────── */
 .cs-file-drop-area {
   position: relative;
   display: flex;
@@ -60,18 +52,16 @@
   align-items: center;
   gap: 0.5rem;
   padding: 1.5rem;
-  border: 2px dashed #ced4da;
+  border: 2px dashed rgba(0,0,0,0.12);
   border-radius: 0.5rem;
   background-color: #fdfdfd;
   transition: border-color 0.2s ease, background-color 0.2s ease;
   cursor: pointer;
 }
-
 .cs-file-drop-area:hover {
-  border-color: #007bff;
-  background-color: #f0f7ff;
+  border-color: #c9a84c;
+  background-color: rgba(201,168,76,.04);
 }
-
 .cs-file-drop-preview {
   width: 120px;
   height: 120px;
@@ -79,104 +69,52 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #f0f0f0;
+  background-color: rgba(0,0,0,0.03);
 }
+.cs-file-drop-preview img { width: 100%; height: 100%; object-fit: contain; }
+.cs-file-drop-message { font-size: 0.875rem; color: #8a8fa0; text-align: center; }
+.cs-file-drop-hint { font-size: 0.775rem; color: #adb5bd; text-align: center; }
+.cs-file-drop-input { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
 
-.cs-file-drop-preview img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-}
-
-.cs-file-drop-message {
-  font-size: 0.875rem;
-  color: #6c757d;
-  text-align: center;
-}
-
-.cs-file-drop-hint {
-  font-size: 0.775rem;
-  color: #adb5bd;
-  text-align: center;
-}
-
-.cs-file-drop-input {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  opacity: 0;
-  cursor: pointer;
-}
-
-/* ── Pie de tarjeta / acciones ─────────────────────────────────── */
-.card-footer {
-  background-color: #f8f9fa;
-  border-top: 1px solid #e8e8e8;
-  padding: 1rem 1.25rem;
-}
-
-/* ── Mejora visual de botones de acción ────────────────────────── */
+/* ── Botones ───────────────────────────────────────────────────── */
 .btn-primary {
+  background-color: #c9a84c;
+  border-color: #c9a84c;
+  color: #fff;
   font-weight: 600;
 }
-
-.btn-outline-danger {
-  font-size: 0.8rem;
-}
+.btn-primary:hover:not(:disabled) { background-color: #e0bb6a; border-color: #e0bb6a; }
+.btn-primary:focus { box-shadow: 0 0 0 0.2rem rgba(201,168,76,.35); }
 
 .btn-outline-primary {
+  border-color: #c9a84c;
+  color: #c9a84c;
   font-size: 0.825rem;
 }
+.btn-outline-primary:hover { background-color: #c9a84c; color: #fff; }
 
-/* ── Textos de ayuda ───────────────────────────────────────────── */
-.form-text.text-muted {
-  font-size: 0.775rem;
-  margin-top: 0.3rem;
+.btn-outline-danger { font-size: 0.8rem; }
+
+.form-control:focus,
+.custom-select:focus {
+  border-color: #c9a84c;
+  box-shadow: 0 0 0 0.2rem rgba(201,168,76,.20);
 }
+.form-text.text-muted { font-size: 0.775rem; margin-top: 0.3rem; }
 
-/* ── Fila compacta de nueva categoría ──────────────────────────── */
-.cat-add-row {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.cat-add-nombre {
-  flex: 1;
-  min-width: 0;
-}
-
-/* Botón selector de ícono — cuadrado pequeño */
+/* ── Nueva categoría ────────────────────────────────────────────── */
+.cat-add-row { display: flex; align-items: center; gap: 6px; }
+.cat-add-nombre { flex: 1; min-width: 0; }
 .cat-icon-pick-btn {
-  width: 31px;
-  height: 31px;
-  padding: 0;
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  border-radius: 6px;
+  width: 31px; height: 31px; padding: 0; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden; border-radius: 6px;
 }
-
-/* Preview dentro del botón cuando hay imagen */
-.cat-icon-pick-preview {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-}
-
-/* Ícono en la tabla de categorías */
+.cat-icon-pick-preview { width: 100%; height: 100%; object-fit: contain; }
 .cat-icon-img {
-  width: 26px;
-  height: 26px;
-  object-fit: contain;
-  border-radius: 4px;
-  border: 1px solid #dee2e6;
-  background: #f8f9fa;
-  vertical-align: middle;
+  width: 26px; height: 26px; object-fit: contain;
+  border-radius: 4px; border: 1px solid rgba(0,0,0,0.07);
+  background: #fafafa; vertical-align: middle;
 }
 
 .font-size-sm { font-size: 0.8125rem; }

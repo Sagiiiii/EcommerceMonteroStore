@@ -4,8 +4,8 @@
       ════════════════════════════════════════════════════════════ -->
 
 <!-- Encabezado del módulo -->
-<div class="border-bottom pt-5 mt-2 mb-5">
-  <h1 class="mt-2 mt-md-4 mb-3 pt-5">Mensajes de Contacto</h1>
+<div class="border-bottom mb-4 pb-1">
+  <h1 class="mb-2">Mensajes de Contacto</h1>
   <div class="d-flex flex-wrap flex-md-nowrap justify-content-between">
     <p class="text-muted">
       Gestione los mensajes recibidos a través del canal de contacto de <strong>MONTERO'S</strong>.
@@ -96,14 +96,15 @@
               Mensaje atendido
             </span>
 
-            <!-- Acción: ir al correo -->
-            <a
-              href="https://mail.google.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="btn btn-sm btn-dark">
-              <i class="cxi-mail mr-1"></i> Ir al correo
-            </a>
+            <!-- Acción: responder mensaje -->
+            <button
+              type="button"
+              class="btn btn-sm btn-dark"
+              [disabled]="item.estado === 'Cerrado'"
+              [title]="item.estado === 'Cerrado' ? 'Mensaje cerrado — ya fue atendido' : 'Responder al cliente'"
+              (click)="responder(item)">
+              <i class="cxi-paper-plane mr-1"></i> Responder
+            </button>
 
           </div>
         </div>

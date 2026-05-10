@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { AdminService } from 'src/app/services/admin.service';
 
 declare var $: any;
@@ -33,7 +34,10 @@ export class IndexContactoComponent implements OnInit {
   public token: string = '';
 
   // ─────────────────────────────────────────────────────────────
-  constructor(private _adminService: AdminService) {
+  constructor(
+    private _adminService: AdminService,
+    private _router: Router
+  ) {
     this.token = localStorage.getItem('token') ?? '';
   }
 
@@ -43,6 +47,12 @@ export class IndexContactoComponent implements OnInit {
   }
 
   // ══ MÉTODOS PÚBLICOS ══════════════════════════════════════════
+
+  responder(item: any): void {
+    this._router.navigate(['/panel/contactos/responder', item._id], {
+      state: { mensaje: item }
+    });
+  }
 
   /**
    * Cierra un mensaje por su ID.

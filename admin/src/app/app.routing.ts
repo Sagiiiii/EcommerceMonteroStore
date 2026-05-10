@@ -9,6 +9,10 @@ import { RegistroComponent }            from './components/registro/registro.com
 import { Error404Component }            from './components/error404/error404.component';
 import { PerfilComponent }              from './components/perfil/perfil.component';
 
+import { IndexAdministradorComponent }  from './components/administradores/index-administrador/index-administrador.component';
+import { CreateAdministradorComponent } from './components/administradores/create-administrador/create-administrador.component';
+import { EditAdministradorComponent }   from './components/administradores/edit-administrador/edit-administrador.component';
+
 import { IndexClienteComponent }        from './components/clientes/index-cliente/index-cliente.component';
 import { CreateClienteComponent }       from './components/clientes/create-cliente/create-cliente.component';
 import { EditClienteComponent }         from './components/clientes/edit-cliente/edit-cliente.component';
@@ -29,7 +33,8 @@ import { IndexDescuentoComponent }      from './components/descuento/index-descu
 import { CreateDescuentoComponent }     from './components/descuento/create-descuento/create-descuento.component';
 import { EditDescuentoComponent }       from './components/descuento/edit-descuento/edit-descuento.component';
 
-import { IndexContactoComponent }       from './components/contacto/index-contacto/index-contacto.component';
+import { IndexContactoComponent }        from './components/contacto/index-contacto/index-contacto.component';
+import { ResponderContactoComponent }   from './components/contacto/responder-contacto/responder-contacto.component';
 
 import { IndexVentasComponent }         from './components/ventas/index-ventas/index-ventas.component';
 import { DetalleVentasComponent }       from './components/ventas/detalle-ventas/detalle-ventas.component';
@@ -53,6 +58,11 @@ const appRoutes: Routes = [
 
       // Perfil
       { path: 'perfil', component: PerfilComponent, canActivate: [adminGuard] },
+
+      // Administradores
+      { path: 'administradores',             component: IndexAdministradorComponent,  canActivate: [adminGuard] },
+      { path: 'administradores/registro',    component: CreateAdministradorComponent, canActivate: [adminGuard] },
+      { path: 'administradores/editar/:id',  component: EditAdministradorComponent,   canActivate: [adminGuard] },
 
       // Clientes
       { path: 'clientes',           component: IndexClienteComponent,  canActivate: [adminGuard] },
@@ -79,7 +89,8 @@ const appRoutes: Routes = [
       { path: 'descuentos/:id',      component: EditDescuentoComponent,   canActivate: [adminGuard] },
 
       // Contacto / Mensajes
-      { path: 'contactos', component: IndexContactoComponent, canActivate: [adminGuard] },
+      { path: 'contactos',              component: IndexContactoComponent,     canActivate: [adminGuard] },
+      { path: 'contactos/responder/:id', component: ResponderContactoComponent, canActivate: [adminGuard] },
 
       // Ventas
       { path: 'ventas',     component: IndexVentasComponent,   canActivate: [adminGuard] },

@@ -1,46 +1,79 @@
-/* ============================================================
-    MONTERO'S — Panel Administrativo
-    Módulo: Variedades de Producto
-    ============================================================ */
+/* variedad-producto.component.css — MONTERO'S */
 
-/* Tarjeta horizontal del producto */
+/* ── Tarjeta horizontal del producto ──────────────────────────── */
 .card-horizontal {
   display: flex;
   flex-direction: row;
   align-items: stretch;
+  border: 1px solid rgba(0,0,0,0.07);
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 2px 12px rgba(0,0,0,.06);
+  transition: box-shadow .25s ease, border-color .25s ease;
+}
+.card-horizontal:hover {
+  box-shadow: 0 8px 30px rgba(201,168,76,.18);
+  border-color: rgba(201,168,76,.45);
 }
 
 .card-horizontal .card-img-top {
   width: 180px;
   min-width: 180px;
   overflow: hidden;
-  border-right: 1px solid #e9ecef;
+  border-right: 1px solid rgba(0,0,0,0.07);
 }
 
-/* Acciones en el footer */
-.card-footer .gap-2 {
-  gap: 0.5rem;
+/* ── Card general ─────────────────────────────────────────────── */
+.card.box-shadow-sm {
+  border: 1px solid rgba(0,0,0,0.07);
+  border-radius: 14px;
+  box-shadow: 0 2px 12px rgba(0,0,0,.06), 0 1px 3px rgba(0,0,0,.04);
+  transition: box-shadow .25s ease, border-color .25s ease;
 }
+.card.box-shadow-sm:hover {
+  box-shadow: 0 8px 30px rgba(201,168,76,.18), 0 4px 12px rgba(0,0,0,.08);
+  border-color: rgba(201,168,76,.45);
+}
+
+/* ── Footer acciones ──────────────────────────────────────────── */
+.card-footer {
+  background-color: #ffffff;
+  border-top: 1px solid rgba(0,0,0,0.07);
+}
+.card-footer .gap-2 { gap: 0.5rem; }
+
+/* ── Table theme ──────────────────────────────────────────────── */
+.table thead th,
+.table thead.thead-dark th {
+  background-color: #fafafa;
+  color: #8a8fa0;
+  border-color: rgba(0,0,0,0.07);
+  font-size: 0.70rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.table tbody tr:hover { background-color: #fafaf8; }
+.table td { vertical-align: middle; font-size: 0.875rem; color: #4a4f5e; }
+
+/* ── Buttons ──────────────────────────────────────────────────── */
+.btn-primary {
+  background-color: #c9a84c;
+  border-color: #c9a84c;
+  color: #fff;
+  font-weight: 600;
+}
+.btn-primary:hover:not(:disabled) { background-color: #e0bb6a; border-color: #e0bb6a; }
+.btn-primary:focus { box-shadow: 0 0 0 0.2rem rgba(201,168,76,.35); }
 
 @media (max-width: 576px) {
-  .card-horizontal {
-    flex-direction: column;
-  }
-
+  .card-horizontal { flex-direction: column; }
   .card-horizontal .card-img-top {
     width: 100%;
     min-width: unset;
     border-right: none;
-    border-bottom: 1px solid #e9ecef;
+    border-bottom: 1px solid rgba(0,0,0,0.07);
   }
-
-  .card-footer {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .card-footer .btn {
-    width: 100%;
-    text-align: center;
-  }
+  .card-footer { flex-direction: column; align-items: stretch; }
+  .card-footer .btn { width: 100%; text-align: center; }
 }

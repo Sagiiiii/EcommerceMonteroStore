@@ -1,34 +1,63 @@
 /* index-ventas.component.css — MONTERO'S */
-.border-bottom h1 { font-size: 1.6rem; font-weight: 700; color: #2d2d2d; letter-spacing: -0.02em; }
-.card.box-shadow-sm { border: 1px solid #e8e8e8; border-radius: 0.5rem; box-shadow: 0 2px 8px rgba(0,0,0,.06); }
-.card-header { background-color: #f8f9fa; border-bottom: 1px solid #e8e8e8; padding: 1rem 1.25rem; }
-.card-header h5 { font-size: 1rem; font-weight: 600; color: #2d2d2d; }
-.card-footer { background-color: #f8f9fa; border-top: 1px solid #e8e8e8; padding: 0.75rem 1.25rem; }
 
-/* Ítem de venta */
+.border-bottom h1 {
+  font-family: 'Sora', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #0f1117;
+  letter-spacing: -0.02em;
+}
+
+.card.box-shadow-sm {
+  border: 1px solid rgba(0,0,0,0.07);
+  border-radius: 14px;
+  box-shadow: 0 2px 12px rgba(0,0,0,.06), 0 1px 3px rgba(0,0,0,.04);
+  transition: box-shadow .25s ease, border-color .25s ease;
+}
+.card.box-shadow-sm:hover {
+  box-shadow: 0 8px 30px rgba(201,168,76,.18), 0 4px 12px rgba(0,0,0,.08);
+  border-color: rgba(201,168,76,.45);
+}
+.card-header {
+  background-color: #ffffff;
+  border-bottom: 1px solid rgba(0,0,0,0.07);
+  padding: 1rem 1.25rem;
+}
+.card-header h5 { font-size: 1rem; font-weight: 600; color: #0f1117; }
+.card-footer {
+  background-color: #ffffff;
+  border-top: 1px solid rgba(0,0,0,0.07);
+  padding: 0.75rem 1.25rem;
+}
+
+/* ── Ítem de venta ─────────────────────────────────────────────── */
 .venta-item { padding-top: 1rem; }
 .venta-item:first-child { padding-top: 0; }
 
-/* Badges */
-.badge { font-size: 0.72rem; font-weight: 600; padding: 0.3em 0.65em; letter-spacing: 0.02em; }
-.badge-warning  { background-color: #ffc107; color: #212529; }
-.badge-success  { background-color: #28a745; color: #fff; }
-.badge-danger   { background-color: #dc3545; color: #fff; }
-.badge-info     { background-color: #17a2b8; color: #fff; }
-.badge-secondary{ background-color: #6c757d; color: #fff; }
-.badge-dark     { background-color: #343a40; color: #fff; }
+/* ── Badges ────────────────────────────────────────────────────── */
+.badge { font-size: 0.72rem; font-weight: 600; padding: 0.3em 0.65em; letter-spacing: 0.02em; border-radius: 20px; }
+.badge-warning  { background-color: rgba(245,158,11,.12); color: #d97706; }
+.badge-success  { background-color: rgba(34,197,94,.12);  color: #16a34a; }
+.badge-danger   { background-color: rgba(239,68,68,.12);  color: #dc2626; }
+.badge-info     { background-color: rgba(59,130,246,.12); color: #2563eb; }
+.badge-secondary{ background-color: rgba(0,0,0,.06);     color: #4a4f5e; }
+.badge-dark     { background-color: rgba(0,0,0,.10);     color: #0f1117; }
 
-/* Tipografía */
+/* ── Tipografía ────────────────────────────────────────────────── */
 .font-size-sm  { font-size: 0.875rem; }
 .font-size-xs  { font-size: 0.775rem; }
-.font-size-xl  { font-size: 2rem; }
 .font-weight-semibold { font-weight: 600; }
 
-/* Form label */
-.form-label { font-weight: 500; font-size: 0.875rem; color: #444; margin-bottom: 0.3rem; display: block; }
+/* ── Form label ────────────────────────────────────────────────── */
+.form-label { font-weight: 500; font-size: 0.875rem; color: #4a4f5e; margin-bottom: 0.3rem; display: block; }
 
-/* Utilidades */
+.form-control:focus,
+.custom-select:focus {
+  border-color: #c9a84c;
+  box-shadow: 0 0 0 0.2rem rgba(201,168,76,.20);
+}
+
+/* ── Utilidades ────────────────────────────────────────────────── */
 .gap-2 { gap: 0.5rem; }
 .gap-3 { gap: 0.75rem; }
-
 ngb-pagination { display: flex; justify-content: flex-end; }

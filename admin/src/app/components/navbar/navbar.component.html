@@ -18,7 +18,9 @@
 
   <!-- ── Hamburguesa móvil ────────────────────────────────────── -->
   <button class="monteros-navbar__toggler d-block d-lg-none"
-    type="button" data-toggle="offcanvas" data-target="componentsNav"
+    [class.monteros-navbar__toggler--open]="mobileMenuOpen"
+    type="button"
+    (click)="toggleMobileMenu()"
     aria-label="Abrir menú">
     <span class="monteros-navbar__toggler-icon"></span>
     <span class="monteros-navbar__toggler-icon"></span>
@@ -28,16 +30,70 @@
   <!-- ── Acciones derecha ─────────────────────────────────────── -->
   <div class="monteros-navbar__actions ml-auto d-none d-lg-flex align-items-center">
 
-    <!-- Campana -->
-    <button class="monteros-navbar__icon-btn" aria-label="Notificaciones">
-      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
-        fill="none" stroke="currentColor" stroke-width="1.8"
-        stroke-linecap="round" stroke-linejoin="round">
-        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
-        <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
-      </svg>
-      <span class="monteros-navbar__badge">3</span>
-    </button>
+    <!-- Campana de notificaciones -->
+    <div class="notif-wrapper">
+
+      <button class="monteros-navbar__icon-btn"
+        aria-label="Notificaciones"
+        (click)="toggleNotif()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+          fill="none" stroke="currentColor" stroke-width="1.8"
+          stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+          <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+        </svg>
+        <span class="notif-badge" *ngIf="totalAbiertos > 0">
+          {{ totalAbiertos > 9 ? '9+' : totalAbiertos }}
+        </span>
+      </button>
+
+      <!-- Panel de notificaciones -->
+      <div class="notif-dropdown" *ngIf="notifOpen">
+
+        <div class="notif-header">
+          <h6>Mensajes recientes</h6>
+          <a [routerLink]="['/panel/contactos']" (click)="closeNotif()">Ver todos</a>
+        </div>
+
+        <!-- Sin mensajes -->
+        <div class="notif-empty" *ngIf="notificaciones.length === 0">
+          <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="1.4"
+            stroke-linecap="round" stroke-linejoin="round" class="mb-2 d-block mx-auto">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+          </svg>
+          No hay mensajes
+        </div>
+
+        <!-- Lista de mensajes -->
+        <button type="button" class="notif-item"
+          [class.notif-item--abierto]="n.estado === 'Abierto'"
+          *ngFor="let n of notificaciones"
+          (click)="abrirMensaje(n)">
+
+          <div class="notif-avatar">{{ inicialDelCliente(n.cliente) }}</div>
+
+          <div class="notif-content">
+            <p class="notif-name">{{ n.cliente }}</p>
+            <p class="notif-preview">{{ n.mensaje }}</p>
+            <div class="notif-meta">
+              <span class="notif-date">{{ n.createdAt | date:'dd/MM/yy · HH:mm' }}</span>
+              <span class="notif-pill notif-pill--abierto" *ngIf="n.estado === 'Abierto'">Pendiente</span>
+              <span class="notif-pill notif-pill--cerrado" *ngIf="n.estado === 'Cerrado'">Atendido</span>
+            </div>
+          </div>
+
+        </button>
+
+        <div class="notif-footer">
+          <a [routerLink]="['/panel/contactos']" (click)="closeNotif()">
+            Ir a bandeja completa
+          </a>
+        </div>
+
+      </div>
+    </div>
 
     <div class="monteros-navbar__divider"></div>
 
@@ -48,7 +104,7 @@
         type="button"
         (click)="toggleDropdown()"
         [attr.aria-expanded]="dropdownOpen">
-        <img [src]="'assets/img/user.png'"
+        <img [src]="avatarSrc"
           class="monteros-navbar__avatar"
           [alt]="'Avatar ' + user_admin.nombres">
         <div class="monteros-navbar__user-info d-none d-xl-block">
@@ -101,4 +157,159 @@
     </div>
 
   </div>
+
+  <!-- ════════════════════════════════════════════════════
+       MENÚ MÓVIL — solo visible en pantallas < 992px
+       ════════════════════════════════════════════════════ -->
+
+  <!-- Backdrop -->
+  <div class="mobile-bd d-lg-none" *ngIf="mobileMenuOpen" (click)="closeMobileMenu()"></div>
+
+  <!-- Drawer -->
+  <div class="mobile-drawer d-lg-none" *ngIf="mobileMenuOpen">
+
+    <!-- Encabezado del drawer -->
+    <div class="mobile-drawer__header">
+      <div class="mobile-drawer__brand">
+        <img src="assets/img/monteros-fondo-negro.png" alt="MONTERO'S" height="40">
+        <span>MONTERO'S</span>
+      </div>
+      <button class="mobile-drawer__close" type="button" (click)="closeMobileMenu()" aria-label="Cerrar menú">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+          fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Perfil del administrador -->
+    <div class="mobile-drawer__profile">
+      <img [src]="avatarSrc" class="mobile-drawer__avatar" [alt]="'Avatar ' + user_admin.nombres">
+      <div class="mobile-drawer__user-info">
+        <p class="mobile-drawer__name">{{ user_admin.nombres }}, {{ user_admin.apellidos }}</p>
+        <p class="mobile-drawer__role">Administrador</p>
+      </div>
+    </div>
+
+    <!-- Navegación -->
+    <div class="mobile-drawer__nav-wrapper">
+      <p class="mobile-drawer__section-label">Menú principal</p>
+      <nav class="mobile-drawer__nav">
+
+        <a class="mobile-drawer__link" [routerLink]="['/inicio']"
+          routerLinkActive="mobile-drawer__link--active" [routerLinkActiveOptions]="{exact:true}"
+          (click)="closeMobileMenu()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
+            <rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/>
+          </svg>
+          Inicio
+        </a>
+
+        <a class="mobile-drawer__link" [routerLink]="['/panel/administradores']"
+          routerLinkActive="mobile-drawer__link--active" (click)="closeMobileMenu()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          </svg>
+          Administradores
+        </a>
+
+        <a class="mobile-drawer__link" [routerLink]="['/panel/clientes']"
+          routerLinkActive="mobile-drawer__link--active" (click)="closeMobileMenu()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+          </svg>
+          Clientes
+        </a>
+
+        <a class="mobile-drawer__link" [routerLink]="['/panel/productos']"
+          routerLinkActive="mobile-drawer__link--active" (click)="closeMobileMenu()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+            <line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/>
+          </svg>
+          Productos
+        </a>
+
+        <a class="mobile-drawer__link" [routerLink]="['/panel/cupones']"
+          routerLinkActive="mobile-drawer__link--active" (click)="closeMobileMenu()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/>
+            <line x1="7" y1="7" x2="7.01" y2="7"/>
+          </svg>
+          Cupones
+        </a>
+
+        <a class="mobile-drawer__link" [routerLink]="['/panel/descuentos']"
+          routerLinkActive="mobile-drawer__link--active" (click)="closeMobileMenu()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="19" y1="5" x2="5" y2="19"/>
+            <circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/>
+          </svg>
+          Descuentos
+        </a>
+
+        <a class="mobile-drawer__link" [routerLink]="['/panel/contactos']"
+          routerLinkActive="mobile-drawer__link--active" (click)="closeMobileMenu()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+          </svg>
+          Mensajes
+          <span class="mobile-drawer__notif-badge" *ngIf="totalAbiertos > 0">
+            {{ totalAbiertos > 9 ? '9+' : totalAbiertos }}
+          </span>
+        </a>
+
+        <a class="mobile-drawer__link" [routerLink]="['/panel/ventas']"
+          routerLinkActive="mobile-drawer__link--active" (click)="closeMobileMenu()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+          </svg>
+          Ventas
+        </a>
+
+        <a class="mobile-drawer__link" [routerLink]="['/panel/configuracion']"
+          routerLinkActive="mobile-drawer__link--active" (click)="closeMobileMenu()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+          </svg>
+          Configuración
+        </a>
+
+      </nav>
+    </div>
+
+    <!-- Pie: perfil y salir -->
+    <div class="mobile-drawer__footer">
+      <a [routerLink]="['/panel/perfil']" class="mobile-drawer__footer-btn" (click)="closeMobileMenu()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
+          fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+        </svg>
+        Mi perfil
+      </a>
+      <button type="button" class="mobile-drawer__footer-btn mobile-drawer__footer-btn--danger" (click)="logout()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
+          fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+          <polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/>
+        </svg>
+        Cerrar sesión
+      </button>
+    </div>
+
+  </div>
+
 </header>

@@ -1,47 +1,56 @@
-/* ============================================================
-    MONTERO'S — Panel Administrativo
-    Módulo: Reseñas de Producto
-    ============================================================ */
+/* reviews-producto.component.css — MONTERO'S */
 
-/* Sistema de calificación por estrellas */
-.star-rating {
-  display: flex;
-  gap: 2px;
-}
+/* ── Sistema de estrellas ──────────────────────────────────────── */
+.star-rating { display: flex; gap: 2px; }
+.star-rating .sr-star { font-size: 1.1rem; color: rgba(0,0,0,0.15); transition: color 0.2s ease; }
+.star-rating .sr-star.active { color: #c9a84c; }
 
-.star-rating .sr-star {
-  font-size: 1.1rem;
-  color: #d1d5db; /* gris por defecto */
-  transition: color 0.2s ease;
-}
-
-.star-rating .sr-star.active {
-  color: #f59e0b; /* amarillo dorado para activas */
-}
-
-/* Tarjeta horizontal del producto */
+/* ── Card horizontal del producto ─────────────────────────────── */
 .card-horizontal {
   display: flex;
   flex-direction: row;
   align-items: stretch;
+  border: 1px solid rgba(0,0,0,0.07);
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 2px 12px rgba(0,0,0,.06);
+  transition: box-shadow .25s ease, border-color .25s ease;
 }
-
+.card-horizontal:hover {
+  box-shadow: 0 8px 30px rgba(201,168,76,.18);
+  border-color: rgba(201,168,76,.45);
+}
 .card-horizontal .card-img-top {
   width: 180px;
   min-width: 180px;
   overflow: hidden;
-  border-right: 1px solid #e9ecef;
+  border-right: 1px solid rgba(0,0,0,0.07);
 }
 
-@media (max-width: 576px) {
-  .card-horizontal {
-    flex-direction: column;
-  }
+/* ── Card general ─────────────────────────────────────────────── */
+.card.box-shadow-sm {
+  border: 1px solid rgba(0,0,0,0.07);
+  border-radius: 14px;
+  box-shadow: 0 2px 12px rgba(0,0,0,.06), 0 1px 3px rgba(0,0,0,.04);
+  transition: box-shadow .25s ease, border-color .25s ease;
+}
+.card.box-shadow-sm:hover {
+  box-shadow: 0 8px 30px rgba(201,168,76,.18), 0 4px 12px rgba(0,0,0,.08);
+  border-color: rgba(201,168,76,.45);
+}
+.card-header {
+  background-color: #ffffff;
+  border-bottom: 1px solid rgba(0,0,0,0.07);
+  padding: 1rem 1.25rem;
+}
+.card-header h5 { font-size: 1rem; font-weight: 600; color: #0f1117; }
 
+@media (max-width: 576px) {
+  .card-horizontal { flex-direction: column; }
   .card-horizontal .card-img-top {
     width: 100%;
     min-width: unset;
     border-right: none;
-    border-bottom: 1px solid #e9ecef;
+    border-bottom: 1px solid rgba(0,0,0,0.07);
   }
 }

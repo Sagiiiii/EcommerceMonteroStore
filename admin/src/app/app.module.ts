@@ -19,6 +19,11 @@ import { PerfilComponent }    from './components/perfil/perfil.component';
 import { Error404Component }  from './components/error404/error404.component';
 import { ConfiguracionComponent } from './components/configuracion/configuracion.component';
 
+// ── Administradores ───────────────────────────────────────────
+import { IndexAdministradorComponent }  from './components/administradores/index-administrador/index-administrador.component';
+import { CreateAdministradorComponent } from './components/administradores/create-administrador/create-administrador.component';
+import { EditAdministradorComponent }   from './components/administradores/edit-administrador/edit-administrador.component';
+
 // ── Clientes ──────────────────────────────────────────────────
 import { IndexClienteComponent }  from './components/clientes/index-cliente/index-cliente.component';
 import { CreateClienteComponent } from './components/clientes/create-cliente/create-cliente.component';
@@ -44,7 +49,8 @@ import { EditDescuentoComponent }   from './components/descuento/edit-descuento/
 import { IndexDescuentoComponent }  from './components/descuento/index-descuento/index-descuento.component';
 
 // ── Contacto ──────────────────────────────────────────────────
-import { IndexContactoComponent } from './components/contacto/index-contacto/index-contacto.component';
+import { IndexContactoComponent }     from './components/contacto/index-contacto/index-contacto.component';
+import { ResponderContactoComponent } from './components/contacto/responder-contacto/responder-contacto.component';
 
 // ── Ventas ────────────────────────────────────────────────────
 import { IndexVentasComponent }   from './components/ventas/index-ventas/index-ventas.component';
@@ -68,6 +74,11 @@ import { DetalleVentasComponent } from './components/ventas/detalle-ventas/detal
     PerfilComponent,
     Error404Component,
     ConfiguracionComponent,
+
+    // Administradores
+    IndexAdministradorComponent,
+    CreateAdministradorComponent,
+    EditAdministradorComponent,
 
     // Clientes
     IndexClienteComponent,
@@ -95,6 +106,7 @@ import { DetalleVentasComponent } from './components/ventas/detalle-ventas/detal
 
     // Contacto
     IndexContactoComponent,
+    ResponderContactoComponent,
 
     // Ventas
     IndexVentasComponent,

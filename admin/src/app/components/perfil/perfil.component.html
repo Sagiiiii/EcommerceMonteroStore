@@ -3,9 +3,8 @@
       Panel Administrativo · JAIME PONCE MONTERO
       ════════════════════════════════════════════════════════════ -->
 
-<!-- Encabezado del módulo (fuera de la tarjeta) -->
-<div class="border-bottom pt-5 mt-2 mb-5">
-  <h1 class="mt-2 mt-md-4 mb-3 pt-5">Mi Perfil</h1>
+<div class="border-bottom mb-4 pb-1">
+  <h1 class="mb-2">Mi Perfil</h1>
   <div class="d-flex flex-wrap flex-md-nowrap justify-content-between">
     <p class="text-muted">
       Administre su información personal de acceso al sistema de <strong>MONTERO'S</strong>.
@@ -13,197 +12,149 @@
   </div>
 </div>
 
-<!-- ── Tarjeta principal (fuera del border-bottom) ── -->
-<div class="card box-shadow-sm mb-5">
-
-  <!-- Encabezado de tarjeta -->
-  <div class="card-header d-flex align-items-center">
-    <h5 class="mb-0">
-      <i class="cxi-profile mr-2"></i>
-      Datos del administrador
-    </h5>
-  </div>
-
-  <!-- Estado: cargando -->
-  <div class="card-body text-center py-5" *ngIf="load_data">
-    <div
-      class="spinner-border text-primary mb-3"
-      style="width: 2.5rem; height: 2.5rem;"
-      role="status">
+<!-- Estado: cargando -->
+<div class="card box-shadow-sm" *ngIf="load_data">
+  <div class="card-body text-center py-5">
+    <div class="spinner-border text-primary mb-3" style="width:2.5rem;height:2.5rem;" role="status">
       <span class="sr-only">Cargando perfil...</span>
     </div>
     <p class="text-muted mb-0">Cargando información del perfil...</p>
   </div>
+</div>
 
-  <!-- Formulario de perfil -->
-  <div class="card-body" *ngIf="!load_data">
-    <form #actualizarForm="ngForm" (ngSubmit)="actualizar(actualizarForm)">
+<!-- Formulario -->
+<ng-container *ngIf="!load_data">
 
-      <div class="row">
+  <form #actualizarForm="ngForm" (ngSubmit)="actualizar(actualizarForm)">
 
-        <!-- Nombres -->
-        <div class="col-sm-6 form-group">
-          <label class="form-label" for="input-nombres">
-            <i class="cxi-profile mr-1"></i> Nombres
-          </label>
-          <input
-            type="text"
-            class="form-control"
-            id="input-nombres"
-            name="nombres"
-            placeholder="Nombres completos"
-            required
-            [(ngModel)]="user_admin.nombres">
-        </div>
-
-        <!-- Apellidos -->
-        <div class="col-sm-6 form-group">
-          <label class="form-label" for="input-apellidos">
-            <i class="cxi-profile mr-1"></i> Apellidos
-          </label>
-          <input
-            type="text"
-            class="form-control"
-            id="input-apellidos"
-            name="apellidos"
-            placeholder="Apellidos completos"
-            required
-            [(ngModel)]="user_admin.apellidos">
-        </div>
-
-        <!-- Correo electrónico (solo lectura) -->
-        <div class="col-sm-6 form-group">
-          <label class="form-label" for="input-email">
-            <i class="cxi-mail mr-1"></i> Correo electrónico
-          </label>
-          <input
-            type="email"
-            class="form-control perfil-readonly"
-            id="input-email"
-            name="email"
-            [ngModel]="user_admin.email"
-            readonly>
-          <small class="form-text text-muted">
-            El correo electrónico no puede modificarse.
-          </small>
-        </div>
-
-        <!-- Nueva contraseña (opcional) -->
-        <div class="col-sm-6 form-group">
-          <label class="form-label" for="input-password">
-            <i class="cxi-lock mr-1"></i> Nueva contraseña
-          </label>
-          <div class="cs-password-toggle input-group-overlay">
-            <input
-              type="password"
-              class="form-control appended-form-control"
-              id="input-password"
-              name="nueva_password"
-              placeholder="Dejar vacío para no cambiar"
-              autocomplete="new-password"
-              [(ngModel)]="nueva_password">
-            <div class="input-group-append-overlay">
-              <label class="btn cs-password-toggle-btn input-group-text">
-                <input type="checkbox" class="custom-control-input">
-                <i class="cxi-eye cs-password-toggle-indicator"></i>
-                <span class="sr-only">Mostrar contraseña</span>
-              </label>
-            </div>
-          </div>
-          <small class="form-text text-muted">
-            Solo complete este campo si desea cambiar su contraseña.
-          </small>
-        </div>
-
-        <!-- Teléfono -->
-        <div class="col-sm-6 form-group">
-          <label class="form-label" for="input-telefono">
-            <i class="cxi-phone mr-1"></i> Teléfono
-          </label>
-          <input
-            type="tel"
-            class="form-control"
-            id="input-telefono"
-            name="telefono"
-            placeholder="Ej.: 987 654 321"
-            required
-            [(ngModel)]="user_admin.telefono">
-        </div>
-
-        <!-- Fecha de nacimiento -->
-        <div class="col-sm-6 form-group">
-          <label class="form-label" for="input-fecha-nacimiento">
-            <i class="cxi-calendar mr-1"></i> Fecha de nacimiento
-          </label>
-          <input
-            type="date"
-            class="form-control"
-            id="input-fecha-nacimiento"
-            name="fecha_nacimiento"
-            required
-            [(ngModel)]="user_admin.fecha_nacimiento">
-        </div>
-
-        <!-- DNI -->
-        <div class="col-sm-6 form-group">
-          <label class="form-label" for="input-dni">
-            <i class="cxi-files mr-1"></i> DNI
-          </label>
-          <input
-            type="text"
-            class="form-control"
-            id="input-dni"
-            name="dni"
-            placeholder="Ej.: 12345678"
-            required
-            maxlength="8"
-            [(ngModel)]="user_admin.dni">
-          <small class="form-text text-muted">
-            Documento Nacional de Identidad (8 dígitos).
-          </small>
-        </div>
-
+    <!-- ── Tarjeta: Foto de perfil ── -->
+    <div class="card box-shadow-sm mb-4">
+      <div class="card-header d-flex align-items-center">
+        <h5 class="mb-0"><i class="cxi-camera mr-2"></i> Foto de perfil</h5>
       </div>
-      <!-- /row -->
+      <div class="card-body">
+        <div class="perfil-foto-wrap">
 
-      <!-- Separador -->
-      <hr class="mt-2 mb-4">
+          <!-- Preview avatar -->
+          <div class="perfil-avatar-ring">
+            <img [src]="fotoPreview" class="perfil-avatar" alt="Foto de perfil">
+          </div>
 
-      <!-- Acciones -->
-      <div class="d-flex align-items-center">
+          <!-- Info + botón -->
+          <div class="perfil-foto-info">
+            <p class="mb-1 font-weight-medium">{{ user_admin.nombres }} {{ user_admin.apellidos }}</p>
+            <p class="text-muted font-size-sm mb-3">
+              Formatos admitidos: JPG, PNG, WEBP, GIF · Máximo 4 MB
+            </p>
+            <label class="btn btn-outline-primary btn-sm perfil-foto-btn" for="input-foto">
+              <i class="cxi-photo mr-1"></i> Cambiar foto
+              <input type="file" id="input-foto" class="d-none"
+                accept="image/png,image/jpeg,image/jpg,image/webp,image/gif"
+                (change)="fotoChange($event)">
+            </label>
+            <span *ngIf="fotoFile" class="ml-2 font-size-sm text-success">
+              <i class="cxi-check mr-1"></i> {{ fotoFile.name }}
+            </span>
+          </div>
 
-        <!-- Botón activo -->
-        <button
-          *ngIf="!load_btn"
-          type="submit"
-          class="btn btn-primary mr-3">
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Tarjeta: Datos personales ── -->
+    <div class="card box-shadow-sm mb-4">
+      <div class="card-header d-flex align-items-center">
+        <h5 class="mb-0"><i class="cxi-profile mr-2"></i> Datos del administrador</h5>
+      </div>
+      <div class="card-body">
+        <div class="row">
+
+          <!-- Nombres -->
+          <div class="col-sm-6 form-group">
+            <label class="form-label" for="input-nombres">
+              <i class="cxi-profile mr-1"></i> Nombres
+            </label>
+            <input type="text" class="form-control" id="input-nombres" name="nombres"
+              placeholder="Nombres completos" required [(ngModel)]="user_admin.nombres">
+          </div>
+
+          <!-- Apellidos -->
+          <div class="col-sm-6 form-group">
+            <label class="form-label" for="input-apellidos">
+              <i class="cxi-profile mr-1"></i> Apellidos
+            </label>
+            <input type="text" class="form-control" id="input-apellidos" name="apellidos"
+              placeholder="Apellidos completos" required [(ngModel)]="user_admin.apellidos">
+          </div>
+
+          <!-- Correo (solo lectura) -->
+          <div class="col-sm-6 form-group">
+            <label class="form-label" for="input-email">
+              <i class="cxi-mail mr-1"></i> Correo electrónico
+            </label>
+            <input type="email" class="form-control perfil-readonly" id="input-email"
+              name="email" [ngModel]="user_admin.email" readonly>
+            <small class="form-text text-muted">El correo electrónico no puede modificarse.</small>
+          </div>
+
+          <!-- Nueva contraseña -->
+          <div class="col-sm-6 form-group">
+            <label class="form-label" for="input-password">
+              <i class="cxi-lock mr-1"></i> Nueva contraseña
+            </label>
+            <input type="password" class="form-control" id="input-password" name="nueva_password"
+              placeholder="Dejar vacío para no cambiar" autocomplete="new-password"
+              [(ngModel)]="nueva_password">
+            <small class="form-text text-muted">Solo complete este campo si desea cambiar su contraseña.</small>
+          </div>
+
+          <!-- Teléfono -->
+          <div class="col-sm-6 form-group">
+            <label class="form-label" for="input-telefono">
+              <i class="cxi-phone mr-1"></i> Teléfono
+            </label>
+            <input type="tel" class="form-control" id="input-telefono" name="telefono"
+              placeholder="Ej.: 987 654 321" required [(ngModel)]="user_admin.telefono">
+          </div>
+
+          <!-- Fecha de nacimiento -->
+          <div class="col-sm-6 form-group">
+            <label class="form-label" for="input-fecha-nacimiento">
+              <i class="cxi-calendar mr-1"></i> Fecha de nacimiento
+            </label>
+            <input type="date" class="form-control" id="input-fecha-nacimiento"
+              name="fecha_nacimiento" [(ngModel)]="user_admin.fecha_nacimiento">
+          </div>
+
+          <!-- DNI -->
+          <div class="col-sm-6 form-group">
+            <label class="form-label" for="input-dni">
+              <i class="cxi-files mr-1"></i> DNI
+            </label>
+            <input type="text" class="form-control" id="input-dni" name="dni"
+              placeholder="Ej.: 12345678" required maxlength="8" [(ngModel)]="user_admin.dni">
+            <small class="form-text text-muted">Documento Nacional de Identidad (8 dígitos).</small>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Footer acciones -->
+      <div class="card-footer d-flex align-items-center">
+        <button *ngIf="!load_btn" type="submit" class="btn btn-primary mr-3">
           <i class="cxi-check mr-1"></i> Guardar cambios
         </button>
-
-        <!-- Botón de carga -->
-        <button
-          *ngIf="load_btn"
-          type="button"
-          class="btn btn-secondary mr-3"
-          disabled>
-          <span
-            class="spinner-grow spinner-grow-sm mr-2"
-            role="status"
-            aria-hidden="true">
-          </span>
+        <button *ngIf="load_btn" type="button" class="btn btn-secondary mr-3" disabled>
+          <span class="spinner-grow spinner-grow-sm mr-2" role="status" aria-hidden="true"></span>
           Guardando...
         </button>
-
         <span class="font-size-sm text-muted">
-          <i class="cxi-info mr-1"></i>
-          Los campos marcados con <span class="text-danger">*</span> son obligatorios.
+          <i class="cxi-info mr-1"></i> Los cambios de foto y datos se guardan juntos.
         </span>
-
       </div>
 
-    </form>
-  </div>
-  <!-- /card-body formulario -->
+    </div>
 
-</div>
-<!-- /card -->
+  </form>
+
+</ng-container>

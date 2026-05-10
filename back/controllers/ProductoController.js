@@ -58,7 +58,11 @@ const listar_productos_filtro_admin = async function (req, res) {
         const filtroVal = (!req.params.filtro || req.params.filtro === '_') ? '' : req.params.filtro;
         const query = { titulo: new RegExp(filtroVal, 'i') };
         if (req.params.almacen && req.params.almacen !== 'todos') {
-            query.almacen = req.params.almacen;
+            if (req.params.almacen === 'huancayo') {
+                query.$or = [{ almacen: 'huancayo' }, { almacen: { $exists: false } }, { almacen: null }];
+            } else {
+                query.almacen = req.params.almacen;
+            }
         }
         const reg = await Producto.find(query);
         res.status(200).send({ data: reg });

@@ -1,96 +1,100 @@
-/* ════════════════════════════════════════════════════════════════
-    perfil.component.css
-    Estilos del módulo Mi Perfil — MONTERO'S
-    Panel Administrativo · JAIME PONCE MONTERO
-    ════════════════════════════════════════════════════════════════ */
+/* perfil.component.css — MONTERO'S */
 
-/* ── Encabezado del módulo ─────────────────────────────────────── */
+/* ── Foto de perfil ────────────────────────────────────────────── */
+.perfil-foto-wrap {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+.perfil-avatar-ring {
+  flex-shrink: 0;
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  padding: 3px;
+  background: linear-gradient(145deg, #c9a84c, rgba(201,168,76,.3));
+  box-shadow: 0 0 18px rgba(201,168,76,.25);
+}
+.perfil-avatar {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+  background: #f0ece0;
+}
+.perfil-foto-info { flex: 1; }
+.perfil-foto-btn { cursor: pointer; }
+
+/* ── Module header ─────────────────────────────────────────────── */
 .border-bottom h1 {
-  font-size: 1.6rem;
+  font-family: 'Sora', sans-serif;
+  font-size: 1.5rem;
   font-weight: 700;
-  color: #2d2d2d;
+  color: #0f1117;
   letter-spacing: -0.02em;
 }
 
-/* ── Tarjeta principal ─────────────────────────────────────────── */
+/* ── Cards ─────────────────────────────────────────────────────── */
 .card.box-shadow-sm {
-  border: 1px solid #e8e8e8;
-  border-radius: 0.5rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(0,0,0,0.07);
+  border-radius: 14px;
+  box-shadow: 0 2px 12px rgba(0,0,0,.06), 0 1px 3px rgba(0,0,0,.04);
+  transition: box-shadow .25s ease, border-color .25s ease;
 }
-
+.card.box-shadow-sm:hover {
+  box-shadow: 0 8px 30px rgba(201,168,76,.18), 0 4px 12px rgba(0,0,0,.08);
+  border-color: rgba(201,168,76,.45);
+}
 .card-header {
-  background-color: #f8f9fa;
-  border-bottom: 1px solid #e8e8e8;
+  background-color: #ffffff;
+  border-bottom: 1px solid rgba(0,0,0,0.07);
   padding: 1rem 1.25rem;
 }
-
-.card-header h5 {
-  font-size: 1rem;
-  font-weight: 600;
-  color: #2d2d2d;
-}
-
-.card-body {
-  padding: 1.75rem 1.5rem;
-}
+.card-header h5 { font-size: 1rem; font-weight: 600; color: #0f1117; }
+.card-body { padding: 1.75rem 1.5rem; }
 
 /* ── Formulario ────────────────────────────────────────────────── */
 .form-label {
   font-weight: 500;
   font-size: 0.875rem;
-  color: #444;
+  color: #4a4f5e;
   margin-bottom: 0.35rem;
   display: block;
 }
-
 .form-control {
-  border-radius: 0.375rem;
+  border-radius: 8px;
   font-size: 0.9rem;
   height: calc(1.5em + 0.875rem + 2px);
 }
-
 .form-control:focus {
-  border-color: #007bff;
-  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.18);
+  border-color: #c9a84c;
+  box-shadow: 0 0 0 0.2rem rgba(201,168,76,.20);
 }
 
-/* ── Campo de solo lectura (correo) ────────────────────────────── */
+/* ── Campo readonly ─────────────────────────────────────────────── */
 .perfil-readonly {
-  background-color: #f8f9fa;
-  color: #6c757d;
+  background-color: rgba(0,0,0,0.03);
+  color: #8a8fa0;
   cursor: not-allowed;
-  border-color: #e8e8e8;
+  border-color: rgba(0,0,0,0.07);
 }
+.perfil-readonly:focus { box-shadow: none; border-color: rgba(0,0,0,0.07); }
 
-.perfil-readonly:focus {
-  box-shadow: none;
-  border-color: #e8e8e8;
-}
+.form-text.text-muted { font-size: 0.775rem; margin-top: 0.3rem; }
+hr { border-color: rgba(0,0,0,0.07); }
 
-/* ── Texto de ayuda ────────────────────────────────────────────── */
-.form-text.text-muted {
-  font-size: 0.775rem;
-  margin-top: 0.3rem;
-}
-
-/* ── Separador ─────────────────────────────────────────────────── */
-hr {
-  border-color: #e8e8e8;
-}
-
-/* ── Botones ───────────────────────────────────────────────────── */
+/* ── Buttons ────────────────────────────────────────────────────── */
 .btn-primary {
+  background-color: #c9a84c;
+  border-color: #c9a84c;
+  color: #fff;
   font-weight: 600;
   padding: 0.5rem 1.5rem;
 }
+.btn-primary:hover:not(:disabled) { background-color: #e0bb6a; border-color: #e0bb6a; }
+.btn-primary:focus { box-shadow: 0 0 0 0.2rem rgba(201,168,76,.35); }
 
-/* ── Nota de campos obligatorios ───────────────────────────────── */
-.font-size-sm {
-  font-size: 0.825rem;
-}
-
-/* ── Spinner de carga del perfil ───────────────────────────────── */
-.spinner-border {
-  color: #007bff;
-}
+.font-size-sm { font-size: 0.825rem; }
+.spinner-border { color: #c9a84c; }

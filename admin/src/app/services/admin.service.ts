@@ -67,6 +67,23 @@ export class AdminService {
     }
   }
 
+  // ── Administradores ───────────────────────────────────────────
+
+  obtener_admins(token: any): Observable<any> {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': token });
+    return this._http.get(this.url + 'obtener_admins', { headers });
+  }
+
+  verificar_password_admin(password: string, token: any): Observable<any> {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': token });
+    return this._http.post(this.url + 'verificar_password_admin', { password }, { headers });
+  }
+
+  eliminar_admin(id: string, token: any): Observable<any> {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': token });
+    return this._http.delete(this.url + 'eliminar_admin/' + id, { headers });
+  }
+
   // ── Perfil ────────────────────────────────────────────────────
 
   obtener_admin(id: any, token: any): Observable<any> {
@@ -74,9 +91,17 @@ export class AdminService {
     return this._http.get(this.url + 'obtener_admin/' + id, { headers });
   }
 
-  actualizar_perfil_admin(id: any, data: any, token: any): Observable<any> {
-    const headers = new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': token });
-    return this._http.put(this.url + 'actualizar_perfil_admin/' + id, data, { headers });
+  actualizar_perfil_admin(id: any, data: any, token: any, foto?: File): Observable<any> {
+    const headers = new HttpHeaders({ 'Authorization': token });
+    const fd = new FormData();
+    fd.append('nombres',          data.nombres          || '');
+    fd.append('apellidos',        data.apellidos        || '');
+    fd.append('telefono',         data.telefono         || '');
+    fd.append('dni',              data.dni              || '');
+    fd.append('fecha_nacimiento', data.fecha_nacimiento || '');
+    if (data.password) fd.append('password', data.password);
+    if (foto)          fd.append('foto', foto);
+    return this._http.put(this.url + 'actualizar_perfil_admin/' + id, fd, { headers });
   }
 
   // ── Configuración ─────────────────────────────────────────────
@@ -124,6 +149,16 @@ export class AdminService {
   cerrar_mensaje_admin(id: any, data: any, token: any): Observable<any> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': token });
     return this._http.put(this.url + 'cerrar_mensaje_admin/' + id, data, { headers });
+  }
+
+  obtener_detalle_mensaje_admin(id: string, token: any): Observable<any> {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': token });
+    return this._http.get(this.url + 'obtener_detalle_mensaje_admin/' + id, { headers });
+  }
+
+  responder_mensaje_admin(id: string, data: any, token: any): Observable<any> {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': token });
+    return this._http.post(this.url + 'responder_mensaje_admin/' + id, data, { headers });
   }
 
   // ── Ventas ────────────────────────────────────────────────────

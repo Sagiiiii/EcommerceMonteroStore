@@ -7,7 +7,7 @@
     margin-top: 64px;
     min-height: calc(100vh - 64px);
     background: #f2f1ed;
-    padding: 1.25rem 1.75rem;        /* menos padding arriba: 2rem → 1.25rem */
+    padding: 3rem 1.75rem 1.25rem;
     transition: margin-left 0.45s cubic-bezier(0.4, 0, 0.2, 1);
   }
 

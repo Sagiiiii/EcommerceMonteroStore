@@ -22,8 +22,8 @@ export class IndexVentasComponent implements OnInit {
   public ventas: Array<any> = [];
 
   // ── Filtros de fecha ──────────────────────────────────────────
-  public desde: string = '';
-  public hasta: string = '';
+  public desde: string = this.primerDiaMes();
+  public hasta: string = this.hoy();
 
   // ── Paginación ────────────────────────────────────────────────
   public page:     number = 1;
@@ -100,6 +100,15 @@ export class IndexVentasComponent implements OnInit {
         this.load_data = false;
       }
     });
+  }
+
+  private hoy(): string {
+    return new Date().toISOString().split('T')[0];
+  }
+
+  private primerDiaMes(): string {
+    const d = new Date();
+    return new Date(d.getFullYear(), d.getMonth(), 1).toISOString().split('T')[0];
   }
 
   private mostrarExito(mensaje: string): void {

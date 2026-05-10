@@ -1,7 +1,63 @@
-.perfil-readonly {
-  background-color: #f8f9fa;
-  color: #6c757d;
-  cursor: not-allowed;
-  border-color: #e8e8e8;
+/* edit-administrador.component.css — MONTERO'S */
+
+.border-bottom h1 {
+  font-family: 'Sora', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #0f1117;
+  letter-spacing: -0.02em;
 }
-.perfil-readonly:focus { box-shadow: none; border-color: #e8e8e8; }
+
+.card.box-shadow-sm {
+  border: 1px solid rgba(0,0,0,0.07);
+  border-radius: 14px;
+  box-shadow: 0 2px 12px rgba(0,0,0,.06), 0 1px 3px rgba(0,0,0,.04);
+  transition: box-shadow .25s ease, border-color .25s ease;
+}
+.card.box-shadow-sm:hover {
+  box-shadow: 0 8px 30px rgba(201,168,76,.18), 0 4px 12px rgba(0,0,0,.08);
+  border-color: rgba(201,168,76,.45);
+}
+.card-header {
+  background-color: #ffffff;
+  border-bottom: 1px solid rgba(0,0,0,0.07);
+  padding: 1rem 1.25rem;
+}
+.card-header h5 { font-weight: 600; color: #0f1117; }
+.card-footer {
+  background-color: #ffffff;
+  border-top: 1px solid rgba(0,0,0,0.07);
+  padding: 1rem 1.25rem;
+}
+
+.form-label { font-weight: 500; font-size: 0.875rem; color: #4a4f5e; margin-bottom: 0.35rem; display: block; }
+
+.form-control,
+.custom-select {
+  border-radius: 8px;
+  border: 1px solid rgba(0,0,0,0.12);
+  font-size: 0.9rem;
+}
+.form-control:focus,
+.custom-select:focus {
+  border-color: #c9a84c;
+  box-shadow: 0 0 0 0.2rem rgba(201,168,76,.20);
+}
+
+.perfil-readonly {
+  background-color: rgba(0,0,0,0.03);
+  color: #8a8fa0;
+  cursor: not-allowed;
+  border-color: rgba(0,0,0,0.07);
+}
+.perfil-readonly:focus { box-shadow: none; border-color: rgba(0,0,0,0.07); }
+
+.btn-primary {
+  background-color: #c9a84c;
+  border-color: #c9a84c;
+  color: #fff;
+  font-weight: 600;
+}
+.btn-primary:hover:not(:disabled) { background-color: #e0bb6a; border-color: #e0bb6a; }
+.btn-primary:focus { box-shadow: 0 0 0 0.2rem rgba(201,168,76,.35); }
+.btn:disabled { cursor: not-allowed; opacity: 0.7; }

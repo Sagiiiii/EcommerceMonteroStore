@@ -1,0 +1,220 @@
+<!-- ════════════════════════════════════════════════════════════
+     MÓDULO: Responder Mensaje — MONTERO'S
+     Panel Administrativo · JAIME PONCE MONTERO
+     ════════════════════════════════════════════════════════════ -->
+
+<!-- Encabezado -->
+<div class="border-bottom mb-4 pb-1">
+  <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+    <div>
+      <h1 class="mb-1">Responder mensaje</h1>
+      <p class="text-muted mb-0">
+        Redacte y envíe una respuesta directamente al correo del cliente desde <strong>MONTERO'S</strong>.
+      </p>
+    </div>
+    <button type="button" class="btn btn-outline-secondary btn-sm" (click)="volver()">
+      <i class="cxi-arrow-left mr-1"></i> Volver a mensajes
+    </button>
+  </div>
+</div>
+
+<!-- ── Estado: cargando ── -->
+<div class="text-center py-5" *ngIf="load_data">
+  <div class="spinner-border text-primary mb-3" style="width:2.5rem;height:2.5rem;" role="status">
+    <span class="sr-only">Cargando...</span>
+  </div>
+  <p class="text-muted mb-0">Cargando datos del mensaje...</p>
+</div>
+
+<!-- ── Contenido principal ── -->
+<div class="row" *ngIf="!load_data">
+
+  <!-- ─── Columna izquierda: mensaje original ─── -->
+  <div class="col-lg-4 mb-4 mb-lg-0">
+
+    <div class="card box-shadow-sm h-100">
+      <div class="card-header">
+        <h5 class="mb-0"><i class="cxi-mail mr-2"></i>Mensaje recibido</h5>
+      </div>
+      <div class="card-body">
+
+        <!-- Remitente -->
+        <div class="mb-3">
+          <label class="campo-label">Remitente</label>
+          <p class="campo-valor mb-0">{{ mensaje.cliente }}</p>
+        </div>
+
+        <!-- Correo -->
+        <div class="mb-3">
+          <label class="campo-label">Correo</label>
+          <p class="campo-valor mb-0">
+            <a [href]="'mailto:' + mensaje.correo" class="text-dark">{{ mensaje.correo }}</a>
+          </p>
+        </div>
+
+        <!-- Asunto original -->
+        <div class="mb-3">
+          <label class="campo-label">Asunto original</label>
+          <p class="campo-valor mb-0">{{ mensaje.asunto }}</p>
+        </div>
+
+        <!-- Fecha -->
+        <div class="mb-3">
+          <label class="campo-label">Fecha</label>
+          <p class="campo-valor mb-0">{{ mensaje.createdAt | date: 'dd/MM/yyyy HH:mm' }}</p>
+        </div>
+
+        <!-- Estado -->
+        <div class="mb-4">
+          <label class="campo-label">Estado</label><br>
+          <span class="badge badge-warning" *ngIf="mensaje.estado === 'Abierto'">
+            <i class="cxi-time mr-1"></i> Abierto
+          </span>
+          <span class="badge badge-success" *ngIf="mensaje.estado === 'Cerrado'">
+            <i class="cxi-check mr-1"></i> Cerrado
+          </span>
+        </div>
+
+        <!-- Mensaje -->
+        <div>
+          <label class="campo-label">Contenido del mensaje</label>
+          <div class="mensaje-box">{{ mensaje.mensaje }}</div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+  <!-- /col izquierda -->
+
+  <!-- ─── Columna derecha: formulario de respuesta ─── -->
+  <div class="col-lg-8">
+
+    <div class="card box-shadow-sm">
+      <div class="card-header">
+        <h5 class="mb-0"><i class="cxi-paper-plane mr-2"></i>Redactar respuesta</h5>
+      </div>
+      <div class="card-body">
+
+        <form #formResponder="ngForm" (ngSubmit)="enviar()">
+
+          <!-- Fila: Responde / Para -->
+          <div class="row">
+
+            <!-- Admin que responde -->
+            <div class="col-md-6 mb-3">
+              <label class="form-label" for="sel-admin">
+                Responde <span class="text-danger">*</span>
+              </label>
+              <select
+                class="form-control custom-select"
+                id="sel-admin"
+                name="correo_admin"
+                [(ngModel)]="form.correo_admin"
+                (ngModelChange)="onAdminChange($event)"
+                required>
+                <option *ngFor="let a of admins" [value]="a.email">
+                  {{ a.nombres }} {{ a.apellidos }} — {{ a.email }}
+                </option>
+              </select>
+              <small class="form-text text-muted">
+                Por defecto: el administrador con sesión activa.
+              </small>
+            </div>
+
+            <!-- Para (correo del cliente) -->
+            <div class="col-md-6 mb-3">
+              <label class="form-label" for="inp-para">Para</label>
+              <input
+                type="email"
+                class="form-control campo-readonly"
+                id="inp-para"
+                [value]="mensaje.correo"
+                readonly>
+              <small class="form-text text-muted">
+                Correo del cliente que envió el mensaje.
+              </small>
+            </div>
+
+          </div>
+
+          <!-- Asunto -->
+          <div class="mb-3">
+            <label class="form-label" for="inp-asunto">
+              Asunto <span class="text-danger">*</span>
+            </label>
+            <input
+              type="text"
+              class="form-control"
+              id="inp-asunto"
+              name="asunto"
+              [(ngModel)]="form.asunto"
+              placeholder="Asunto del correo"
+              required
+              maxlength="200">
+          </div>
+
+          <!-- Mensaje original (referencia) -->
+          <div class="mb-3">
+            <label class="form-label">Consulta del cliente <span class="text-muted font-weight-normal">(referencia)</span></label>
+            <div class="mensaje-cita">
+              <i class="cxi-quote-open mr-1 text-muted"></i>
+              {{ mensaje.mensaje }}
+            </div>
+          </div>
+
+          <!-- Respuesta -->
+          <div class="mb-4">
+            <label class="form-label" for="inp-respuesta">
+              Respuesta <span class="text-danger">*</span>
+            </label>
+            <textarea
+              class="form-control"
+              id="inp-respuesta"
+              name="respuesta"
+              [(ngModel)]="form.respuesta"
+              rows="8"
+              placeholder="Escriba aquí su respuesta al cliente..."
+              required
+              #respuestaCtrl="ngModel">
+            </textarea>
+            <div *ngIf="respuestaCtrl.invalid && respuestaCtrl.touched" class="text-danger font-size-sm mt-1">
+              La respuesta es obligatoria.
+            </div>
+          </div>
+
+          <!-- Pie: preview del remitente + botones -->
+          <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+
+            <div class="remitente-preview" *ngIf="form.correo_admin">
+              <i class="cxi-user mr-1"></i>
+              Enviará como: <strong>{{ form.nombre_admin }}</strong>
+              <span class="text-muted"> &lt;{{ form.correo_admin }}&gt;</span>
+            </div>
+
+            <div class="d-flex gap-2">
+              <button type="button" class="btn btn-outline-secondary btn-sm" (click)="volver()">
+                Cancelar
+              </button>
+              <button *ngIf="!load_btn" type="submit" class="btn btn-primary btn-sm"
+                [disabled]="formResponder.invalid">
+                <i class="cxi-paper-plane mr-1"></i> Enviar respuesta
+              </button>
+              <button *ngIf="load_btn" type="button" class="btn btn-secondary btn-sm" disabled>
+                <span class="spinner-grow spinner-grow-sm mr-2" role="status" aria-hidden="true"></span>
+                Enviando...
+              </button>
+            </div>
+
+          </div>
+
+        </form>
+
+      </div>
+    </div>
+
+  </div>
+  <!-- /col derecha -->
+
+</div>
+<!-- /row -->

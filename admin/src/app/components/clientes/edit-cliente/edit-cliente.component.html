@@ -19,7 +19,7 @@
 
     <!-- Cabecera -->
     <div class="card-header d-flex align-items-center">
-      <i class="cxi-edit mr-2 text-danger"></i>
+      <i class="cxi-edit mr-2" style="color: var(--gold)"></i>
       <h5 class="mb-0">Actualizar Datos del Cliente</h5>
     </div>
 
@@ -27,7 +27,7 @@
     <ng-container *ngIf="load_data">
       <div class="card-body">
         <div class="col-12 text-center py-5">
-          <div class="spinner-border text-danger" style="width: 3rem; height: 3rem;" role="status"></div>
+          <div class="spinner-border" style="width:3rem;height:3rem;color:var(--gold);" role="status"></div>
           <p class="text-muted mt-3 mb-0">Cargando información del cliente...</p>
         </div>
       </div>
@@ -174,7 +174,7 @@
     <!-- Pie -->
     <div class="card-footer d-flex align-items-center justify-content-between">
       <div>
-        <button *ngIf="!load_btn" class="btn btn-danger mr-3" type="submit"
+        <button *ngIf="!load_btn" class="btn btn-primary mr-3" type="submit"
           [disabled]="updateForm.invalid || cliente === undefined || (localidad_sel === 'Otro' && !localidad_otro.trim())">
           <i class="cxi-check mr-1"></i> Guardar Cambios
         </button>

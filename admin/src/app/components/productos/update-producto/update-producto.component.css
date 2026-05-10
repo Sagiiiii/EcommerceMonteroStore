@@ -1,11 +1,52 @@
 /* update-producto.component.css — MONTERO'S */
-.border-bottom h1 { font-size: 1.6rem; font-weight: 700; color: #2d2d2d; letter-spacing: -0.02em; }
-.card.box-shadow-sm { border: 1px solid #e8e8e8; border-radius: 0.5rem; box-shadow: 0 2px 8px rgba(0,0,0,.06); }
-.card-header { background-color: #f8f9fa; border-bottom: 1px solid #e8e8e8; padding: 1rem 1.25rem; }
-.card-header h5 { font-size: 1rem; font-weight: 600; color: #2d2d2d; }
-.card-footer { background-color: #f8f9fa; border-top: 1px solid #e8e8e8; padding: 1rem 1.25rem; }
-.form-label { font-weight: 500; font-size: 0.875rem; color: #444; margin-bottom: 0.35rem; display: block; }
+
+.border-bottom h1 {
+  font-family: 'Sora', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #0f1117;
+  letter-spacing: -0.02em;
+}
+
+.card.box-shadow-sm {
+  border: 1px solid rgba(0,0,0,0.07);
+  border-radius: 14px;
+  box-shadow: 0 2px 12px rgba(0,0,0,.06), 0 1px 3px rgba(0,0,0,.04);
+  transition: box-shadow .25s ease, border-color .25s ease;
+}
+.card.box-shadow-sm:hover {
+  box-shadow: 0 8px 30px rgba(201,168,76,.18), 0 4px 12px rgba(0,0,0,.08);
+  border-color: rgba(201,168,76,.45);
+}
+.card-header {
+  background-color: #ffffff;
+  border-bottom: 1px solid rgba(0,0,0,0.07);
+  padding: 1rem 1.25rem;
+}
+.card-header h5 { font-size: 1rem; font-weight: 600; color: #0f1117; }
+.card-footer {
+  background-color: #ffffff;
+  border-top: 1px solid rgba(0,0,0,0.07);
+  padding: 1rem 1.25rem;
+}
+
+.form-label { font-weight: 500; font-size: 0.875rem; color: #4a4f5e; margin-bottom: 0.35rem; display: block; }
 .form-text.text-muted { font-size: 0.775rem; }
+
+.form-control:focus,
+.custom-select:focus {
+  border-color: #c9a84c;
+  box-shadow: 0 0 0 0.2rem rgba(201,168,76,.20);
+}
+
 .img-thumbnail { max-height: 220px; object-fit: cover; border-radius: 0.375rem; }
-.input-group-text { font-weight: 600; background-color: #f0f0f0; }
-.btn-primary { font-weight: 600; }
+.input-group-text { font-weight: 600; background-color: rgba(0,0,0,0.03); border-color: rgba(0,0,0,0.1); }
+
+.btn-primary {
+  background-color: #c9a84c;
+  border-color: #c9a84c;
+  color: #fff;
+  font-weight: 600;
+}
+.btn-primary:hover:not(:disabled) { background-color: #e0bb6a; border-color: #e0bb6a; }
+.btn-primary:focus { box-shadow: 0 0 0 0.2rem rgba(201,168,76,.35); }

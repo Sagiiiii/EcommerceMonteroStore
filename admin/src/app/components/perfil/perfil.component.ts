@@ -1,17 +1,10 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { AdminService } from 'src/app/services/admin.service';
+import { AdminStateService } from 'src/app/services/admin-state.service';
+import { GLOBAL } from 'src/app/services/global';
 
 declare var iziToast: any;
-
-// ════════════════════════════════════════════════════════════════
-//  PerfilComponent
-//  Gestión del perfil del administrador del sistema MONTERO'S.
-//  Permite visualizar y actualizar datos personales:
-//  nombres, apellidos, teléfono, fecha de nacimiento,
-//  DNI y contraseña.
-//  El correo electrónico es de solo lectura.
-// ════════════════════════════════════════════════════════════════
 
 @Component({
   selector: 'app-perfil',
@@ -20,42 +13,60 @@ declare var iziToast: any;
 })
 export class PerfilComponent implements OnInit {
 
-  // ── Modelo del administrador ──────────────────────────────────
-  public user_admin: any = {};
+  public user_admin:      any    = {};
+  public nueva_password:  string = '';
+  public load_data:       boolean = true;
+  public load_btn:        boolean = false;
 
-  // ── Campo de contraseña (binding Angular puro, sin jQuery) ────
-  public nueva_password: string = '';
+  // Foto de perfil
+  public fotoPreview: string = 'assets/img/user.png';
+  public fotoFile:    File | undefined = undefined;
 
-  // ── Estados de UI ─────────────────────────────────────────────
-  public load_data: boolean = true;
-  public load_btn:  boolean = false;
-
-  // ── Identificadores de sesión ─────────────────────────────────
   private id:    string = '';
   private token: string = '';
+  private url:   string = '';
 
-  // ─────────────────────────────────────────────────────────────
-  constructor(private _adminService: AdminService) { }
+  private readonly TIPOS_IMAGEN = ['image/png','image/jpeg','image/jpg','image/webp','image/gif'];
+  private readonly MAX_SIZE     = 4_000_000;
+
+  constructor(
+    private _adminService: AdminService,
+    private _adminState:   AdminStateService
+  ) {}
 
   ngOnInit(): void {
     this.id    = localStorage.getItem('_id')   ?? '';
     this.token = localStorage.getItem('token') ?? '';
+    this.url   = GLOBAL.url;
     this.cargarPerfil();
   }
 
-  // ══ MÉTODOS PÚBLICOS ══════════════════════════════════════════
+  fotoChange(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (!input.files || !input.files[0]) return;
+    const archivo = input.files[0];
 
-  /**
-   * Actualiza el perfil del administrador en MONTERO'S.
-   * Si se completó la contraseña, la incluye en el payload.
-   */
+    if (!this.TIPOS_IMAGEN.includes(archivo.type)) {
+      this.mostrarError('La foto debe ser una imagen válida (JPG, PNG, WEBP o GIF).');
+      return;
+    }
+    if (archivo.size > this.MAX_SIZE) {
+      this.mostrarError('La foto no puede superar los 4 MB.');
+      return;
+    }
+
+    this.fotoFile = archivo;
+    const reader  = new FileReader();
+    reader.onload = () => { this.fotoPreview = reader.result as string; };
+    reader.readAsDataURL(archivo);
+  }
+
   actualizar(actualizarForm: NgForm): void {
     if (!actualizarForm.valid) {
       this.mostrarError('Complete correctamente todos los campos obligatorios.');
       return;
     }
 
-    // Solo incluir contraseña si el administrador escribió una nueva
     if (this.nueva_password.trim()) {
       this.user_admin.password = this.nueva_password.trim();
     } else {
@@ -64,11 +75,27 @@ export class PerfilComponent implements OnInit {
 
     this.load_btn = true;
 
-    this._adminService.actualizar_perfil_admin(this.id, this.user_admin, this.token).subscribe({
-      next: (_response) => {
-        this.mostrarExito('Su perfil fue actualizado correctamente en MONTERO\'S.');
-        this.nueva_password = ''; // limpiar campo de contraseña tras guardar
+    this._adminService.actualizar_perfil_admin(
+      this.id, this.user_admin, this.token, this.fotoFile
+    ).subscribe({
+      next: (response) => {
+        const data = response?.data ?? {};
+        this.user_admin     = data;
+        this.nueva_password = '';
+        this.fotoFile       = undefined;
+
+        this.fotoPreview = data.foto
+          ? this.url + 'obtener_foto_admin/' + data.foto + '?t=' + Date.now()
+          : 'assets/img/user.png';
+
+        this._adminState.update({
+          nombres:   data.nombres   || '',
+          apellidos: data.apellidos || '',
+          foto:      data.foto      || '',
+        });
+
         this.load_btn = false;
+        this.mostrarExito('Su perfil fue actualizado correctamente en MONTERO\'S.');
       },
       error: (err) => {
         console.error('[PerfilComponent] Error al actualizar perfil:', err);
@@ -78,16 +105,21 @@ export class PerfilComponent implements OnInit {
     });
   }
 
-  // ══ MÉTODOS PRIVADOS ══════════════════════════════════════════
-
-  /**
-   * Carga los datos del administrador autenticado desde el servidor.
-   */
   private cargarPerfil(): void {
     this._adminService.obtener_admin(this.id, this.token).subscribe({
       next: (response) => {
-        this.user_admin = response?.data ?? {};
-        this.load_data  = false;
+        this.user_admin  = response?.data ?? {};
+        this.fotoPreview = this.user_admin.foto
+          ? this.url + 'obtener_foto_admin/' + this.user_admin.foto + '?t=' + Date.now()
+          : 'assets/img/user.png';
+        this.load_data = false;
+
+        // Sincronizar estado global al cargar
+        this._adminState.update({
+          nombres:   this.user_admin.nombres   || '',
+          apellidos: this.user_admin.apellidos || '',
+          foto:      this.user_admin.foto      || '',
+        });
       },
       error: (err) => {
         console.error('[PerfilComponent] Error al cargar perfil:', err);
@@ -98,24 +130,10 @@ export class PerfilComponent implements OnInit {
   }
 
   private mostrarExito(mensaje: string): void {
-    iziToast.show({
-      title: 'Perfil actualizado',
-      titleColor: '#1DC74C',
-      theme: 'dark',
-      class: 'text-success',
-      position: 'topRight',
-      message: mensaje
-    });
+    iziToast.show({ title: 'Perfil actualizado', titleColor: '#1DC74C', theme: 'dark', class: 'text-success', position: 'topRight', message: mensaje });
   }
 
   private mostrarError(mensaje: string): void {
-    iziToast.show({
-      title: 'Error',
-      titleColor: '#FF3B30',
-      theme: 'dark',
-      class: 'text-danger',
-      position: 'topRight',
-      message: mensaje
-    });
+    iziToast.show({ title: 'Error', titleColor: '#FF3B30', theme: 'dark', class: 'text-danger', position: 'topRight', message: mensaje });
   }
 }

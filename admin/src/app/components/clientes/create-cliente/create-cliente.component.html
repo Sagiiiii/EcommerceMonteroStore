@@ -19,7 +19,7 @@
 
     <!-- Cabecera -->
     <div class="card-header d-flex align-items-center">
-      <i class="cxi-profile mr-2 text-danger"></i>
+      <i class="cxi-profile mr-2" style="color: var(--gold)"></i>
       <h5 class="mb-0">Nuevo Registro de Cliente</h5>
     </div>
 
@@ -145,7 +145,7 @@
     <!-- Pie -->
     <div class="card-footer d-flex align-items-center justify-content-between">
       <div>
-        <button *ngIf="!load_btn" class="btn btn-danger mr-3" type="submit"
+        <button *ngIf="!load_btn" class="btn btn-primary mr-3" type="submit"
           [disabled]="registroForm.invalid || (localidad_sel === 'Otro' && !localidad_otro.trim())">
           <i class="cxi-profile mr-1"></i> Registrar Cliente
         </button>

@@ -7,7 +7,7 @@
     <p class="text-muted mb-0">
       Listado completo de administradores con acceso al panel de <strong>MONTERO'S</strong>.
     </p>
-    <a class="btn btn-danger px-4 mt-2 mt-md-0" [routerLink]="['/panel/administradores/registro']">
+    <a class="btn btn-primary px-4 mt-2 mt-md-0" [routerLink]="['/panel/administradores/registro']">
       <i class="cxi-plus-round mr-2"></i> Nuevo Administrador
     </a>
   </div>
@@ -18,7 +18,7 @@
 
   <!-- Título de la card -->
   <div class="card-header d-flex align-items-center">
-    <i class="cxi-menu mr-2 text-danger"></i>
+    <i class="cxi-menu mr-2" style="color: var(--gold)"></i>
     <h5 class="mb-0">Listado de Administradores</h5>
   </div>
 
@@ -79,7 +79,7 @@
         <tbody *ngIf="load_data">
           <tr>
             <td colspan="8" class="text-center py-5">
-              <div class="spinner-border text-danger" style="width:3rem;height:3rem;" role="status"></div>
+              <div class="spinner-border" style="width:3rem;height:3rem;color:var(--gold);" role="status"></div>
               <p class="text-muted mt-2 mb-0">Cargando listado de administradores...</p>
             </td>
           </tr>

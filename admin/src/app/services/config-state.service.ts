@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { GLOBAL } from './global';
 
 export interface ConfigState {
   titulo: string;
@@ -30,7 +31,7 @@ export class ConfigStateService {
     if (config.logo) {
       const link = document.querySelector("link[rel~='icon']") as HTMLLinkElement;
       if (link) {
-        link.href = config.logo;
+        link.href = GLOBAL.url + 'obtener_logo/' + config.logo;
       }
     }
   }

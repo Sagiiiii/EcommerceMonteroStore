@@ -3,6 +3,7 @@
   <app-navbar></app-navbar>
 </ng-container>
 
-<div [class.panel-main]="mostrarLayout">
+<div [class.panel-main]="mostrarLayout"
+     [class.panel-main--collapsed]="mostrarLayout && sidebarCollapsed">
   <router-outlet></router-outlet>
 </div>

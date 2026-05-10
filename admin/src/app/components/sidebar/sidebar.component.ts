@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 import { AdminService } from 'src/app/services/admin.service';
 import { SidebarStateService } from 'src/app/services/sidebar-state.service';
 import { ConfigStateService } from 'src/app/services/config-state.service';
+import { AdminStateService } from 'src/app/services/admin-state.service';
 import { GLOBAL } from 'src/app/services/global';
 
 @Component({
@@ -18,6 +19,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
   public collapsed = false;
   public logoSrc: string = 'assets/img/monteros-fondo-negro.png';
   public nombreComercial: string = "MONTERO'S";
+  public avatarSrc: string = 'assets/img/user.png';
 
   private token: string = '';
   private id: string = '';
@@ -28,7 +30,8 @@ export class SidebarComponent implements OnInit, OnDestroy {
     private _adminService: AdminService,
     private _router: Router,
     public sidebarState: SidebarStateService,
-    public configState: ConfigStateService
+    public configState: ConfigStateService,
+    private _adminState: AdminStateService
   ) {
     this.url = GLOBAL.url;
   }
@@ -51,6 +54,12 @@ export class SidebarComponent implements OnInit, OnDestroy {
         }
       })
     );
+
+    this.subs.add(
+      this._adminState.profile$.subscribe(profile => {
+        this.avatarSrc = this._adminState.avatarUrl(profile.foto, profile.ts);
+      })
+    );
   }
 
   ngOnDestroy(): void {
@@ -70,7 +79,15 @@ export class SidebarComponent implements OnInit, OnDestroy {
   private cargarAdmin(): void {
     if (!this.id || !this.token) return;
     this._adminService.obtener_admin(this.id, this.token).subscribe({
-      next: (response) => { this.user_admin = response?.data ?? {}; },
+      next: (response) => {
+        const data = response?.data ?? {};
+        this.user_admin = data;
+        this._adminState.update({
+          nombres:   data.nombres   || '',
+          apellidos: data.apellidos || '',
+          foto:      data.foto      || '',
+        });
+      },
       error: (err) => { console.error('[SidebarComponent]', err); }
     });
   }
